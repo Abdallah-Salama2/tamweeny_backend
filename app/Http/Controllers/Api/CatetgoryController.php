@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class CatetgoryController extends Controller
@@ -14,6 +16,10 @@ class CatetgoryController extends Controller
     public function index()
     {
         //
+        $categories=Category::all();
+        $users = UserResource::collection(User::paginate(10)); // Adjust the number based on your requirements
+        // $users=User::paginate(10);
+        return response()->json($categories);
     }
 
     /**

@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use App\Models\Post;
+use Illuminate\Support\Facades\DB;
+
 
 
 
@@ -22,8 +24,14 @@ class AuthController extends Controller
 
     public function index()
     {
-       $users = UserResource::collection(User::paginate(10)); // Adjust the number based on your requirements
-       // $users=User::paginate(10);
+
+
+        $users = DB::table('user')
+        ->join('customer','user.nationalId','=','customer.national_id')
+        ->join('cards','customer.tamweenCardId','=','cards.cardId')
+        ->get(); // Joining posts with users and paginating the results
+        //$users = Customer::with('card')->paginate(10); // Joining posts with users and paginating the results
+
         return response()->json($users);
     }
 
@@ -43,42 +51,102 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'NationalId' => 'required|string|max:255|unique:user,NationalId',
-            'Name' => 'required|string|max:255',
+            'nationalId' => 'required|string|max:255|unique:user,nationalId',
+            'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:user,email',
             'password' => ['required', 'confirmed', 'min:8'],
-            'Phone_number' => 'required|string|max:255',
-            'City' => 'required|string|max:255',
-            'State' => 'required|string|max:255',
-            'Street' => 'required|string|max:255',
-            'BirthDate' => 'required|date',
-            'CardName' => 'required|string|max:255',
-            'CardNumber' => 'required|string|max:255|unique:cards,CardNumber',
-            'CardNationalId' => 'required|string|max:255|unique:cards,CardNationalId',
-            'CardPassword' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'state' => 'required|string|max:255',
+            'street' => 'required|string|max:255',
+            'birthDate' => 'required|date',
+            'cardName' => 'required|string|max:255',
+            'cardNumber' => 'required|string|max:255|unique:cards,cardNumber',
+            'cardNationalId' => 'required|string|max:255|unique:cards,cardNationalId',
+            'cardPassword' => 'required|string|max:255',
         ]);
 
         // Create the user
         $user = User::create([
-            'NationalId' => $request->NationalId,
-            'Name' => $request->Name,
+            'nationalId' => $request->nationalId,
+            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'Phone_number' => $request->Phone_number,
-            'City' => $request->City,
-            'State' => $request->State,
-            'Street' => $request->Street,
-            'BirthDate' => $request->BirthDate,
+            'phone_number' => $request->phone_number,
+            'city' => $request->city,
+            'state' => $request->state,
+            'street' => $request->street,
+            'birthDate' => $request->birthDate,
+            'userType' => '1', // Set the default value for UserType
+            'latitude' => '10.2',
+            'longitude' => '10.2',
+        ]);
+
+        $tamweenCard = Card::create([
+            'cardName' => $request->cardName,
+            'cardNumber' => $request->cardNumber,
+            'cardNationalId' => $request->cardNationalId,
+            'cardPassword' => Hash::make($request->cardPassword),
+            // Add other fields as needed
+            'individualsNumber' => '1',
+            'breadPoints' => '1',
+            'tamweenPoints' => '1',
+        ]);
+
+        $customer = new Customer([
+            'national_id' => $request->nationalId,
+            'tamweenCardId' => $tamweenCard->cardId, // Assuming this is the ID of the created TamweenCard
+        ]);
+
+        // Create the Tamween card
+        $user->save();
+        $tamweenCard->save();
+        $customer->save();
+        $token = $user->createToken('registration-token')->plainTextToken;
+        $list= response()->json(['message' => 'Registration successful', 'user' => $user, 'customer' => $customer, 'tamweenCard' => $tamweenCard]);
+        print $list;
+        return response()->json(['token' => $token], 201);
+
+    }
+    public function fake2(Request $request)
+    {
+        $request->validate([
+            'NationalId' => 'string|max:255|unique:user,NationalId',
+            'Name' => 'string|max:255',
+            'email' => 'string|email|max:255|unique:user,email',
+            'password' => 'string',
+            'Phone_number' => 'string|max:255',
+            'City' => 'string|max:255',
+            'State' => 'string|max:255',
+            'Street' => 'string|max:255',
+            'BirthDate' => 'date',
+            'CardName' => 'string|max:255',
+            'CardNumber' => 'string|max:255|unique:cards,CardNumber',
+            'CardNationalId' => 'string|max:255|unique:cards,CardNationalId',
+            'CardPassword' => 'string|max:255',
+        ]);
+
+        // Create the user
+        $user = User::create([
+            'NationalId' => '132456789 ',
+            'Name' => 'fake',
+            'email' => 'fake@fake.com',
+            'password' => '111',
+            'Phone_number' => '12345678910',
+            'City' => 'fakeCity',
+            'State' => 'fakeState',
+            'Street' => 'fakeStreet',
+            'BirthDate' => '2023-12-11',
             'UserType' => '1', // Set the default value for UserType
             'Latitude' => '10.2',
             'Longitude' => '10.2',
         ]);
 
         $tamweenCard = Card::create([
-            'CardName' => $request->CardName,
-            'CardNumber' => $request->CardNumber,
-            'CardNationalId' => $request->CardNationalId,
-            'CardPassword' => Hash::make($request->CardPassword),
+            'CardName' => 'fakeCard',
+            'CardNumber' => '111',
+            'CardNationalId' => '12347885566321',
+            'CardPassword' => '111',
             // Add other fields as needed
             'Individuals Number' => '1',
             'BreadPoints' => '1',
@@ -86,7 +154,7 @@ class AuthController extends Controller
         ]);
 
         $customer = new Customer([
-            'National_Id' => $request->NationalId,
+            'National_Id' => '132456789',
             'TamweencardId' => $tamweenCard->id, // Assuming this is the ID of the created TamweenCard
         ]);
 
@@ -119,7 +187,10 @@ class AuthController extends Controller
             ]);
         }
 
-        return $user->createToken($request->device_name)->plainTextToken;
+
+        $token = $user->createToken($request->device_name)->plainTextToken;
+
+        return response()->json(['token' => $token,'id'=>$user->Id], 201);
     }
 
 

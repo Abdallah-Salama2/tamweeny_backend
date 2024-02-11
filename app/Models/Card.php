@@ -6,22 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 class Card extends Model
 {
     protected $fillable = [
-        'id',
-        'CardName',
-        'CardNumber',
-        'CardNationalId',
-        'CardPassword',
-        'Individuals Number',
-        'BreadPoints',
-        'TamweenPoints',
+        'cardId',
+        'cardName',
+        'cardNumber',
+        'cardNationalId',
+        'cardPassword',
+        'individualsNumber',
+        'breadPoints',
+        'tamweenPoints',
     ];
 
     // Relationship with Customer model
     public function customer()
     {
-        return $this->hasOne(Customer::class, 'TamweencardId', 'id');
+        return $this->hasOne(Customer::class, 'tamweenCardId', 'cardId');
     }
     protected $table = 'cards'; // Adjust based on your table name
+    protected $primaryKey = 'cardId'; //
 
 
 }

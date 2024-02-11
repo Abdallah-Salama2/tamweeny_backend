@@ -10,19 +10,21 @@ class Customer extends Model
     use HasFactory;
     protected $fillable = [
         // Fields for the Customer model
-        'National_Id', // Assuming you have a column named 'national_id' for the foreign key
-        'TamweencardId'
+        'national_id', // Assuming you have a column named 'national_id' for the foreign key
+        'tamweenCardId'
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'National_Id', 'NationalId');
+        return $this->belongsTo(User::class, 'national_id', 'nationalId');
     }
 
-    public function tamweenCard()
+    public function card()
     {
-        return $this->belongsTo(Card::class, 'TamweencardId', 'id');
+        return $this->belongsTo(Card::class, 'tamweenCardId', 'cardId');
     }
     protected $table = 'customer'; // Adjust based on your table name
+    protected $primaryKey = 'customerId'; //
+
 
 }

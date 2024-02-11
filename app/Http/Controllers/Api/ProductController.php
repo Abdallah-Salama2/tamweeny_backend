@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductResource;
+use App\Http\Resources\UserResource;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -14,6 +18,11 @@ class ProductController extends Controller
     public function index()
     {
         //
+        $products = ProductResource::collection(Product::paginate(10)); // Adjust the number based on your requirements
+        $users = UserResource::collection(User::paginate(10)); // Adjust the number based on your requirements
+
+        return response()->json($products);
+        //return Product::all();
     }
 
     /**
@@ -25,11 +34,28 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified category products
      */
-    public function show(Product $product)
+    public function productsByCategory($catId)
     {
-        //
+        $products = DB::table('product')
+            ->join('category', 'product.cat_id', '=', 'category.catId')
+            ->select('product.*')
+            ->where('category.catName', '=', $catId)
+            ->orderBy('product.productId')
+            ->get();
+
+        return response()->json(ProductResource::collection($products));
+    }
+public function searchForProduct($productName)
+    {
+        $products = DB::table('product')
+            ->select('product.*')
+            ->where('product.productName',"like", '%' . $productName . '%')
+            ->orderBy('product.productId')
+            ->get();
+
+        return response()->json(ProductResource::collection($products));
     }
 
     /**
