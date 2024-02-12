@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class store extends Model
+class Store extends Model
 {
     use HasFactory;
     use HasApiTokens;
@@ -23,6 +23,7 @@ class store extends Model
         'owner_id',
         'storeName',
         'address',
+        'phoneNumber',
         'type',
         'valid',
         'latitude',

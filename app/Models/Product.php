@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class product extends Model
+class Product extends Model
 {
     use HasFactory;
     use HasFactory, Notifiable;
@@ -15,7 +15,6 @@ class product extends Model
         'productId',
         'productName',
         'productType',
-        'original_price',
         'productImage',
         'description',
         'stock_quantity',
@@ -27,6 +26,10 @@ class product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class, 'cat_id', 'catId');
+    }
+    public function pricing(){
+        return $this->hasOne(ProductPricing::class, 'product_id', 'productId');
+
     }
     protected $table = 'product'; // Adjust based on your table name
     protected $primaryKey = 'productId'; //
