@@ -22,7 +22,7 @@ class ProductController extends Controller
             ->join('product_pricing', 'product.productId', '=', 'product_pricing.product_id')
             ->select('product.*','product_pricing.selling_price')
             ->orderBy('product.productId')
-            ->get();
+            ->paginate(10);
 
         return response()->json($products);
         //return Product::all();
