@@ -37,7 +37,8 @@ class AuthController extends Controller
 
     // search or specific user if not found will return all users
     public function findUser($id=null){
-        return $id?User::find($id):User::all();
+        $user=User::where('Id',$id)->get();
+        return $user;
     }
     //Route:Get(/users/{id?},[finduser]);
 

@@ -18,8 +18,11 @@ class ProductController extends Controller
     public function index()
     {
         //
-        $products = ProductResource::collection(Product::paginate(10)); // Adjust the number based on your requirements
-        $users = UserResource::collection(User::paginate(10)); // Adjust the number based on your requirements
+        $products = DB::table('product')
+            ->join('product_pricing', 'product.productId', '=', 'product_pricing.product_id')
+            ->select('product.*','product_pricing.selling_price')
+            ->orderBy('product.productId')
+            ->get();
 
         return response()->json($products);
         //return Product::all();
@@ -47,13 +50,26 @@ class ProductController extends Controller
 
         return response()->json(ProductResource::collection($products));
     }
-public function searchForProduct($productName)
+public function searchForProductById($product=null)
     {
         $products = DB::table('product')
             ->select('product.*')
-            ->where('product.productName',"like", '%' . $productName . '%')
+            ->where('product.productId',"like",$product)
             ->orderBy('product.productId')
             ->get();
+
+        return response()->json(ProductResource::collection($products));
+    }
+
+    public function searchForProductByName($product=null)
+    {
+
+            $products = DB::table('product')
+                ->select('product.*')
+                ->where('product.productName',"like", '%' . $product . '%')
+                ->orderBy('product.productId')
+                ->get();
+
 
         return response()->json(ProductResource::collection($products));
     }
