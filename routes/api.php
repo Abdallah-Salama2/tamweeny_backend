@@ -24,13 +24,13 @@ Route::post('/fake', [\App\Http\Controllers\Api\AuthController::class, 'fake2'])
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
+Route::get('/products',[\App\Http\Controllers\Api\ProductController::class, 'index']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/userss',[\App\Http\Controllers\Api\AuthController::class, 'index']);
     //http://127.0.0.1:8000/api/userss
     Route::get('/categories',[\App\Http\Controllers\Api\CatetgoryController::class, 'index']);
     //http://127.0.0.1:8000/api/categories
-    Route::get('/products',[\App\Http\Controllers\Api\ProductController::class, 'index']);
     //http://127.0.0.1:8000/api/products
     Route::get('/offers',[\App\Http\Controllers\Api\ProductPricingController::class, 'index']);
     //http://127.0.0.1:8000/api/offers
