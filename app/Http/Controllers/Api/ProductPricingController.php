@@ -18,12 +18,12 @@ class ProductPricingController extends Controller
     {
         //
         //return ProductPricing::all();
-        $products = DB::table('product')
-            ->join('product_pricing', 'product.productId', '=', 'product_pricing.product_id')
-            ->join('store', 'product.store_id', '=', 'store.storeId')
-            ->join('storeowner', 'store.owner_id', '=', 'storeowner.ownerId')
-            ->select('product.productName','product.description','product_pricing.date_created','product_pricing.exipred_date','product_pricing.selling_price','store.address','store.phoneNumber')
-            ->orderBy('product.productId')
+        $products = DB::table('products')
+            ->join('product_pricings', 'products.Id', '=', 'product_pricings.product_id')
+            ->join('stores', 'products.store_id', '=', 'stores.Id')
+            ->join('storeowner', 'stores.owner_id', '=', 'storeowner.Id')
+            ->select('products.product_name AS productName ', 'products.description', 'product_pricings.date_created AS dateCreated', 'product_pricings.exipred_date AS exipredDate', 'product_pricings.selling_price AS sellingPrice', 'product_pricings.discount', 'product_pricings.discount_unit AS discountUnit')
+            ->orderBy('products.Id')
             ->get();
 
         return response()->json($products);

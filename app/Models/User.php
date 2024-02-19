@@ -22,7 +22,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'Id',
-        'nationalId',
+        'national_id',
         'name',
         'email',
         'password',
@@ -30,8 +30,8 @@ class User extends Authenticatable
         'city',
         'state',
         'street',
-        'birthDate',
-        'userType',
+        'birth_date',
+        'user_type',
         'latitude',
         'longitude',
     ];
@@ -58,11 +58,12 @@ class User extends Authenticatable
 
     public function customer()
     {
-        return $this->hasOne(Customer::class, 'national_id', 'nationalId');
+        return $this->hasOne(Customer::class, 'national_id', 'national_id');
     }
+
     public function storeOwner()
     {
-        return $this->hasOne(StoreOwner::class, 'national_id', 'nationalId');
+        return $this->hasOne(StoreOwner::class, 'national_id', 'national_id');
     }
 
 
@@ -71,8 +72,8 @@ class User extends Authenticatable
      *
      * @var string
      */
-    protected $table = 'user'; // Adjust based on your table name
-    protected $primaryKey = 'nationalId'; //
+    protected $table = 'users'; // Adjust based on your table name
+    protected $primaryKey = 'national_id'; //
 
 
 }

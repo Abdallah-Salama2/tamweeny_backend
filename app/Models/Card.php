@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -6,23 +7,26 @@ use Illuminate\Database\Eloquent\Model;
 class Card extends Model
 {
     protected $fillable = [
-        'cardId',
-        'cardName',
-        'cardNumber',
-        'cardNationalId',
-        'cardPassword',
-        'individualsNumber',
-        'breadPoints',
-        'tamweenPoints',
+        'Id',
+        'card_name',
+        'card_number',
+        'card_national_id',
+        'card_password',
+        'individuals_number',
+        'bread_points',
+        'tamween_points',
+        'customer_id'
+
     ];
 
     // Relationship with Customer model
     public function customer()
     {
-        return $this->hasOne(Customer::class, 'tamweenCardId', 'cardId');
+        return $this->hasOne(Customer::class, 'card_id', 'Id');
     }
+
     protected $table = 'cards'; // Adjust based on your table name
-    protected $primaryKey = 'cardId'; //
+    protected $primaryKey = 'Id'; //
 
 
 }

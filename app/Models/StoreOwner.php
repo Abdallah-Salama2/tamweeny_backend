@@ -19,17 +19,17 @@ class storeOwner extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'ownerId',
+        'Id',
         'tax_registration_number',
         'national_id',
-        'taxCard'
+        'tax_card'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'national_id', 'nationalId');
     }
-    
+
     protected $table = 'storeowner'; // Adjust based on your table name
-    protected $primaryKey = 'ownerId'; //
+    protected $primaryKey = 'Id'; //
 }

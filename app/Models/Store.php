@@ -19,17 +19,17 @@ class Store extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'storeId',
+        'Id',
         'owner_id',
-        'storeName',
+        'store_name',
         'address',
-        'phoneNumber',
+        'phone_number',
         'type',
         'valid',
         'latitude',
-        'longitude'
+        'longitude',
     ];
 
-    protected $table = 'store'; // Adjust based on your table name
-    protected $primaryKey = 'storeId'; //s
+    protected $table = 'stores'; // Adjust based on your table name
+    protected $primaryKey = 'Id'; //s
 }

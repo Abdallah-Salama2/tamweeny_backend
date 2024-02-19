@@ -14,6 +14,9 @@ class StoreOwnerResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return ['Id'                      => $this -> Id,
+            'taxRegistrationNumber' => $this -> tax_registration_number,
+            'nationalId'             => $this -> national_id            ,
+            'taxCard'                => $this -> tax_card               ];
     }
 }

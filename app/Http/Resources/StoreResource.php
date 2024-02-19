@@ -15,9 +15,15 @@ class StoreResource extends JsonResource
     public function toArray(Request $request): array
     {
         return[
-            'storeId'=>$this->storeId,
-            'latitude'=>$this->latitude,
-            'langitude'=>$this->longitude
+            'Id'          => $this -> Id          ,
+            'ownerId'    => $this -> owner_id    ,
+            'storeName'  => $this -> store_name  ,
+            'address'     => $this -> address     ,
+            'phoneNumber'=> $this -> phone_number,
+            'type'        => $this -> type        ,
+            'valid'       => $this -> valid       ,
+            'latitude'    => $this -> latitude    ,
+            'longitude'   => $this -> longitude   ,
         ];
     }
 }

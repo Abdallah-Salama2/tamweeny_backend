@@ -15,7 +15,8 @@ class StoreController extends Controller
     public function index()
     {
         //
-        return Store::all();
+        $stores=Store::all();
+        return response()->json(StoreResource::collection($stores));
         /*[
     {
         "storeId": 1,
@@ -80,7 +81,7 @@ class StoreController extends Controller
 
         foreach ($stores as $store) {
             $combinedData[] = [
-                $store->storeId,
+                $store->Id,
                 $store->latitude,
                 $store->longitude,
 

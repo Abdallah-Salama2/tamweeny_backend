@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StoreOwnerResource;
+use App\Http\Resources\StoreResource;
 use App\Models\StoreOwner;
 use Illuminate\Http\Request;
 
@@ -14,6 +16,8 @@ class StoreOwnerController extends Controller
     public function index()
     {
         //
+        $owners=StoreOwner::all();
+        return response()->json(StoreOwnerResource::collection($owners));
     }
 
     /**

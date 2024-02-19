@@ -9,8 +9,8 @@ class ProductPricing extends Model
 {
     use HasFactory;
 
-    protected $fillable=[
-        'priceId',
+    protected $fillable = [
+        'Id',
         'product_id',
         'base_price',
         'selling_price',
@@ -20,11 +20,12 @@ class ProductPricing extends Model
         'exipred_date'
 
     ];
+
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id', 'productId');
+        return $this->belongsTo(Product::class, 'product_id', 'Id');
     }
 
-    protected $table = 'product_pricing'; // Adjust based on your table name
-    protected $primaryKey = 'priceId'; //
+    protected $table = 'product_pricings'; // Adjust based on your table name
+    protected $primaryKey = 'Id'; //
 }

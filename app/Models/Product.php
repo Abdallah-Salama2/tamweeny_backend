@@ -11,26 +11,34 @@ class Product extends Model
     use HasFactory;
     use HasFactory, Notifiable;
 
-    protected $fillable=[
-        'productId',
-        'productName',
-        'productType',
-        'productImage',
+    protected $hidden = [
+        'productImage'
+    ];
+
+    protected $fillable = [
+        'Id',
+        'product_name',
+        'product_type',
+        'product_image',
+        'image_extension',
         'description',
         'stock_quantity',
-        'pointsPrice',
+        'points_price',
         'store_id',
         'cat_id'
     ];
 
     public function category()
     {
-        return $this->belongsTo(Category::class, 'cat_id', 'catId');
+        return $this->belongsTo(Category::class, 'cat_id', 'Id');
     }
-    public function pricing(){
-        return $this->hasOne(ProductPricing::class, 'product_id', 'productId');
+
+    public function productpricing()
+    {
+        return $this->hasOne(ProductPricing::class, 'product_id', 'Id');
 
     }
-    protected $table = 'product'; // Adjust based on your table name
-    protected $primaryKey = 'productId'; //
+
+    protected $table = 'products'; // Adjust based on your table name
+    protected $primaryKey = 'Id'; //
 }
