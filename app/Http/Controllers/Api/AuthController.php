@@ -19,8 +19,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 
 
-
-
 class AuthController extends Controller
 {
 
@@ -40,7 +38,7 @@ class AuthController extends Controller
         return response()->json(UserResource::collection($users));
     }
 
-//        $users = DB::table('users')
+/*       $users = DB::table('users')
 //        ->join('customers','users.national_id','=','customers.national_id')
 //        ->join('cards','customers.card_id','=','cards.Id')
 //        ->get(); // Joining posts with users and paginating the results
@@ -85,7 +83,7 @@ class AuthController extends Controller
 //        }
 //
 //        return response()->json($formattedData);
-//    }
+    }*/
 
 
     // search or specific user if not found will return all users
@@ -109,7 +107,7 @@ class AuthController extends Controller
             'nationalId' => 'required|string|max:255|unique:users,national_id',
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
-            'password' => ['required',  'min:8'],
+            'password' => ['required', 'min:8'],
             'phoneNumber' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
@@ -122,7 +120,7 @@ class AuthController extends Controller
         ]);
 
         //'unit_price' => $requestData['unitPrice'],
-        $requestData = $request->only(['nationalId','phoneNumber','birthDate','cardName','cardNumber','cardNationalId','cardPassword']);
+        $requestData = $request->only(['nationalId', 'phoneNumber', 'birthDate', 'cardName', 'cardNumber', 'cardNationalId', 'cardPassword']);
 
 
         // Create the user
@@ -154,7 +152,7 @@ class AuthController extends Controller
         $tamweenCard = Card::create([
             'card_name' => $requestData['cardName'],
             'card_number' => $requestData['cardNumber'],
-            'card_national_id' =>$requestData['cardNationalId'],
+            'card_national_id' => $requestData['cardNationalId'],
             'card_password' => Hash::make($requestData['cardPassword']),
             // Add other fields as needed
             'individuals_number' => '1',
@@ -259,7 +257,7 @@ class AuthController extends Controller
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
-        Session::put('user_id',$user->Id);
+        Session::put('user_id', $user->Id);
 
 
         $token = $user->createToken($request->device_name)->plainTextToken;
@@ -269,8 +267,7 @@ class AuthController extends Controller
     //$userResources = UserResource::collection($user);
 
 
-
-    // Find the user from the collection by ID
+    /* Find the user from the collection by ID
 //        $user = $users->first(function ($user) use ($customerId) {
 //            return $user->customer->Id == $customerId;
 //        });
@@ -290,52 +287,98 @@ class AuthController extends Controller
 //    // Handle the case when the user with the specified ID is not found
 //    print("User not found.");
 //}
+    //print($customer);
+//        $customer =Customer::where("national_id",$national_id)->first();
+//        $customerId=$customer->Id;
+//        //print ($customerId);
+//$national_id=$user->national_id;
+//$customer=$user->customer;
+    //$card=Card::where("Id",$customerId)->first();
+    //print($card);
+    //$card->card_name=$request->input('card_name');*/
 
     public function updateUserInfo(Request $request)
     {
         // Retrieve user ID from the session
         $userId = Session::get('user_id');
+        print($userId."\n");
 
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
 
         // Retrieve the user from the collection by ID
         $user = $users->where("Id", $userId)->first();
-        $national_id=$user->national_id;
-        $customer=$user->customer;
-        //print($customer);
-//        $customer =Customer::where("national_id",$national_id)->first();
-//        $customerId=$customer->Id;
-//        //print ($customerId);
 
-        //$card=Card::where("Id",$customerId)->first();
+
         $card = $user->customer->card;
 
-        //print($card);
-        //$card->card_name=$request->input('card_name');
-
-
-
-
-        $user->fill($request->only(['name', 'email']));
-        $card->fill($request->only(['card_name', 'card_number','card_national_id','individuals_number']));
+        $user->fill($request->only(['name', 'email', 'national_id', 'password', 'phone_number', 'city', 'state', 'street', 'birth_date', 'user_type', 'latitude','longitude',]));
+        $card->fill($request->only(['card_name', 'card_number', 'card_national_id', 'individuals_number','bread_points','tamween_points']));
 
 
         // Save user changes
         $card->update();
-
         $user->update();
 
         // Return response
         return new UserResource($user);
     }
 
+    public function deleteUser()
+    {
+        // Retrieve the user ID from the session
+        $userId = Session::get('user_id');
+       print("UserID". $userId ."\n");
+
+        // Fetch all users with related data
+        $users = User::with('customer', 'customer.card')->get();
+
+        // Retrieve the user from the collection by ID
+        $user = $users->where("Id", $userId)->first();
+        print($user);
+        $national_id=$user->national_id;
+        print("NationalId". $national_id ."\n");
+        $customer =Customer::where("national_id",$national_id)->first();
+        print ($customer."\n");
+
+        $customerId=$customer->Id;
+        print ("customerId".$customerId ."\n");
+
+        $card=Card::where("customer_id",$customerId)->first();
+        print("customerId on cards table".$card->customer_id);
+
+        $card->customer_id=null;
+        $card->save();
+        print($card->customer_id);
+
+
+        // Check if the user exists
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        // Check if the user has related records in other tables (e.g., customer, card)
+        if ($user->customer) {
+            // If the user has a related customer record, delete it
+            $user->customer->delete();
+        }
+
+        // If the user has a related card record, delete it
+        if ($user->customer && $user->customer->card) {
+            $user->customer->card->delete();
+        }
+
+        // Delete the user
+        $user->delete();
+
+        return response()->json(['message' => 'User deleted successfully']);
+    }
 
 
 
     public function logout(Request $request)
     {
-        //Session::forget('user_id');
+        Session::forget('user_id');
 
         $request->user()->currentAccessToken()->delete();
 
