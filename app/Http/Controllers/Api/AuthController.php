@@ -109,7 +109,7 @@ class AuthController extends Controller
             'nationalId' => 'required|string|max:255|unique:users,national_id',
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
-            'password' => ['required', 'confirmed', 'min:8'],
+            'password' => ['required',  'min:8'],
             'phoneNumber' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
