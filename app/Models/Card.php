@@ -19,6 +19,7 @@ class Card extends Model
 
     ];
 
+
     // Relationship with Customer model
     public function customer()
     {

@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
-use App\Models\Post;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
@@ -107,32 +106,36 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'national_id' => 'required|string|max:255|unique:users,national_id',
+            'nationalId' => 'required|string|max:255|unique:users,national_id',
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => ['required', 'confirmed', 'min:8'],
-            'phone_number' => 'required|string|max:255',
+            'phoneNumber' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
             'street' => 'required|string|max:255',
-            'birth_date' => 'required|date',
-            'card_name' => 'required|string|max:255',
-            'card_number' => 'required|string|max:255|unique:cards,card_number',
-            'card_national_id' => 'required|string|max:255|unique:cards,card_national_id',
-            'card_password' => 'required|string|max:255',
+            'birthDate' => 'required|date',
+            'cardName' => 'required|string|max:255',
+            'cardNumber' => 'required|string|max:255|unique:cards,card_number',
+            'cardNationalId' => 'required|string|max:255|unique:cards,card_national_id',
+            'cardPassword' => 'required|string|max:255',
         ]);
+
+        //'unit_price' => $requestData['unitPrice'],
+        $requestData = $request->only(['nationalId','phoneNumber','birthDate','cardName','cardNumber','cardNationalId','cardPassword']);
+
 
         // Create the user
         $user = User::create([
-            'national_id' => $request->national_id,
+            'national_id' => $requestData['nationalId'],
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'phone_number' => $request->phone_number,
+            'phone_number' => $requestData['phoneNumber'],
             'city' => $request->city,
             'state' => $request->state,
             'street' => $request->street,
-            'birth_date' => $request->birth_date,
+            'birth_date' => $requestData['birthDate'],
             'user_type' => '1', // Set the default value for UserType
             'latitude' => '10.2',
             'longitude' => '10.2',
@@ -141,7 +144,7 @@ class AuthController extends Controller
 
         $customer = new Customer([
             'Id' => $request->Id,
-            'national_id' => $request->national_id,
+            'national_id' => $requestData['nationalId'],
             'card_id' => null,
         ]);
 
@@ -149,10 +152,10 @@ class AuthController extends Controller
 
 
         $tamweenCard = Card::create([
-            'card_name' => $request->card_name,
-            'card_number' => $request->card_number,
-            'card_national_id' => $request->card_national_id,
-            'card_password' => Hash::make($request->card_password),
+            'card_name' => $requestData['cardName'],
+            'card_number' => $requestData['cardNumber'],
+            'card_national_id' =>$requestData['cardNationalId'],
+            'card_password' => Hash::make($requestData['cardPassword']),
             // Add other fields as needed
             'individuals_number' => '1',
             'bread_points' => '1',

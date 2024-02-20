@@ -36,6 +36,7 @@ class User extends Authenticatable
         'longitude',
     ];
 
+
     /**
      * The attributes that should be hidden for serialization.
      *

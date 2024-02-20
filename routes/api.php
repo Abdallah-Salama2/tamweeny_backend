@@ -34,7 +34,12 @@ Route::get('/test',[ProductController::class, 'test']);
 
 Route::get('/users',[AuthController::class, 'test']);
 
+
 Route::group(['middleware' => 'auth:sanctum'], function () {
+
+    Route::get('/test',[\App\Http\Controllers\TestController::class,'index']);
+
+    Route::post('/test22',[\App\Http\Controllers\TestController::class,'store']);
 
     Route::post('updateUserInfo',[AuthController::class,'updateUserInfo']);
 
