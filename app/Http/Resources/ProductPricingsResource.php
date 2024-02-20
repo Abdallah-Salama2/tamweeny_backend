@@ -15,7 +15,7 @@ class ProductPricingsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'Id' => $this->Id,
+            'id' => $this->Id,
             'product_id' => $this->product_id,
             'base_price' => $this->base_price,
             'selling_price' => $this->selling_price,

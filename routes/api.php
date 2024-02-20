@@ -1,14 +1,15 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Api\CardController;
+use App\Http\Controllers\Api\CatetgoryController;
+use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ProductPricingController;
+use App\Http\Controllers\Api\StoreController;
+use App\Http\Controllers\Api\StoreOwnerController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Validation\ValidationException;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,48 +21,42 @@ use Illuminate\Validation\ValidationException;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::get('/images',[\App\Http\Controllers\Api\ProductController::class, 'store'] );
+Route::get('/images',[ProductController::class, 'store'] );
 
 
-Route::post('/register', [\App\Http\Controllers\Api\AuthController::class, 'register']);
-Route::post('/fake', [\App\Http\Controllers\Api\AuthController::class, 'fake2']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/fake', [AuthController::class, 'fake2']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
-Route::get('/test',[\App\Http\Controllers\Api\ProductController::class, 'test']);
+Route::get('/test',[ProductController::class, 'test']);
 
-//Route::get('/test3',[\App\Http\Controllers\Api\CatetgoryController::class, 'test2']);
+//Route::get('/test3',[CatetgoryController::class, 'test2']);
 
-Route::get('/users',[\App\Http\Controllers\Api\AuthController::class, 'test']);
+Route::get('/users',[AuthController::class, 'test']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::get('/userss',[\App\Http\Controllers\Api\AuthController::class, 'index']);
-    Route::get('/customers',[\App\Http\Controllers\Api\CustomerController::class, 'index']);
-    Route::get('/owners',[\App\Http\Controllers\Api\StoreOwnerController::class, 'index']);
-    Route::get('/cards',[\App\Http\Controllers\Api\CardController::class, 'index']);
-    //http://127.0.0.1:8000/api/userss
-    Route::get('/categories',[\App\Http\Controllers\Api\CatetgoryController::class, 'index']);
-    //http://127.0.0.1:8000/api/categories
-    Route::get('/products',[\App\Http\Controllers\Api\ProductController::class, 'index']);
-    //http://127.0.0.1:8000/api/products
-    Route::get('/offers',[\App\Http\Controllers\Api\ProductPricingController::class, 'index']);
-    Route::get('/orders',[\App\Http\Controllers\Api\OrderController::class, 'index']);
-    //http://127.0.0.1:8000/api/offers
-    Route::get('/stores',[\App\Http\Controllers\Api\StoreController ::class, 'index']);
-    //http://127.0.0.1:8000/api/stores
-    Route::get('/storesLatLong',[\App\Http\Controllers\Api\StoreController ::class, 'showLatLong']);
-    //http://127.0.0.1:8000/api/storesLatLong
-    Route::get('/categories/{catName}',[\App\Http\Controllers\Api\ProductController::class, 'productsByCategory']);
-    //http://127.0.0.1:8000/api/categories/اخرى
-    Route::get('/productId/{product}',[\App\Http\Controllers\Api\ProductController::class, 'searchForProductById']);
-    //http://127.0.0.1:8000/api/productsId/2
-    Route::get('/productName/{product}',[\App\Http\Controllers\Api\ProductController::class, 'searchForProductByName']);
-        //http://127.0.0.1:8000/api/productsName/ارز
-    Route::get('/search/{name}',[AuthController::class,'search']);
-    //http://127.0.0.1:8000/api/search/Tux
 
+    Route::post('updateUserInfo',[AuthController::class,'updateUserInfo']);
+
+    Route::get('/userss',[AuthController::class, 'index']);
+    Route::get('/customers',[CustomerController::class, 'index']);
+    Route::get('/owners',[StoreOwnerController::class, 'index']);
+    Route::get('/cards',[CardController::class, 'index']);
+
+    Route::get('/categories',[CatetgoryController::class, 'index']);
+    Route::get('/products',[ProductController::class, 'index']);
+    Route::get('/offers',[ProductPricingController::class, 'index']);
+    Route::get('/orders',[OrderController::class, 'index']);
+    Route::get('/stores',[StoreController ::class, 'index']);
+    Route::get('/storesLatLong',[StoreController ::class, 'showLatLong']);
+
+
+    Route::get('/categories/{catName}',[ProductController::class, 'productsByCategory']);
+    Route::get('/productId/{product}',[ProductController::class, 'searchForProductById']);
+    Route::get('/productName/{product}',[ProductController::class, 'searchForProductByName']);
+    Route::get('/search/{name}',[AuthController::class,'search']);
     Route::get('/userss/{id?}',[AuthController::class,'findUser']);
-    //http://127.0.0.1:8000/api/userss/2
-    // UI FEN YA ABO 3LA2
+
 
 
 
@@ -71,5 +66,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 
 Route::post("/upload",[\App\Http\Controllers\FIleController::class, 'upload']);
-//Route::get('/test2',[\App\Http\Controllers\Api\CatetgoryController::class, 'test']);
+//Route::get('/test2',[CatetgoryController::class, 'test']);
 

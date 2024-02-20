@@ -15,7 +15,7 @@ class StoreResource extends JsonResource
     public function toArray(Request $request): array
     {
         return[
-            'Id'          => $this -> Id          ,
+            'id'          => $this -> Id          ,
             'ownerId'    => $this -> owner_id    ,
             'storeName'  => $this -> store_name  ,
             'address'     => $this -> address     ,

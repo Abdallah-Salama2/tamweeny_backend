@@ -11,10 +11,15 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use App\Models\Post;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Validator;
+
+
 
 
 class AuthController extends Controller
@@ -29,7 +34,7 @@ class AuthController extends Controller
     public function index(Request $request)
     {
         $users = User::with(
-            'customer','customer.card'
+            'customer', 'customer.card'
         )->get();
 
 
@@ -133,6 +138,16 @@ class AuthController extends Controller
             'longitude' => '10.2',
         ]);
 
+
+        $customer = new Customer([
+            'Id' => $request->Id,
+            'national_id' => $request->national_id,
+            'card_id' => null,
+        ]);
+
+        $customer->save();
+
+
         $tamweenCard = Card::create([
             'card_name' => $request->card_name,
             'card_number' => $request->card_number,
@@ -142,18 +157,17 @@ class AuthController extends Controller
             'individuals_number' => '1',
             'bread_points' => '1',
             'tamween_points' => '1',
+            'customer_id' => $customer->Id
         ]);
 
-        $customer = new Customer([
+        $customer->card_id = $tamweenCard->Id;
+        $customer->save();
 
-            'national_id' => $request->national_id,
-            'card_id' => $tamweenCard->Id, // Assuming this is the ID of the created TamweenCard
-        ]);
 
         // Create the Tamween card
         $user->save();
         $tamweenCard->save();
-        $customer->save();
+        //$customer->save();
         $token = $user->createToken('registration-token')->plainTextToken;
         $list = response()->json(['message' => 'Registration successful', 'user' => $user, 'customer' => $customer, 'tamweenCard' => $tamweenCard]);
         print $list;
@@ -222,6 +236,10 @@ class AuthController extends Controller
 //
 //    }
 
+    public function setUserId($Id)
+    {
+        return $Id;
+    }
 
     public function login(Request $request)
     {
@@ -238,16 +256,84 @@ class AuthController extends Controller
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
+        Session::put('user_id',$user->Id);
 
 
         $token = $user->createToken($request->device_name)->plainTextToken;
 
         return response()->json(['token' => $token, 'id' => $user->Id], 201);
     }
+    //$userResources = UserResource::collection($user);
+
+
+
+    // Find the user from the collection by ID
+//        $user = $users->first(function ($user) use ($customerId) {
+//            return $user->customer->Id == $customerId;
+//        });
+//
+//        print($user."\n");
+//print($userId2."\n");
+//$customerId = 1; // Replace 1 with the actual customer ID you want to search for
+    //dd(Session::all());
+    //print($users."\n");
+    // Transform the users collection into a collection of UserResource
+    //print ($userResources."\n");
+    // Check if the user was found
+//if ($user) {
+//    //  print($user);
+//} else {
+//    // User not found
+//    // Handle the case when the user with the specified ID is not found
+//    print("User not found.");
+//}
+
+    public function updateUserInfo(Request $request)
+    {
+        // Retrieve user ID from the session
+        $userId = Session::get('user_id');
+
+        // Fetch all users with related data
+        $users = User::with('customer', 'customer.card')->get();
+
+        // Retrieve the user from the collection by ID
+        $user = $users->where("Id", $userId)->first();
+        $national_id=$user->national_id;
+        $customer=$user->customer;
+        //print($customer);
+//        $customer =Customer::where("national_id",$national_id)->first();
+//        $customerId=$customer->Id;
+//        //print ($customerId);
+
+        //$card=Card::where("Id",$customerId)->first();
+        $card = $user->customer->card;
+
+        //print($card);
+        //$card->card_name=$request->input('card_name');
+
+
+
+
+        $user->fill($request->only(['name', 'email']));
+        $card->fill($request->only(['card_name', 'card_number','card_national_id','individuals_number']));
+
+
+        // Save user changes
+        $card->update();
+
+        $user->update();
+
+        // Return response
+        return new UserResource($user);
+    }
+
+
 
 
     public function logout(Request $request)
     {
+        //Session::forget('user_id');
+
         $request->user()->currentAccessToken()->delete();
 
         return response()->json(['message' => 'Successfully logged out']);
