@@ -37,12 +37,13 @@ Route::get('/users',[AuthController::class, 'test']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
 
-    Route::get('/test',[\App\Http\Controllers\TestController::class,'index']);
+    Route::post('favorite/{productId}',[\App\Http\Controllers\Api\FavoriteController::class,'add']);
 
+    Route::get('/test',[\App\Http\Controllers\TestController::class,'index']);
     Route::post('/test22',[\App\Http\Controllers\TestController::class,'store']);
 
-    Route::post('updateUserInfo',[AuthController::class,'updateUserInfo']);
-    Route::Delete('deleteUser',[AuthController::class,'deleteUser']);
+    Route::post('updateAccInfo',[AuthController::class,'updateUserInfo']);
+    Route::Delete('deleteAccount',[AuthController::class,'deleteUser']);
 
     Route::get('/userss',[AuthController::class, 'index']);
     Route::get('/customers',[CustomerController::class, 'index']);

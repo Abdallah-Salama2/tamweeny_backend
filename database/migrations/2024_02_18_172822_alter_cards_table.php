@@ -13,8 +13,8 @@ return new class extends Migration {
 //        Schema::table('customers', function(Blueprint $table){
 //            $table->renameColumn('tamween_card_id','card_id');
 //        });
-        Schema::table('customers', function (Blueprint $table) {
-            $table->renameColumn('national_id_fk', 'national_id');
+        Schema::table('favorites', function (Blueprint $table) {
+            $table->foreignIdFor(\App\Models\Product::class, 'product_id')->constrained('products');
         });
 
     }

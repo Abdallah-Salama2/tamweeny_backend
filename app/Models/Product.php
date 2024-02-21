@@ -38,6 +38,9 @@ class Product extends Model
         return $this->hasOne(ProductPricing::class, 'product_id', 'Id');
 
     }
+    public function favorite(){
+        return $this->hasMany(Favorite::class,'product_id','Id');
+    }
 
     protected $table = 'products'; // Adjust based on your table name
     protected $primaryKey = 'Id'; //

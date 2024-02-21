@@ -25,6 +25,10 @@ class Customer extends Model
         return $this->belongsTo(Card::class, 'card_id', 'Id');
     }
 
+    public function favorite(){
+        return $this->hasMany(Favorite::class,'customer_id','Id');
+    }
+
     protected $table = 'customers'; // Adjust based on your table name
     protected $primaryKey = 'Id'; //
 

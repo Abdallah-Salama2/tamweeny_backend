@@ -262,7 +262,7 @@ class AuthController extends Controller
 
         $token = $user->createToken($request->device_name)->plainTextToken;
 
-        return response()->json(['token' => $token, 'id' => $user->Id], 201);
+        return response()->json(['token' => $token, 'userId ' => $user->Id], 201);
     }
     //$userResources = UserResource::collection($user);
 
@@ -308,7 +308,7 @@ class AuthController extends Controller
 
         // Retrieve the user from the collection by ID
         $user = $users->where("Id", $userId)->first();
-
+        print (        $customerId=$user->customer->Id ."\n");
 
         $card = $user->customer->card;
 
@@ -328,26 +328,21 @@ class AuthController extends Controller
     {
         // Retrieve the user ID from the session
         $userId = Session::get('user_id');
-       print("UserID". $userId ."\n");
+        print("UserID ". $userId ."\t");
 
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
 
         // Retrieve the user from the collection by ID
         $user = $users->where("Id", $userId)->first();
-        print($user);
-        $national_id=$user->national_id;
-        print("NationalId". $national_id ."\n");
-        $customer =Customer::where("national_id",$national_id)->first();
-        print ($customer."\n");
+        //print($user);
 
-        $customerId=$customer->Id;
-        print ("customerId".$customerId ."\n");
+        $customerId=$user->customer->Id;
+        print ("customerId ".$customerId ."\n");
 
-        $card=Card::where("customer_id",$customerId)->first();
-        print("customerId on cards table".$card->customer_id);
-
+        $card=$user->customer->card;
         $card->customer_id=null;
+
         $card->save();
         print($card->customer_id);
 
