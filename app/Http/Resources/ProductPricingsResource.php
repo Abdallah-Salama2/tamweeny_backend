@@ -16,13 +16,13 @@ class ProductPricingsResource extends JsonResource
     {
         return [
             'id' => $this->Id,
-            'product_id' => $this->product_id,
-            'base_price' => $this->base_price,
-            'selling_price' => $this->selling_price,
+            'productId' => $this->product_id,
+            'basePrice' => $this->base_price,
+            'sellingPrice' => $this->selling_price,
             'discount' => $this->discount,
-            'discount_unit' => $this->discount_unit,
-            'date_created' => $this->date_created,
-            'exipred_date' => $this->exipred_date,
+            'discountUnit' => $this->discount_unit,
+            'dateCreated' => $this->date_created,
+            'exipredDate' => $this->exipred_date,
         ];
     }
 

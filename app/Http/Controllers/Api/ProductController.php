@@ -57,15 +57,20 @@ class ProductController extends Controller
         return response()->json(ProductResource::collection($products));
     }
 
-    public function searchForProductById($product = null)
+    public function searchForProductById($productId)
     {
-        $products = DB::table('products')
-            ->join('product_pricings', 'products.Id', '=', 'product_pricings.product_id')
-            ->where('products.Id', "like", $product)
-            ->orderBy('products.Id')
-            ->get();
+        $products = Product::with('productpricing', 'category')->get();
+        foreach ($products as $product) {
+            $product->product_image = base64_encode($product->product_image);
+            $product->category->category_image = base64_encode($product->category->category_image);
 
-        return response()->json(ProductResource::collection($products));
+        }
+
+        //print($products);
+        $product = $products->where("Id",$productId)->first();
+
+
+        return new ProductResource($product);
     }
 
     public function searchForProductByName($product_name)

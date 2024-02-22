@@ -138,12 +138,15 @@ class AuthController extends Controller
         return response()->json(['message' => 'Successfully logged out']);
     }
 
+    //        foreach ($users as $user) {
+//            // Assuming the property you're trying to access is `id` and not `Id`
+//            print("Loop UserID " .$user->Id); // Accessing the `id` property of each `User` object
+//        }
 
     public function updateUserInfo(Request $request)
     {
         // Retrieve user ID from the session
         $userId = Session::get('user_id');
-
         print($userId . "\n");
 
         // Fetch all users with related data

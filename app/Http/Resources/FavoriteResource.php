@@ -15,6 +15,10 @@ class FavoriteResource extends JsonResource
      */
     public function toArray(Request $request): array{
         return [
+            //'id' => $this->Id,
+            'customerId' => $this->customer_id,
+            'productId' => $this->product_id,
+
         ];
     }
 }

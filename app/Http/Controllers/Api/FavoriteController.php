@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreFavoriteRequest;
 use App\Http\Requests\UpdateFavoriteRequest;
+use App\Http\Resources\FavoriteResource;
 use App\Models\Customer;
 use App\Models\Favorite;
 
@@ -28,6 +29,7 @@ class FavoriteController extends Controller
         // Retrieve the user from the collection by ID
         $user = $users->where("Id", $userId)->first();
         //print($user);
+
         $customerId=$user->customer->Id;
         print ("CustomerId ".$customerId ."\n");
 
@@ -37,7 +39,7 @@ class FavoriteController extends Controller
 
         //$favorites=Favorite::all();
 
-        return response()->json($customerFavorites);
+        return response()->json(FavoriteResource::Collection($customerFavorites));
 
 
 
