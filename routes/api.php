@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CardController;
 use App\Http\Controllers\Api\CatetgoryController;
 use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductPricingController;
@@ -33,7 +34,7 @@ Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logo
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
 
-    Route::post('favorite/{productId}',[\App\Http\Controllers\Api\FavoriteController::class,'add']);
+    Route::post('favorite/{productId}',[FavoriteController::class,'add']);
 
     Route::get('/test',[\App\Http\Controllers\TestController::class,'index']);
     Route::post('/test22',[\App\Http\Controllers\TestController::class,'store']);
@@ -48,6 +49,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::get('/categories',[CatetgoryController::class, 'index']);
     Route::get('/products',[ProductController::class, 'index']);
+    Route::get('/favorites',[FavoriteController::class, 'index']);
     Route::get('/offers',[ProductPricingController::class, 'index']);
     Route::get('/orders',[OrderController::class, 'index']);
     Route::get('/stores',[StoreController ::class, 'index']);

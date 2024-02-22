@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -9,8 +10,8 @@ use App\Models\Customer;
 use App\Models\Favorite;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 
 class FavoriteController extends Controller
@@ -21,16 +22,10 @@ class FavoriteController extends Controller
     public function index()
     {
         //
-        $userId = Session::get('user_id');
-        print("UserID ". $userId ."\n");
 
-        // Fetch all users with related data
-        $users = User::with('customer', 'customer.card')->get();
+        $favorites=Favorite::all();
 
-        // Retrieve the user from the collection by ID
-        $user = $users->where("Id", $userId)->first();
-        $customerId=$user->customer->Id;
-        print ("customerId ".$customerId ."\n");
+        return response()->json($favorites);
 
 
 
@@ -109,3 +104,16 @@ class FavoriteController extends Controller
         //
     }
 }
+/*
+  $userId = Session::get('user_id');
+        print("UserID ". $userId ."\n");
+
+        // Fetch all users with related data
+        $users = User::with('customer', 'customer.card')->get();
+
+        // Retrieve the user from the collection by ID
+        $user = $users->where("Id", $userId)->first();
+        $customerId=$user->customer->Id;
+        print ("customerId ".$customerId ."\n");
+
+ */
