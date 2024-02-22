@@ -25,14 +25,10 @@ Route::get('/images',[ProductController::class, 'store'] );
 
 
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/fake', [AuthController::class, 'fake2']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
-Route::get('/test',[ProductController::class, 'test']);
 
-//Route::get('/test3',[CatetgoryController::class, 'test2']);
 
-Route::get('/users',[AuthController::class, 'test']);
 
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
@@ -73,5 +69,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 
 Route::post("/upload",[\App\Http\Controllers\FIleController::class, 'upload']);
-//Route::get('/test2',[CatetgoryController::class, 'test']);
+////Route::get('/test2',[CatetgoryController::class, 'test']);
+////Route::get('/test3',[CatetgoryController::class, 'test2']);
+//Route::post('/fake', [AuthController::class, 'fake2']);
+//Route::get('/test',[ProductController::class, 'test']);
+//
+//Route::get('/users',[AuthController::class, 'test']);
 

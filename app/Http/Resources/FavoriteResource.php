@@ -15,7 +15,6 @@ class FavoriteResource extends JsonResource
      */
     public function toArray(Request $request): array{
         return [
-
         ];
     }
 }
