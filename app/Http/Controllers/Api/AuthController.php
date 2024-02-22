@@ -143,6 +143,7 @@ class AuthController extends Controller
     {
         // Retrieve user ID from the session
         $userId = Session::get('user_id');
+
         print($userId . "\n");
 
         // Fetch all users with related data

@@ -21,11 +21,23 @@ class FavoriteController extends Controller
      */
     public function index()
     {
-        //
+        $userId = Session::get('user_id');
+        print("UserID ". $userId ."\n");
+        // Fetch all users with related data
+        $users = User::with('customer', 'customer.card')->get();
+        // Retrieve the user from the collection by ID
+        $user = $users->where("Id", $userId)->first();
+        //print($user);
+        $customerId=$user->customer->Id;
+        print ("CustomerId ".$customerId ."\n");
 
-        $favorites=Favorite::all();
 
-        return response()->json($favorites);
+
+        $customerFavorites= Favorite::where("customer_id",$user->customer->Id)->get();
+
+        //$favorites=Favorite::all();
+
+        return response()->json($customerFavorites);
 
 
 
@@ -35,15 +47,16 @@ class FavoriteController extends Controller
     {
         //
         $userId = Session::get('user_id');
-        print("UserID". $userId ."\n");
+        print("UserID ". $userId ."\n");
 
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
 
         // Retrieve the user from the collection by ID
         $user = $users->where("Id", $userId)->first();
+        print($user);
         $customerId=$user->customer->Id;
-        print ("customerId".$customerId ."\n");
+        print ("CustomerId ".$customerId ."\n");
 
         $favorite=  Favorite::create([
             'customer_id'=>$customerId,

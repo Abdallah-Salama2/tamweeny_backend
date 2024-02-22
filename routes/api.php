@@ -42,18 +42,18 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('updateAccInfo',[AuthController::class,'updateUserInfo']);
     Route::Delete('deleteAccount',[AuthController::class,'deleteUser']);
 
-    Route::get('/userss',[AuthController::class, 'index']);
-    Route::get('/customers',[CustomerController::class, 'index']);
+    Route::get('/userss',[AuthController::class, 'index']);                //Users
+    Route::get('/customers',[CustomerController::class, 'index']);         //Customers
     Route::get('/owners',[StoreOwnerController::class, 'index']);
     Route::get('/cards',[CardController::class, 'index']);
 
-    Route::get('/categories',[CatetgoryController::class, 'index']);
-    Route::get('/products',[ProductController::class, 'index']);
-    Route::get('/favorites',[FavoriteController::class, 'index']);
-    Route::get('/offers',[ProductPricingController::class, 'index']);
-    Route::get('/orders',[OrderController::class, 'index']);
-    Route::get('/stores',[StoreController ::class, 'index']);
-    Route::get('/storesLatLong',[StoreController ::class, 'showLatLong']);
+    Route::get('/categories',[CatetgoryController::class, 'index']);        //Categories
+    Route::get('/products',[ProductController::class, 'index']);            //Products
+    Route::get('/favorites',[FavoriteController::class, 'index']);          //Favorites
+    Route::get('/offers',[ProductPricingController::class, 'index']);       //ProductPricing
+    Route::get('/orders',[OrderController::class, 'index']);                //Orders
+    Route::get('/stores',[StoreController ::class, 'index']);               //Stores
+    Route::get('/storesLatLong',[StoreController ::class, 'showLatLong']);  //StoresLatLang
 
 
     Route::get('/categories/{catName}',[ProductController::class, 'productsByCategory']);
