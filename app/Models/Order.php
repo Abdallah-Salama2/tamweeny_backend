@@ -12,7 +12,7 @@ class Order extends Model
 
     protected $fillable = [
 
-        'Id',
+        'id',
         'order_date',
         'order_price',
         'discount_code',
@@ -24,5 +24,6 @@ class Order extends Model
 
 
     protected $table = 'orders'; // Adjust based on your table name
-    protected $primaryKey = 'Id'; //
+    protected $primaryKey = 'id'; //
+
 }

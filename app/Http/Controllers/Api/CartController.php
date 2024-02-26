@@ -1,26 +1,26 @@
 <?php
 
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreFavoriteRequest;
-use App\Http\Requests\UpdateFavoriteRequest;
-use App\Http\Resources\FavoriteResource;
-use App\Models\Favorite;
+use App\Http\Requests\StoreCartRequest;
+use App\Http\Requests\UpdateCartRequest;
+use App\Http\Resources\CartResource;
+use App\Models\Cart;
 use App\Models\Product;
+use App\Models\ProductPricing;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
-
-class FavoriteController extends Controller
+class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+
         $userId = Session::get('user_id');
         print("UserID " . $userId . "\n");
         // Fetch all users with related data
@@ -33,59 +33,69 @@ class FavoriteController extends Controller
         print ("CustomerId " . $customerId . "\n");
 
 
-        $customerFavorites = Favorite::where("customer_id", $user->customer->id)->get();
+        $customerCart = Cart::where("customer_id", $user->customer->id)->get();
 
         //$favorites=Favorite::all();
 
-        return response()->json(FavoriteResource::Collection($customerFavorites));
-
-    }
-
-    public function add($productId)
-    {
-        //
-        $userId = Session::get('user_id');
-        print("UserID " . $userId . "\n");
-
-        // Fetch all users with related data
-        $users = User::with('customer', 'customer.card')->get();
-
-        // Retrieve the user from the collection by ID
-        $user = $users->where("id", $userId)->first();
-        //print($user);
-
-        $customerId = $user->customer->id;
-        print ("CustomerId " . $customerId . "\n");
-
-        $product = Product::where("id", $productId)->first();
-        $product->favorite_status = 1;
-        $product->save();
-        $productFavoriteStatus = $product->favorite_status;
-        print("productFavoriteStatus: " . $productFavoriteStatus);
-
-        $favorite = Favorite::create([
-            'customer_id' => $customerId,
-            'product_id' => $productId,
-        ]);
-        $favorite->save();
-
-        return response()->json($favorite);
-
-
+        return response()->json(CartResource::Collection($customerCart));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request, $productId, $quantity)
     {
         //
+//        //
+        $userId = Session::get('user_id');
+        print("UserID " . $userId . "\n");
+
+        // Fetch all users with related data
+        $users = User::with('customer', 'customer.card')->get();
+
+        // Retrieve the user from the collection by ID
+        $user = $users->where("id", $userId)->first();
+        //print($user);
+
+        $customerId = $user->customer->id;
+        //$customerId=3;
+        print ("CustomerId " . $customerId . "\n");
+
+        $product = Product::where("id", $productId)->first();
+
+        $productInCart = Cart::where('customer_id', $customerId)
+            ->where('product_id', $productId)
+            ->first();
+
+        if ($productInCart) {
+            print("Product already exists in cart.");
+            // Handle the case where the product already exists in the cart
+            return;
+        }
+
+
+
+        $productPricing = (double) $product->productpricing->selling_price;
+
+
+        $cart = cart::create([
+            'customer_id' => $customerId,
+            'product_id' => $productId,
+            'quantity' => (int)$quantity,
+            'total_price'=> $productPricing*$quantity,
+        ]);
+        $cart->save();
+        return response()->json(
+            new CartResource($cart)
+         );
+
+
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreFavoriteRequest $request)
+    public function store(StoreCartRequest $request)
     {
         //
     }
@@ -93,7 +103,7 @@ class FavoriteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Favorite $favorite)
+    public function show(Cart $cart)
     {
         //
     }
@@ -101,7 +111,7 @@ class FavoriteController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Favorite $favorite)
+    public function edit(Cart $cart)
     {
         //
     }
@@ -109,7 +119,7 @@ class FavoriteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateFavoriteRequest $request, Favorite $favorite)
+    public function update(UpdateCartRequest $request, Cart $cart)
     {
         //
     }
@@ -117,21 +127,8 @@ class FavoriteController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Favorite $favorite)
+    public function destroy(Cart $cart)
     {
         //
     }
 }
-/*
-  $userId = Session::get('user_id');
-        print("UserID ". $userId ."\n");
-
-        // Fetch all users with related data
-        $users = User::with('customer', 'customer.card')->get();
-
-        // Retrieve the user from the collection by ID
-        $user = $users->where("id", $userId)->first();
-        $customerId=$user->customer->id;
-        print ("customerId ".$customerId ."\n");
-
- */

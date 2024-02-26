@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductResource;
 use App\Models\ProductPricing;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,11 +18,11 @@ class ProductPricingController extends Controller
         //
         //return ProductPricing::all();
         $products = DB::table('products')
-            ->join('product_pricings', 'products.Id', '=', 'product_pricings.product_id')
-            ->join('stores', 'products.store_id', '=', 'stores.Id')
-            ->join('storeowner', 'stores.owner_id', '=', 'storeowner.Id')
+            ->join('product_pricings', 'products.id', '=', 'product_pricings.product_id')
+            ->join('stores', 'products.store_id', '=', 'stores.id')
+            ->join('storeowner', 'stores.owner_id', '=', 'storeowner.id')
             ->select('products.product_name AS productName ', 'products.description', 'product_pricings.date_created AS dateCreated', 'product_pricings.exipred_date AS exipredDate', 'product_pricings.selling_price AS sellingPrice', 'product_pricings.discount', 'product_pricings.discount_unit AS discountUnit')
-            ->orderBy('products.Id')
+            ->orderBy('products.id')
             ->get();
 
         return response()->json($products);

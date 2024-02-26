@@ -15,7 +15,7 @@ class StoreController extends Controller
     public function index()
     {
         //
-        $stores=Store::all();
+        $stores = Store::all();
         return response()->json(StoreResource::collection($stores));
         /*[
     {
@@ -70,6 +70,7 @@ class StoreController extends Controller
     }
 ]*/
     }
+
     public function showLatLong()
     {
         //
@@ -81,7 +82,7 @@ class StoreController extends Controller
 
         foreach ($stores as $store) {
             $combinedData[] = [
-                $store->Id,
+                $store->id,
                 $store->latitude,
                 $store->longitude,
 
@@ -89,7 +90,7 @@ class StoreController extends Controller
         }
 
         return response()->json($combinedData);
-        //return response()->json(['token' => $token,'id'=>$user->Id], 201);
+        //return response()->json(['token' => $token,'id'=>$user->id], 201);
         /*[
         1,
         "30.05283352",

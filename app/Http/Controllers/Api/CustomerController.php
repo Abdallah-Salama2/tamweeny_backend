@@ -22,35 +22,6 @@ class CustomerController extends Controller
         return response()->json(CustomerResource::collection($customers));
     }
 
-    // app/Http/Controllers/CustomerController.php
-
-
-
-//    public function register(Request $request)
-//    {
-//        $request->validate([
-//            'national_id' => 'required|string|max:255|unique:users,NationalId',
-//            'tameen_card_name' => 'required|string|max:255',
-//            'tamween_card_number' => 'required|string|max:255',
-//            'card_national_id' => 'required|string|max:255',
-//            'tamween_card_password' => 'required|string|max:255',
-//        ]);
-//
-//        $user = User::where('NationalId', $request->national_id)->first();
-//
-//        if (!$user) {
-//            return response()->json(['error' => 'User not found'], 404);
-//        }
-//
-//        $customer = $user->customer()->create([
-//            'tameen_card_name' => $request->tameen_card_name,
-//            'tamween_card_number' => $request->tamween_card_number,
-//            'card_national_id' => $request->card_national_id,
-//            'tamween_card_password' => Hash::make($request->tamween_card_password),
-//        ]);
-//
-//        return response()->json(['message' => 'Customer registered successfully', 'customer' => $customer]);
-//    }
 
     /**
      * Store a newly created resource in storage.
@@ -84,3 +55,34 @@ class CustomerController extends Controller
         //
     }
 }
+
+// app/Http/Controllers/CustomerController.php
+
+
+
+//    public function register(Request $request)
+//    {
+//        $request->validate([
+//            'national_id' => 'required|string|max:255|unique:users,NationalId',
+//            'tameen_card_name' => 'required|string|max:255',
+//            'tamween_card_number' => 'required|string|max:255',
+//            'card_national_id' => 'required|string|max:255',
+//            'tamween_card_password' => 'required|string|max:255',
+//        ]);
+//
+//        $user = User::where('NationalId', $request->national_id)->first();
+//
+//        if (!$user) {
+//            return response()->json(['error' => 'User not found'], 404);
+//        }
+//
+//        $customer = $user->customer()->create([
+//            'tameen_card_name' => $request->tameen_card_name,
+//            'tamween_card_number' => $request->tamween_card_number,
+//            'card_national_id' => $request->card_national_id,
+//            'tamween_card_password' => Hash::make($request->tamween_card_password),
+//        ]);
+//
+//        return response()->json(['message' => 'Customer registered successfully', 'customer' => $customer]);
+//    }
+

@@ -19,7 +19,7 @@ class Store extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'Id',
+        'id',
         'owner_id',
         'store_name',
         'address',
@@ -31,5 +31,7 @@ class Store extends Model
     ];
 
     protected $table = 'stores'; // Adjust based on your table name
-    protected $primaryKey = 'Id'; //s
+    protected $primaryKey = 'id'; //s
+    public $timestamps = false;
+
 }

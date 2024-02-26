@@ -3,31 +3,44 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductPricingsResource;
 use App\Http\Resources\ProductResource;
-use App\Http\Resources\UserResource;
 use App\Models\Category;
+use App\Models\Favorite;
 use App\Models\Product;
-use App\Models\ProductPricing;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class ProductController extends Controller
 {
 
     public function index(Request $request)
     {
-        $products = Product::with('productpricing', 'category')->paginate(8);
+        $userId = Session::get('user_id');
+        print("UserID " . $userId . "\n");
+        // Fetch all users with related data
+        $users = User::with('customer', 'customer.card')->get();
+        // Retrieve the user from the collection by ID
+        $user = $users->where("id", $userId)->first();
+        //print($user);
+
+        $customerId = $user->customer->id;
+        print ("CustomerId " . $customerId . "\n");
+
+
+        $products = ProductResource::collection(Product::with('productpricing', 'category')->paginate(8));
 
         $numberOfPages = $products->lastPage();
-        //print(response()->json(['$numberOfPages' => $numberOfPages], ''));
-        //echo "Number of Pages: " . $numberOfPages . "\n";
+
+        $customerFavorites = Favorite::where("customer_id", $customerId)->pluck('product_id');
+        //print($customerFavorites);
 
         foreach ($products as $product) {
             $product->product_image = base64_encode($product->product_image);
             $product->category->category_image = base64_encode($product->category->category_image);
+
+            $product->favoriteStats = $customerFavorites->contains($product->id) ? 1 : 0;
+
 
         }
         return response()->json([
@@ -47,7 +60,7 @@ class ProductController extends Controller
         print($category->category_name);
 
         // Retrieve all products in the category
-        $products = Product::where('cat_id', $category->Id)->with('category')->get();
+        $products = Product::where('cat_id', $category->id)->with('category')->get();
 
         foreach ($products as $product) {
             $product->product_image = base64_encode($product->product_image);
@@ -67,7 +80,7 @@ class ProductController extends Controller
         }
 
         //print($products);
-        $product = $products->where("Id",$productId)->first();
+        $product = $products->where("id", $productId)->first();
 
 
         return new ProductResource($product);
@@ -76,7 +89,7 @@ class ProductController extends Controller
     public function searchForProductByName($product_name)
     {
 
-        $products = Product::where('product_name', "like",      "%" . $product_name . "%")->get();
+        $products = Product::where('product_name', "like", "%" . $product_name . "%")->get();
         //$products->product_image = base64_encode($products->product_image);
 
         return response()->json(ProductResource::collection($products));
@@ -103,10 +116,10 @@ class ProductController extends Controller
 //    public function productsByCategory($catId)
 //    {
 //        $products = DB::table('products')
-//            ->join('product_pricings', 'products.Id', '=', 'product_pricings.product_id')
+//            ->join('product_pricings', 'products.id', '=', 'product_pricings.product_id')
 //            ->join('categories', 'products.cat_id', '=', 'categories.Id')
 //            ->where('categories.category_name', '=', $catId)
-//            ->orderBy('products.Id')
+//            ->orderBy('products.id')
 //            ->get();
 //
 //        foreach ($products as $product) {
@@ -121,9 +134,9 @@ class ProductController extends Controller
 //    {
 //
 //        $products = DB::table('products')
-//            ->join('product_pricings', 'products.Id', '=', 'product_pricings.product_id')
+//            ->join('product_pricings', 'products.id', '=', 'product_pricings.product_id')
 //            ->where('products.product_name', "like", '%' . $product . '%')
-//            ->orderBy('products.Id')
+//            ->orderBy('products.id')
 //            ->get();
 //
 //
@@ -194,8 +207,8 @@ class ProductController extends Controller
 //    public function index(Request $request)
 //    {
 //        $products = DB::table('products')
-//            ->join('product_pricings', 'products.Id', '=', 'product_pricings.product_id')
-//            ->orderBy('products.Id')
+//            ->join('product_pricings', 'products.id', '=', 'product_pricings.product_id')
+//            ->orderBy('products.id')
 //            ->get();
 //
 //        // Encode image data as base64

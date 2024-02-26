@@ -2,8 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Customer;
-use Cassandra\Custom;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,7 +17,7 @@ class UserResource extends JsonResource
         // return parent::toArray($request);
 
         return [
-            'id' => $this->Id,
+            'id' => $this->id,
             'nationalId' => $this->national_id,
             'name' => $this->name,
             'email' => $this->email,
@@ -32,8 +30,8 @@ class UserResource extends JsonResource
             'userType' => $this->user_type,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
-            'customerId' =>$this->customer->Id ?? null, //should be Id in customers table of Customer model not Id in user Model but idont know how to do it
-            'cardId' => $this->customer->card->Id ?? null, // Check if customer and card exist
+            'customerId' => $this->customer->id ?? null, //should be Id in customers table of Customer model not Id in user Model but idont know how to do it
+            'cardId' => $this->customer->card->id ?? null, // Check if customer and card exist
             'cardName' => $this->customer->card->card_name ?? null,
             'cardNumber' => $this->customer->card->card_number ?? null,
             'cardNationalId' => $this->customer->card->card_national_id ?? null,

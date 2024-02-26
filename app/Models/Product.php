@@ -16,7 +16,7 @@ class Product extends Model
     ];
 
     protected $fillable = [
-        'Id',
+        'id',
         'product_name',
         'product_type',
         'product_image',
@@ -24,24 +24,34 @@ class Product extends Model
         'description',
         'stock_quantity',
         'points_price',
+        'favorite_status',
         'store_id',
         'cat_id'
     ];
 
     public function category()
     {
-        return $this->belongsTo(Category::class, 'cat_id', 'Id');
+        return $this->belongsTo(Category::class, 'cat_id', 'id');
     }
 
     public function productpricing()
     {
-        return $this->hasOne(ProductPricing::class, 'product_id', 'Id');
+        return $this->hasOne(ProductPricing::class, 'product_id', 'id');
 
     }
-    public function favorite(){
-        return $this->hasMany(Favorite::class,'product_id','Id');
+
+    public function favorite()
+    {
+        return $this->hasMany(Favorite::class, 'product_id', 'id');
     }
 
+    public function cart()
+    {
+        return $this->hasOne(Product::class, 'product_id', 'id');
+
+    }
+
+    public $timestamps = false;
     protected $table = 'products'; // Adjust based on your table name
-    protected $primaryKey = 'Id'; //
+    protected $primaryKey = 'id'; //
 }

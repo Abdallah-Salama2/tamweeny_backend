@@ -13,9 +13,10 @@ class FavoriteResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array{
+    public function toArray(Request $request): array
+    {
         return [
-            //'id' => $this->Id,
+            'id' => $this->id,
             'customerId' => $this->customer_id,
             'productId' => $this->product_id,
 

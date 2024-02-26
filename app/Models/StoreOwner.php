@@ -19,7 +19,7 @@ class storeOwner extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'Id',
+        'id',
         'tax_registration_number',
         'national_id',
         'tax_card'
@@ -31,5 +31,7 @@ class storeOwner extends Model
     }
 
     protected $table = 'storeowner'; // Adjust based on your table name
-    protected $primaryKey = 'Id'; //
+    protected $primaryKey = 'id'; //
+    public $timestamps = false;
+
 }

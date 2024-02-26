@@ -15,7 +15,7 @@ class ProductResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->Id,
+            'id' => $this->id,
             'productName' => $this->product_name,
             'productType' => $this->product_type,
             //'productImage' => $this->product_image,
@@ -23,8 +23,8 @@ class ProductResource extends JsonResource
             'description' => $this->description,
             'stockQuantity' => $this->stock_quantity,
             'pointsPrice' => $this->points_price,
-            'storeId' => $this->store_id,
-            'categoryId' => $this->cat_id,
+            'storeId' => (int)$this->store_id,
+            'categoryId' => (int)$this->cat_id,
             'categoryName' => $this->category->category_name,
             //'categoryImage' => $this->category->category_image,
             'basePrice' => $this->productpricing->base_price,
@@ -32,7 +32,11 @@ class ProductResource extends JsonResource
             'discount' => $this->productpricing->discount,
             'discountUnit' => $this->productpricing->discount_unit,
             'datCreated' => $this->productpricing->date_created,
-            'exipredDate' => $this->productpricing->exipred_date
+            'exipredDate' => $this->productpricing->exipred_date,
+            'favoriteStats' => $this->when(isset($this->favoriteStats), $this->favoriteStats),
         ];
     }
 }
+//
+//If favoriteStats is not a column in your database table, and you want to include it in your response based on whether a product is a favorite for the current user, you can manually add it to the ProductResource without relying on the database.
+//

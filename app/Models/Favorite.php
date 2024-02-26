@@ -9,23 +9,26 @@ class Favorite extends Model
 {
     use HasFactory;
 
-    protected  $fillable=[
-      'Id',
-      'customer_id',
-      'product_id'
+    protected $fillable = [
+        'id',
+        'customer_id',
+        'product_id'
     ];
 
-    public $timestamps=false;
 
-    public function product(){
-        return $this->belongsTo(Product::class,'customer_id','Id');
-
-    }
-    public function customer(){
-        return $this->belongsTo(Customer::class,'customer_id','Id');
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'customer_id', 'id');
 
     }
 
-    protected  $primaryKey='Id';
-    protected $table='favorites';
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+
+    }
+
+    public $timestamps = false;
+    protected $primaryKey = 'id';
+    protected $table = 'favorites';
 }

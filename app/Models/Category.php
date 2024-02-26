@@ -11,12 +11,13 @@ class Category extends Model
 {
     use HasApiTokens;
     use HasFactory, Notifiable;
+
 //    protected $hidden=[
 //        'catImage'
 //    ];
 
-    protected $fillable=[
-        'Id',
+    protected $fillable = [
+        'id',
         'category_name',
         'category_image',
 
@@ -24,9 +25,11 @@ class Category extends Model
 
     public function product()
     {
-        return $this->hasOne(Product::class, 'cat_id', 'Id');
+        return $this->hasOne(Product::class, 'cat_id', 'id');
     }
 
+    public $timestamps = false;
+
     protected $table = 'categories'; // Adjust based on your table name
-    protected $primaryKey = 'Id'; //
+    protected $primaryKey = 'id'; //
 }

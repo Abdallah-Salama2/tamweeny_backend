@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         // Fields for the Customer model
-        'Id',
+        'id',
         'national_id', // Assuming you have a column named 'national_id' for the foreign key
         'card_id'
     ];
@@ -22,15 +23,16 @@ class Customer extends Model
 
     public function card()
     {
-        return $this->belongsTo(Card::class, 'card_id', 'Id');
+        return $this->belongsTo(Card::class, 'card_id', 'id');
     }
 
-    public function favorite(){
-        return $this->hasMany(Favorite::class,'customer_id','Id');
+    public function favorite()
+    {
+        return $this->hasMany(Favorite::class, 'customer_id', 'id');
     }
 
     protected $table = 'customers'; // Adjust based on your table name
-    protected $primaryKey = 'Id'; //
+    protected $primaryKey = 'id'; //
 
 
 }

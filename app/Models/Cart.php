@@ -5,20 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductPricing extends Model
+class Cart extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'id',
+        'customer_id',
         'product_id',
-        'base_price',
-        'selling_price',
-        'discount',
-        'discount_unit',
-        'date_created',
-        'exipred_date'
-
+        'quantity',
+        'total_price'
     ];
 
     public function product()
@@ -26,7 +22,8 @@ class ProductPricing extends Model
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 
-    protected $table = 'product_pricings'; // Adjust based on your table name
+    public $timestamps = false;
+    protected $table = 'cart'; // Adjust based on your table name
     protected $primaryKey = 'id'; //
 
 }
