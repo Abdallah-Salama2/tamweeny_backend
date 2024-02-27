@@ -23,9 +23,10 @@ class FavoriteController extends Controller
     public function index(Request $request)
     {
         $userId = $request->user()->id;
+
         //print("UserID " . $userId . "\n");
-        // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
+
         // Retrieve the user from the collection by ID
         $user = $users->where("id", $userId)->first();
         //print($user);
@@ -34,7 +35,7 @@ class FavoriteController extends Controller
         //print ("CustomerId " . $customerId . "\n");
 
 
-        $customerFavorites = Favorite::where("customer_id", $user->customer->id)->get();
+        $customerFavorites = Favorite::where("customer_id", $customerId)->get();
 
         //$favorites=Favorite::all();
 
@@ -53,7 +54,7 @@ class FavoriteController extends Controller
 
         // Retrieve the user from the collection by ID
         $user = $users->where("id", $userId)->first();
-        //print($user);
+        print($user);
 
         $customerId = $user->customer->id;
 //        print ("CustomerId " . $customerId . "\n");
