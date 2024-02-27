@@ -54,7 +54,7 @@ class FavoriteController extends Controller
 
         // Retrieve the user from the collection by ID
         $user = $users->where("id", $userId)->first();
-        print($user);
+        //print($user);
 
         $customerId = $user->customer->id;
 //        print ("CustomerId " . $customerId . "\n");
