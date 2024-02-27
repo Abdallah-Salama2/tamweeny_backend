@@ -102,7 +102,7 @@ class AuthController extends Controller
     public function updateUserInfo(Request $request)
     {
         // Retrieve user ID from the session
-        $userId = Session::get('user_id');
+        $userId = $request->user()->id;
        // print($userId . "\n");
 
         // Fetch all users with related data
@@ -146,10 +146,10 @@ class AuthController extends Controller
 
     }
 
-    public function deleteUser()
+    public function deleteUser(Request $request)
     {
         // Retrieve the user ID from the session
-        $userId = Session::get('user_id');
+        $userId = $request->user()->id;
         //print("UserID " . $userId . "\t");
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();

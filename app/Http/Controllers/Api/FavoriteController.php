@@ -20,9 +20,9 @@ class FavoriteController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $userId = Session::get('user_id');
+        $userId = $request->user()->id;
         //print("UserID " . $userId . "\n");
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
@@ -42,10 +42,10 @@ class FavoriteController extends Controller
 
     }
 
-    public function add($productId)
+    public function add(Request $request,$productId)
     {
         //
-        $userId = Session::get('user_id');
+        $userId = $request->user()->id;
 //        print("UserID " . $userId . "\n");
 
         // Fetch all users with related data

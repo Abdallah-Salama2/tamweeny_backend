@@ -18,10 +18,10 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $userId = Session::get('user_id');
+        $userId = $request->user()->id;
        // print("UserID " . $userId . "\n");
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
@@ -53,10 +53,10 @@ class OrderController extends Controller
      * Store a newly created resource in storage.
      */
 
-    public function store()
+    public function store(Request $request)
     {
         //
-        $userId = Session::get('user_id');
+        $userId = $request->user()->id;
         //print("UserID " . $userId . "\n");
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();

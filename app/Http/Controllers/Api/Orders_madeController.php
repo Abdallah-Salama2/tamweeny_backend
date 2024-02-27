@@ -16,11 +16,11 @@ class Orders_madeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
 
-        $userId = Session::get('user_id');
+        $userId = $request->user()->id;
         //print("UserID " . $userId . "\n");
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
@@ -37,11 +37,11 @@ class Orders_madeController extends Controller
 
     }
 
-    public function fullOrder()
+    public function fullOrder(Request $request)
     {
         //
 
-        $userId = Session::get('user_id');
+        $userId = $request->user()->id;
         //print("UserID " . $userId . "\n");
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
