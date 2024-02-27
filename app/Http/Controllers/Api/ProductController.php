@@ -18,7 +18,7 @@ class ProductController extends Controller
     {
         $userId = $request->user()->id;
 
-        print("UserID " . $userId . "\n");
+        //print("UserID " . $userId . "\n");
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
 //        print($users);
