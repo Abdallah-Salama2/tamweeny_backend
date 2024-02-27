@@ -66,6 +66,11 @@ class User extends Authenticatable
         return $this->hasOne(StoreOwner::class, 'national_id', 'national_id');
     }
 
+    public function governorAdmin()
+    {
+        return $this->hasOne(GovernorAdmin::class, 'national_id','national_id');
+    }
+
 
     /**
      * The table associated with the model.

@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CartResource;
 use App\Http\Resources\OrderResource;
+use App\Http\Resources\Orders_madeResource;
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\Orders_made;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -20,7 +22,7 @@ class OrderController extends Controller
     {
         //
         $userId = Session::get('user_id');
-        print("UserID " . $userId . "\n");
+       // print("UserID " . $userId . "\n");
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
         // Retrieve the user from the collection by ID
@@ -28,20 +30,19 @@ class OrderController extends Controller
         //print($user);
 
         $customerId = $user->customer->id;
-        print ("CustomerId " . $customerId . "\n");
+        //print ("CustomerId " . $customerId . "\n");
 
 
-        $customerCartItemPrices = Cart::where("customer_id", $user->customer->id)->pluck("total_price");
-        print($customerCartItemPrices."\n");
+        $customerCartItemPrices = Cart::where("customer_id", $customerId)->pluck("total_price");
+       // print($customerCartItemPrices."\n");
 
-        $customerCart =Cart::where("customer_id", $user->customer->id)->get();
-        $customerOrders=Order::where("customer_id", $user->customer->id)->get();
+        //$customerCart =Cart::where("customer_id", $user->customer->id)->get();
+        $customerOrders=Order::where("customer_id", $customerId)->get();
 
         //Cart::where("customer_id", $user->customer->id)->get()
 
         return response()->json([
             OrderResource::collection($customerOrders),
-            CartResource::collection($customerCart),
         ]);
 
 
@@ -56,7 +57,7 @@ class OrderController extends Controller
     {
         //
         $userId = Session::get('user_id');
-        print("UserID " . $userId . "\n");
+        //print("UserID " . $userId . "\n");
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
         // Retrieve the user from the collection by ID
@@ -64,38 +65,42 @@ class OrderController extends Controller
         //print($user);
 
         $customerId = $user->customer->id;
-        print ("CustomerId " . $customerId . "\n");
+        //print ("CustomerId " . $customerId . "\n");
 
 
-        $customerCartItemPrices = Cart::where("customer_id", $user->customer->id)->pluck("total_price");
-   //     print($customerCartItemPrices."\n");
+        //$customerCartItemPrices = Cart::where("customer_id", $user->customer->id)->pluck("total_price");
 
         $customerCart =Cart::where("customer_id", $user->customer->id)->get();
-
-        $total=0;
-        foreach ($customerCartItemPrices as $item2){
-
-            $total+=$item2;
-        }
+        $total = $customerCart->sum('total_price');
 
 
-//        print($total."\n");
-
-         $date=date("Y-m-d H:i:s");
-         $date2=date("Y-F-l H:i:s");
-//         print($date."\n");
 
         $order=Order::create([
-            "order_date"=>$date,
+            "order_date"=>now(),
             "order_price"=>$total,
             "customer_id"=>$customerId,
         ]);
-        //$customerCart->destroy();
 
+        $ordersMade = [];
+        foreach ($customerCart as $cartItem) {
+            $ordersMade[] = Orders_made::create([
+                'order_id' => $order->id,
+                'product_id' => $cartItem->product_id, // Assuming cart_item_id should be the cart item's ID
+                'product_name' => $cartItem->product->product_name,
+                'quantity' => $cartItem->quantity,
+                'total_price' => $cartItem->total_price,
+                'customer_id' => $customerId
+            ]);
+        }
+
+
+         //Delete cart items associated with the order
+        foreach ($customerCart as $cartItem) {
+            $cartItem->delete();
+        }
 
         return response()->json([
-            'orderCreated:' =>new OrderResource($order),
-            'cartItemsInOrder:'=>CartResource::collection($customerCart),
+            'message' => 'Order created successfully',
         ]);
 
     }

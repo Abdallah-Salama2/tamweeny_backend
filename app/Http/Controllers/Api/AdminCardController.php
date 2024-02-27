@@ -1,0 +1,105 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\AdminCard;
+use Illuminate\Http\Request;
+
+class AdminCardController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        //
+    }
+
+    public function showAdminCards()
+    {
+        $adminCards = AdminCard::all();
+
+        return view('adminCard', compact('adminCards'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+        return view('create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        // Validate the request data
+        $request->validate([
+            // Add your validation rules here...
+        ]);
+
+        // Store the admin card details
+        $nationalIdCardPath = $request->file('national_id_card_and_birth_certificate')->store('public/uploads');
+        $followersNationalIdCardsPaths = [];
+        if ($request->hasFile('followers_national_id_cards_and_birth_certificates')) {
+            foreach ($request->file('followers_national_id_cards_and_birth_certificates') as $file) {
+                // Store each uploaded file and save its path
+                $path = $file->store('public/uploads');
+                $followersNationalIdCardsPaths[] = $path;
+            }
+        }
+
+        // Serialize the array of file paths into a JSON string
+        $followersNationalIdCardsPathsJson = json_encode($followersNationalIdCardsPaths);
+
+        // Create a new AdminCard instance and store the file paths in the database
+        $adminCard = AdminCard::create([
+            'name' => $request->input('name'),
+            'admin_id' => $request->input('admin_id'),
+            'email' => $request->input('email'),
+            'gender' => $request->input('gender'),
+            'salary' => $request->input('salary'),
+            'national_id_card_and_birth_certificate' => $nationalIdCardPath,
+            'followers_national_id_cards_and_birth_certificates' => $followersNationalIdCardsPathsJson,
+        ]);
+        return response()->json($adminCard);
+
+        // Redirect or respond with success message
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
+}

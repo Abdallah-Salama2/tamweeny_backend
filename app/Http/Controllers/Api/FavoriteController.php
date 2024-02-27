@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreFavoriteRequest;
 use App\Http\Requests\UpdateFavoriteRequest;
 use App\Http\Resources\FavoriteResource;
+use App\Models\Cart;
 use App\Models\Favorite;
 use App\Models\Product;
 use App\Models\User;
@@ -22,7 +23,7 @@ class FavoriteController extends Controller
     public function index()
     {
         $userId = Session::get('user_id');
-        print("UserID " . $userId . "\n");
+        //print("UserID " . $userId . "\n");
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
         // Retrieve the user from the collection by ID
@@ -30,7 +31,7 @@ class FavoriteController extends Controller
         //print($user);
 
         $customerId = $user->customer->id;
-        print ("CustomerId " . $customerId . "\n");
+        //print ("CustomerId " . $customerId . "\n");
 
 
         $customerFavorites = Favorite::where("customer_id", $user->customer->id)->get();
@@ -45,7 +46,7 @@ class FavoriteController extends Controller
     {
         //
         $userId = Session::get('user_id');
-        print("UserID " . $userId . "\n");
+//        print("UserID " . $userId . "\n");
 
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
@@ -55,13 +56,21 @@ class FavoriteController extends Controller
         //print($user);
 
         $customerId = $user->customer->id;
-        print ("CustomerId " . $customerId . "\n");
+//        print ("CustomerId " . $customerId . "\n");
 
         $product = Product::where("id", $productId)->first();
-        $product->favorite_status = 1;
-        $product->save();
-        $productFavoriteStatus = $product->favorite_status;
-        print("productFavoriteStatus: " . $productFavoriteStatus);
+        $productInCart = Favorite::where('customer_id', $customerId)
+            ->where('product_id', $productId)
+            ->first();
+
+        if ($productInCart) {
+            // Handle the case where the product already exists in the cart
+            $productInCart->delete();
+            return response()->json([
+                'message' => 'Product removed from Favorites.',
+            ],409);
+        }
+
 
         $favorite = Favorite::create([
             'customer_id' => $customerId,
@@ -69,8 +78,9 @@ class FavoriteController extends Controller
         ]);
         $favorite->save();
 
-        return response()->json($favorite);
-
+        return response()->json([
+            'message' => 'Product Added To Favorites ',
+        ],200);
 
     }
 

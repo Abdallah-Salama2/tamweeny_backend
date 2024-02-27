@@ -22,6 +22,15 @@ class Order extends Model
         'delivery_id'
     ];
 
+    public function order_made()
+    {
+        return $this->hasOne(Orders_made::class, 'order_id', 'id');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Order::class, 'customer_id', 'id');
+    }
 
     protected $table = 'orders'; // Adjust based on your table name
     protected $primaryKey = 'id'; //

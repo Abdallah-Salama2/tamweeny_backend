@@ -31,6 +31,17 @@ class Customer extends Model
         return $this->hasMany(Favorite::class, 'customer_id', 'id');
     }
 
+    public function order()
+    {
+        return $this->hasOne(Order::class, 'customer_id', 'id');
+    }
+
+    public function order_made()
+    {
+        return $this->hasOne(Orders_made::class, 'customer_id', 'id');
+    }
+
+
     protected $table = 'customers'; // Adjust based on your table name
     protected $primaryKey = 'id'; //
 

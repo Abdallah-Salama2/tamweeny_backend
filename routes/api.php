@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\Api\AdminCardController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CardController;
 use App\Http\Controllers\Api\CatetgoryController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\Orders_madeController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductPricingController;
 use App\Http\Controllers\Api\StoreController;
@@ -24,49 +26,68 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/images', [ProductController::class, 'store']);
+Route::get('/admin-cards/create', [AdminCardController::class, 'create'])->name('admin-cards.create');
+Route::get('/admin-card', [AdminCardController::class, 'showAdminCards']);
 
+
+// Route to store the newly created admin card
+Route::post('/adminCards', [AdminCardController::class, 'store']);
 
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
 
+    Route::get('/userss', [AuthController::class, 'index']);                //Users
+    Route::get('/search/{name}', [AuthController::class, 'search']);
+    Route::get('/userss/{id?}', [AuthController::class, 'findUser']);
+
+
+    Route::get('/customers', [CustomerController::class, 'index']);         //Customers
+    Route::post('updateAccInfo', [AuthController::class, 'updateUserInfo']);
+    Route::Delete('deleteAccount', [AuthController::class, 'deleteUser']);
+    Route::get('/cards', [CardController::class, 'index']);
+
+
+    Route::get('/categories', [CatetgoryController::class, 'index']);        //Categories
+    Route::get('/categories/{catName}', [ProductController::class, 'productsByCategory']);
+
+    Route::get('/products', [ProductController::class, 'index']);            //Products
+    Route::get('/productId/{product}', [ProductController::class, 'searchForProductById']);
+    Route::get('/productName/{product}', [ProductController::class, 'searchForProductByName']);
+    Route::get('/offers', [ProductPricingController::class, 'index']);       //ProductPricing
+
+    Route::get('/favorites', [FavoriteController::class, 'index']);          //Favorites
+    Route::post('favorite/{productId}', [FavoriteController::class, 'add']);
+
     Route::get('/cart', [CartController::class, 'index']);
-    Route::get('/orders2', [OrderController::class, 'store']);
     Route::post('cart/{productId}/{quantity}', [CartController::class, 'create']);
 
-    Route::post('favorite/{productId}', [FavoriteController::class, 'add']);
-    Route::get('stats/{productId}', [FavoriteController::class, 'favoriteStats']);
 
+    Route::get('/orders', [OrderController::class, 'index']);                //Orders
+    Route::post('/createOrder', [OrderController::class, 'store']);
+    Route::get('/ordersMade', [Orders_madeController::class, 'index']);
+    Route::get('/fullOrder', [Orders_madeController::class, 'fullOrder']);
+
+
+
+    Route::get('/owners', [StoreOwnerController::class, 'index']);
+    Route::get('/stores', [StoreController ::class, 'index']);               //Stores
+    Route::get('/storesLatLong', [StoreController ::class, 'showLatLong']);  //StoresLatLang
 
     Route::get('/test', [\App\Http\Controllers\TestController::class, 'index']);
     Route::post('/test22', [\App\Http\Controllers\TestController::class, 'store']);
 
-    Route::post('updateAccInfo', [AuthController::class, 'updateUserInfo']);
-    Route::Delete('deleteAccount', [AuthController::class, 'deleteUser']);
-
-    Route::get('/userss', [AuthController::class, 'index']);                //Users
-    Route::get('/customers', [CustomerController::class, 'index']);         //Customers
-    Route::get('/owners', [StoreOwnerController::class, 'index']);
-    Route::get('/cards', [CardController::class, 'index']);
-
-    Route::get('/categories', [CatetgoryController::class, 'index']);        //Categories
-    Route::get('/products', [ProductController::class, 'index']);            //Products
-    Route::get('/favorites', [FavoriteController::class, 'index']);          //Favorites
-    Route::get('/offers', [ProductPricingController::class, 'index']);       //ProductPricing
-    Route::get('/orders', [OrderController::class, 'index']);                //Orders
-    Route::get('/stores', [StoreController ::class, 'index']);               //Stores
-    Route::get('/storesLatLong', [StoreController ::class, 'showLatLong']);  //StoresLatLang
 
 
-    Route::get('/categories/{catName}', [ProductController::class, 'productsByCategory']);
-    Route::get('/productId/{product}', [ProductController::class, 'searchForProductById']);
-    Route::get('/productName/{product}', [ProductController::class, 'searchForProductByName']);
-    Route::get('/search/{name}', [AuthController::class, 'search']);
-    Route::get('/userss/{id?}', [AuthController::class, 'findUser']);
+
+
+
+
 
 
 });

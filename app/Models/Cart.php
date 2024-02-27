@@ -21,6 +21,10 @@ class Cart extends Model
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');
     }
+    public function order_made()
+    {
+        return $this->hasMany(Orders_made::class, 'cart_item_id', 'id');
+    }
 
     public $timestamps = false;
     protected $table = 'cart'; // Adjust based on your table name

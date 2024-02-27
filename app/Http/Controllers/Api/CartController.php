@@ -22,7 +22,7 @@ class CartController extends Controller
     {
 
         $userId = Session::get('user_id');
-        print("UserID " . $userId . "\n");
+        //print("UserID " . $userId . "\n");
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
         // Retrieve the user from the collection by ID
@@ -30,10 +30,10 @@ class CartController extends Controller
         //print($user);
 
         $customerId = $user->customer->id;
-        print ("CustomerId " . $customerId . "\n");
+        //print ("CustomerId " . $customerId . "\n");
 
 
-        $customerCart = Cart::where("customer_id", $user->customer->id)->get();
+        $customerCart = Cart::where("customer_id", $customerId)->get();
 
         //$favorites=Favorite::all();
 
@@ -48,7 +48,7 @@ class CartController extends Controller
         //
 //        //
         $userId = Session::get('user_id');
-        print("UserID " . $userId . "\n");
+        //print("UserID " . $userId . "\n");
 
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
@@ -59,7 +59,7 @@ class CartController extends Controller
 
         $customerId = $user->customer->id;
         //$customerId=3;
-        print ("CustomerId " . $customerId . "\n");
+        //print ("CustomerId " . $customerId . "\n");
 
         $product = Product::where("id", $productId)->first();
 
@@ -68,9 +68,10 @@ class CartController extends Controller
             ->first();
 
         if ($productInCart) {
-            print("Product already exists in cart.");
             // Handle the case where the product already exists in the cart
-            return;
+             return response()->json([
+                'message' => 'Product already exists in cart.',
+            ],409);
         }
 
 
@@ -85,9 +86,9 @@ class CartController extends Controller
             'total_price'=> $productPricing*$quantity,
         ]);
         $cart->save();
-        return response()->json(
-            new CartResource($cart)
-         );
+        return response()->json([
+            'message' => 'Item Added To Cart Successfully',
+        ],200);
 
 
     }

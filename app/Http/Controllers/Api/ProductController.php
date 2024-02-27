@@ -17,7 +17,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $userId = Session::get('user_id');
-        print("UserID " . $userId . "\n");
+        //print("UserID " . $userId . "\n");
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
         // Retrieve the user from the collection by ID
@@ -25,7 +25,7 @@ class ProductController extends Controller
         //print($user);
 
         $customerId = $user->customer->id;
-        print ("CustomerId " . $customerId . "\n");
+        //print ("CustomerId " . $customerId . "\n");
 
 
         $products = ProductResource::collection(Product::with('productpricing', 'category')->paginate(8));
@@ -57,7 +57,7 @@ class ProductController extends Controller
         // Retrieve the category by name
         $category = Category::where('category_name', $catName)->first();
         $category->category_image = base64_encode($category->category_image);
-        print($category->category_name);
+        //print($category->category_name);
 
         // Retrieve all products in the category
         $products = Product::where('cat_id', $category->id)->with('category')->get();

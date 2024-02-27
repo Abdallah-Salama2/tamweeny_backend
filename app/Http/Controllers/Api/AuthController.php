@@ -103,7 +103,7 @@ class AuthController extends Controller
     {
         // Retrieve user ID from the session
         $userId = Session::get('user_id');
-        print($userId . "\n");
+       // print($userId . "\n");
 
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
@@ -111,7 +111,7 @@ class AuthController extends Controller
         // Retrieve the user from the collection by ID
         $user = $users->where("id", $userId)->first();
         $customerId = $user->customer->id;
-        print ("customerId: " . $customerId . "\n");
+        //print ("customerId: " . $customerId . "\n");
 
 
         $user->fill($request->only(UserUpdateDTO::userInfoFromRequest($request)));
@@ -139,7 +139,8 @@ class AuthController extends Controller
         $card->save();
 
         // Return response
-        return new UserResource($user);
+       // return new UserResource($user);
+        return response()->json(['message' => 'User Info Update successfully'],200);
 
         // Handle any exceptions
 
@@ -149,7 +150,7 @@ class AuthController extends Controller
     {
         // Retrieve the user ID from the session
         $userId = Session::get('user_id');
-        print("UserID " . $userId . "\t");
+        //print("UserID " . $userId . "\t");
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
 
@@ -158,7 +159,7 @@ class AuthController extends Controller
         //print($user);
 
         $customerId = $user->customer->id;
-        print ("customerId " . $customerId . "\n");
+        //print ("customerId " . $customerId . "\n");
 
 
         // Check if the user exists
@@ -180,7 +181,7 @@ class AuthController extends Controller
         // Delete the user
         $user->delete();
 
-        return response()->json(['message' => 'User deleted successfully']);
+        return response()->json(['message' => 'User deleted successfully',200]);
     }
 
 
