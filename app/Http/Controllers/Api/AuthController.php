@@ -44,7 +44,7 @@ class AuthController extends Controller
             'birthDate' => 'required|date',
             'cardName' => 'required|string|max:255',
             'cardNumber' => 'required|string|max:255|unique:cards,card_number',
-            'cardNationalId' => 'required|string|max:255|unique:cards,card_natio    nal_id',
+            'cardNationalId' => 'required|string|max:255|unique:cards,card_national_id',
             'cardPassword' => 'required|string|max:255',
         ]);
 

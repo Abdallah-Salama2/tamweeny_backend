@@ -35,6 +35,12 @@ class User extends Authenticatable
         'longitude',
     ];
 
+    public function customer()
+    {
+        return $this->hasOne(Customer::class, 'national_id', 'national_id');
+    }
+
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -56,10 +62,6 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function customer()
-    {
-        return $this->hasOne(Customer::class, 'national_id', 'national_id');
-    }
 
     public function storeOwner()
     {

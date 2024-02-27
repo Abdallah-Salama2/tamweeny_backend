@@ -16,10 +16,16 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        $userId = Session::get('user_id');
-        //print("UserID " . $userId . "\n");
+        $userId = $request->user()->id;
+
+        print("UserID " . $userId . "\n");
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
+//        print($users);
+//        foreach ($users as $user){
+//            print($user->id);
+//
+//        }
         // Retrieve the user from the collection by ID
         $user = $users->where("id", $userId)->first();
         //print($user);
