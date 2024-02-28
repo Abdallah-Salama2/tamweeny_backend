@@ -172,7 +172,7 @@ class AuthController extends Controller
         $card->update($cardData);
 
         // Return response
-        return response()->json(['message' => 'User info updated successfully',$user], 200);
+        return response()->json(['message' => 'User info updated successfully'], 200);
     } public function getLoggedInUserData(Request $request)
     {
         $user = auth()->user();
