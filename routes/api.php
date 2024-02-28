@@ -45,6 +45,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/userss', [AuthController::class, 'index']);                //Users
     Route::get('/search/{name}', [AuthController::class, 'search']);
     Route::get('/userss/{id?}', [AuthController::class, 'findUser']);
+    Route::get('/userData', [AuthController::class, 'getLoggedInUserData']);
 
 
     Route::get('/customers', [CustomerController::class, 'index']);         //Customers

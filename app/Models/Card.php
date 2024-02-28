@@ -26,7 +26,6 @@ class Card extends Model
         return $this->hasOne(Customer::class, 'card_id', 'id');
     }
 
-    public $timestamps = false;
     protected $table = 'cards'; // Adjust based on your table name
     protected $primaryKey = 'id'; //
 
