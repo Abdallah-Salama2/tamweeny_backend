@@ -31,7 +31,7 @@ Route::get('/admin-card', [AdminCardController::class, 'showAdminCards']);
 
 
 // Route to store the newly created admin card
-Route::post('/adminCards', [AdminCardController::class, 'store']);
+Route::post('/cardRegistration', [AdminCardController::class, 'store']);
 
 
 Route::post('/register', [AuthController::class, 'register']);

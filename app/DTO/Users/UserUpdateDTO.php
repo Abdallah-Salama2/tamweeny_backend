@@ -3,6 +3,8 @@
 namespace App\DTO\Users;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
 
 class UserUpdateDTO
 {
@@ -10,40 +12,8 @@ class UserUpdateDTO
     {
         $data = [];
 
-        if ($request->has('nationalId')) {
-            $data['national_id'] = $request->input('nationalId');
-        }
-
-        if ($request->has('name')) {
-            $data['name'] = $request->input('name');
-        }
-
-        if ($request->has('email')) {
-            $data['email'] = $request->input('email');
-        }
-
-        if ($request->has('password')) {
-            $data['password'] = $request->input('password');
-        }
-
-        if ($request->has('phoneNumber')) {
-            $data['phone_number'] = $request->input('phoneNumber');
-        }
-
-        if ($request->has('city')) {
-            $data['city'] = $request->input('city');
-        }
-
-        if ($request->has('state')) {
-            $data['state'] = $request->input('state');
-        }
-
-        if ($request->has('street')) {
-            $data['street'] = $request->input('street');
-        }
-
-        if ($request->has('birthDate')) {
-            $data['birth_date'] = $request->input('birthDate');
+        foreach ($request->all() as $key => $value) {
+            $data[self::snakeToLowerCase($key)] = $value;
         }
 
         return $data;
@@ -53,23 +23,15 @@ class UserUpdateDTO
     {
         $data = [];
 
-        if ($request->has('cardName')) {
-            $data['card_name'] = $request->input('cardName');
-        }
-
-        if ($request->has('cardNumber')) {
-            $data['card_number'] = $request->input('cardNumber');
-        }
-
-        if ($request->has('cardNationalId')) {
-            $data['card_national_id'] = $request->input('cardNationalId');
-        }
-
-        if ($request->has('cardPassword')) {
-            $data['card_password'] = $request->input('cardPassword');
+        foreach ($request->all() as $key => $value) {
+            $data[self::snakeToLowerCase($key)] = $value;
         }
 
         return $data;
     }
 
+    private static function snakeToLowerCase(string $key): string
+    {
+        return strtolower(Str::snake($key));
+    }
 }
