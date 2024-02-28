@@ -53,10 +53,11 @@ class AuthController extends Controller
         $tamweenCard = Card::create(UserRegisterDTO::cardInfoFromRequest($request));
         $customer = Customer::create(array_merge(UserRegisterDTO::customerInfoFromRequest($request), ['card_id' => $tamweenCard->id]));
 
-        $token = $user->createToken('registration-token')->plainTextToken;
-        $list = response()->json(['message' => 'Registration successful', 'user' => $user, 'customer' => $customer, 'tamweenCard' => $tamweenCard]);
-        print $list;
-        return response()->json(['token' => $token], 201);
+        //$token = $user->createToken('registration-token')->plainTextToken;
+        //$list = response()->json(['message' => 'Registration successful', 'user' => $user, 'customer' => $customer, 'tamweenCard' => $tamweenCard]);
+        //print $list;
+
+        return response()->json(['message' => 'Registration successful'], 201);
 
     }
 
@@ -102,6 +103,7 @@ class AuthController extends Controller
     public function updateUserInfo(Request $request)
     {
         // Retrieve user ID from the session
+        //we can u se session to store user Id but using request from middlware is more secure
         $userId = $request->user()->id;
        // print($userId . "\n");
 
