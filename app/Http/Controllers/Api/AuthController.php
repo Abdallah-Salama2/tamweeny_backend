@@ -38,8 +38,7 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => ['required', 'min:8'],
             'phoneNumber' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'state' => 'required|string|max:255',
+            'city_state' => 'required|string|max:255',
             'street' => 'required|string|max:255',
             'birthDate' => 'required|date',
             'cardName' => 'required|string|max:255',
@@ -121,20 +120,21 @@ class AuthController extends Controller
         // Update card information
 //        $cardId = $user->customer->card_id;
 //        $card = Card::where("Id", $cardId)->first();
-//        $card->fill($request->only(UserUpdateDTO::cardInfoFromRequest($request)));
-
-        $requestData = $request->only([
-            'cardName', 'cardNumber', 'cardNationalId', 'cardPassword',
-        ]);
-
         $card = $user->customer->card;
+        $card->fill($request->only(UserUpdateDTO::cardInfoFromRequest($request)));
 
-        $card->fill([
-            'card_name' => $requestData['cardName'] ?? $card->card_name,
-            'card_number' => $requestData['cardNumber'] ?? $card->card_number,
-            'card_national_id' => $requestData['cardNationalId'] ?? $card->card_national_id,
-            'card_password' => isset($requestData['cardPassword']) ? Hash::make($requestData['cardPassword']) : $card->card_password,
-        ]);
+//        $requestData = $request->only([
+//            'cardName', 'cardNumber', 'cardNationalId', 'cardPassword',
+//        ]);
+//
+//        $card = $user->customer->card;
+//
+//        $card->fill([
+//            'card_name' => $requestData['cardName'] ?? $card->card_name,
+//            'card_number' => $requestData['cardNumber'] ?? $card->card_number,
+//            'card_national_id' => $requestData['cardNationalId'] ?? $card->card_national_id,
+//            'card_password' => isset($requestData['cardPassword']) ? Hash::make($requestData['cardPassword']) : $card->card_password,
+//        ]);
 
         // Save changes
         $user->save();
@@ -142,7 +142,7 @@ class AuthController extends Controller
 
         // Return response
        // return new UserResource($user);
-        return response()->json(['message' => 'User Info Update successfully'],200);
+        return response()->json(['message' => 'User Info Update successfully',$user],200);
 
         // Handle any exceptions
 
