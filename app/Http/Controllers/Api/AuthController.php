@@ -38,7 +38,7 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => ['required', 'min:8'],
             'phoneNumber' => 'required|string|max:255',
-            'city_state' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
             'street' => 'required|string|max:255',
             'birthDate' => 'required|date',
             'cardName' => 'required|string|max:255',
@@ -99,55 +99,81 @@ class AuthController extends Controller
 //            print("Loop UserID " .$user->id); // Accessing the `id` property of each `User` object
 //        }
 
+//    public function updateUserInfo(Request $request)
+//    {
+//        // Retrieve user ID from the session
+//        //we can u se session to store user Id but using request from middlware is more secure
+////        $userId = $request->user()->id;
+//        //print($userId . "\n");
+//        $user=auth()->user();
+//       // print($user);
+//        $userId = $user->id;
+//       // print($userId . "\n");
+//
+//
+//        // Fetch all users with related data
+//        $users = User::with('customer', 'customer.card')->get();
+//
+//        // Retrieve the user from the collection by ID
+////        $user = $users->where("id", $userId)->first();
+////        $customerId = $user->customer->id;
+//        //print ("customerId: " . $customerId . "\n");
+//
+//
+////        $user->fill($request->only(UserUpdateDTO::userInfoFromRequest($request)));
+//
+//        // Update card information
+////        $cardId = $user->customer->card_id;
+////        $card = Card::where("Id", $cardId)->first();
+//        $card = $user->customer->card;
+//        print($card);
+//        $card->update($request->only(UserUpdateDTO::cardInfoFromRequest($request)));
+//
+////        $requestData = $request->only([
+////            'cardName', 'cardNumber', 'cardNationalId', 'cardPassword',
+////        ]);
+////
+////        $card = $user->customer->card;
+////
+////        $card->fill([
+////            'card_name' => $requestData['cardName'] ?? $card->card_name,
+////            'card_number' => $requestData['cardNumber'] ?? $card->card_number,
+////            'card_national_id' => $requestData['cardNationalId'] ?? $card->card_national_id,
+////            'card_password' => isset($requestData['cardPassword']) ? Hash::make($requestData['cardPassword']) : $card->card_password,
+////        ]);
+//
+//        // Save changes
+////        $user->save();
+//        $card->save();
+//        print($card);
+////
+////        // Return response
+////       // return new UserResource($user);
+////        return response()->json(['message' => 'User Info Update successfully',$card],200);
+//
+//        // Handle any exceptions
+//
+//    }
+
     public function updateUserInfo(Request $request)
     {
-        // Retrieve user ID from the session
-        //we can u se session to store user Id but using request from middlware is more secure
-        $userId = $request->user()->id;
-       // print($userId . "\n");
+        $user = auth()->user();
+        $userId = $user->id;
 
-        // Fetch all users with related data
-        $users = User::with('customer', 'customer.card')->get();
-
-        // Retrieve the user from the collection by ID
-        $user = $users->where("id", $userId)->first();
-        $customerId = $user->customer->id;
-        //print ("customerId: " . $customerId . "\n");
-
-
-        $user->fill($request->only(UserUpdateDTO::userInfoFromRequest($request)));
-
-        // Update card information
-//        $cardId = $user->customer->card_id;
-//        $card = Card::where("Id", $cardId)->first();
+        // Fetch user's card information
         $card = $user->customer->card;
-        $card->fill($request->only(UserUpdateDTO::cardInfoFromRequest($request)));
 
-//        $requestData = $request->only([
-//            'cardName', 'cardNumber', 'cardNationalId', 'cardPassword',
-//        ]);
-//
-//        $card = $user->customer->card;
-//
-//        $card->fill([
-//            'card_name' => $requestData['cardName'] ?? $card->card_name,
-//            'card_number' => $requestData['cardNumber'] ?? $card->card_number,
-//            'card_national_id' => $requestData['cardNationalId'] ?? $card->card_national_id,
-//            'card_password' => isset($requestData['cardPassword']) ? Hash::make($requestData['cardPassword']) : $card->card_password,
-//        ]);
+        // Validate and update user's information
+        $userData = UserUpdateDTO::userInfoFromRequest($request);
+        $user->update($userData);
 
-        // Save changes
-        $user->save();
-        $card->save();
+        // Validate and update card information
+        $cardData = UserUpdateDTO::cardInfoFromRequest($request);
+        $card->update($cardData);
 
         // Return response
-       // return new UserResource($user);
-        return response()->json(['message' => 'User Info Update successfully',$user],200);
-
-        // Handle any exceptions
-
+        return response()->json(['message' => 'User info updated successfully'], 200);
     }
-
     public function deleteUser(Request $request)
     {
         // Retrieve the user ID from the session

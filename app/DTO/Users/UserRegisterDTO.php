@@ -15,8 +15,7 @@ class UserRegisterDTO
             'email' => $request->input('email'),
             'password' => $request->input('password'),
             'phone_number' => $request->input('phoneNumber'),
-            'city' => $request->input('city'),
-            'state' => $request->input('state'),
+            'city_state' => $request->input('city'),
             'street' => $request->input('street'),
             'birth_date' => $request->input('birthDate'),
         ];
