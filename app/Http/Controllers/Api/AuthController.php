@@ -114,7 +114,7 @@ class AuthController extends Controller
         //print ("customerId: " . $customerId . "\n");
 
 
-        $user->fill(UserUpdateDTO::userInfoFromRequest($request));
+        $user->fill((UserUpdateDTO::userInfoFromRequest($request)));
 
 
         $requestData = $request->only([
@@ -135,12 +135,12 @@ class AuthController extends Controller
         ]);
 
         // Save changes
-//        $user->save();
+        $user->save();
         $card->save();
 //
 //        // Return response
 //       // return new UserResource($user);
-        return response()->json(['message' => 'User Info Updated successfully'],200);
+        return response()->json(['message' => 'User Info Updated successfully',$user],200);
 
 //        // Handle any exceptions
 //
