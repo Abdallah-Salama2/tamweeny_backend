@@ -140,7 +140,7 @@ class AuthController extends Controller
 //
 //        // Return response
 //       // return new UserResource($user);
-        return response()->json(['message' => 'User Info Update successfully',$user,$card],200);
+        return response()->json(['message' => 'User Info Updated successfully'],200);
 
 //        // Handle any exceptions
 //
