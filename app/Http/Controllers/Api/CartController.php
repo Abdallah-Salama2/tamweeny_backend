@@ -93,6 +93,7 @@ class CartController extends Controller
 
     }
 
+
     /**
      * Store a newly created resource in storage.
      */
@@ -120,9 +121,16 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCartRequest $request, Cart $cart)
+    public function update(Request $request, Cart $cart)
     {
-        //
+        //$cart=Cart:
+        $productId = $request->input('product_id');
+        $cart->quantity = $request->input('quantity');
+        $cart->total_price = $cart->product->productpricing->selling_price * $cart->quantity; // Assuming product price is stored in the product model
+        $cart->save();
+
+
+        return response()->json(['success' => true, 'message' => 'Cart item updated successfully']);
     }
 
     /**
@@ -131,5 +139,16 @@ class CartController extends Controller
     public function destroy(Cart $cart)
     {
         //
+    }
+    public function test2(){
+        $cartItem = Cart::find(1); // Change 1 to the ID of the cart item you want to edit
+
+    }
+
+    public  function test(){
+        $cartItem = Cart::find(1); // Change 1 to the ID of the cart item you want to edit
+        print($cartItem);
+
+        return view("editCart", compact('cartItem'));
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreFavoriteRequest;
 use App\Http\Requests\UpdateFavoriteRequest;
 use App\Http\Resources\FavoriteResource;
+use App\Http\Resources\ProductResource;
 use App\Models\Cart;
 use App\Models\Favorite;
 use App\Models\Product;
@@ -22,28 +23,85 @@ class FavoriteController extends Controller
      */
     public function index(Request $request)
     {
+
         $userId = $request->user()->id;
-
-        //print("UserID " . $userId . "\n");
         $users = User::with('customer', 'customer.card')->get();
-
-        // Retrieve the user from the collection by ID
         $user = $users->where("id", $userId)->first();
-        //print($user);
-
         $customerId = $user->customer->id;
-        //print ("CustomerId " . $customerId . "\n");
 
+        // Retrieve customer's favorite product IDs
+        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
+            ->pluck('product_id')
+            ->toArray();
 
-        $customerFavorites = Favorite::where("customer_id", $customerId)->get();
+        // Retrieve favorite products and include their relationships
+        $favoriteProducts = Product::with('productpricing', 'category', 'favorite')
+            ->whereIn('id', $customerFavoriteProductIds)
+            ->paginate(8);
 
-        //$favorites=Favorite::all();
+        // Transform favorite products using ProductResource
+        $products = ProductResource::collection($favoriteProducts);
+        $products->each(function ($product) {
+            $product->favoriteStats = 1;
+        });
 
-        return response()->json(FavoriteResource::Collection($customerFavorites));
+        $numberOfPages = $favoriteProducts->lastPage();
+
+        // Base64 encode images
+//        $products->each(function ($product) {
+//            $product->product_image = base64_encode($product->product_image);
+//            $product->category->category_image = base64_encode($product->category->category_image);
+//        });
+        return response()->json($products);
 
     }
 
-    public function add(Request $request,$productId)
+//    } public function index(Request $request)
+//    {
+//        $userId = $request->user()->id;
+//
+//        //print("UserID " . $userId . "\n");
+//        $users = User::with('customer', 'customer.card')->get();
+//
+//        // Retrieve the user from the collection by ID
+//        $user = $users->where("id", $userId)->first();
+//        //print($user);
+//
+//        $customerId = $user->customer->id;
+//        //print ("CustomerId " . $customerId . "\n");
+//
+//        $products = ProductResource::collection(Product::with('productpricing', 'category','favorite')->paginate(8));
+//
+//        $numberOfPages = $products->lastPage();
+//
+//        $customerPrdouctIds = Favorite::where("customer_id", $customerId)->pluck('product_id');
+//        $customerFavorites=[];
+//        //print($customerFavorites);
+//
+//        foreach ($products as $product) {
+//            $product->product_image = base64_encode($product->product_image);
+//            $product->category->category_image = base64_encode($product->category->category_image);
+//
+//            $product->favoriteStats = $customerPrdouctIds->contains($product->id) ? 1 : 0;
+//
+//            if($product->favoriteStats == 1){
+//                $customerFavorites[]=$product;
+//            }
+//
+//
+//        }
+//
+//
+//
+//        //$favorites=Favorite::all();
+//
+//
+//
+//        return response()->json(ProductResource::collection($customerFavorites));
+//
+//    }
+
+    public function add(Request $request, $productId)
     {
         //
         $userId = $request->user()->id;
@@ -69,7 +127,7 @@ class FavoriteController extends Controller
             $productInCart->delete();
             return response()->json([
                 'message' => 'Product removed from Favorites.',
-            ],409);
+            ], 409);
         }
 
 
@@ -81,7 +139,7 @@ class FavoriteController extends Controller
 
         return response()->json([
             'message' => 'Product Added To Favorites ',
-        ],200);
+        ], 200);
 
     }
 

@@ -173,7 +173,9 @@ class AuthController extends Controller
 
         // Return response
         return response()->json(['message' => 'User info updated successfully'], 200);
-    } public function getLoggedInUserData(Request $request)
+    }
+
+    public function getLoggedInUserData(Request $request)
     {
         $user = auth()->user();
 
@@ -185,6 +187,7 @@ class AuthController extends Controller
         // Return response
         return response()->json(new UserResource ($user));
     }
+
     public function deleteUser(Request $request)
     {
         // Retrieve the user ID from the session
@@ -220,7 +223,7 @@ class AuthController extends Controller
         // Delete the user
         $user->delete();
 
-        return response()->json(['message' => 'User deleted successfully',200]);
+        return response()->json(['message' => 'User deleted successfully', 200]);
     }
 
 

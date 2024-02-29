@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AdminCardController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CardController;
+use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CatetgoryController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\FavoriteController;
@@ -12,7 +13,6 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductPricingController;
 use App\Http\Controllers\Api\StoreController;
 use App\Http\Controllers\Api\StoreOwnerController;
-use App\Http\Controllers\Api\CartController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,6 +28,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/images', [ProductController::class, 'store']);
 Route::get('/admin-cards/create', [AdminCardController::class, 'create'])->name('admin-cards.create');
 Route::get('/admin-card', [AdminCardController::class, 'showAdminCards']);
+
+
+Route::get('/editCart', [CartController::class, 'test']);
+Route::put('/cart/{cart}', [CartController::class,'update'])->name('cart.update');
 
 
 // Route to store the newly created admin card
@@ -75,20 +79,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/fullOrder', [Orders_madeController::class, 'fullOrder']);
 
 
-
     Route::get('/owners', [StoreOwnerController::class, 'index']);
     Route::get('/stores', [StoreController ::class, 'index']);               //Stores
     Route::get('/storesLatLong', [StoreController ::class, 'showLatLong']);  //StoresLatLang
 
     Route::get('/test', [\App\Http\Controllers\TestController::class, 'index']);
     Route::post('/test22', [\App\Http\Controllers\TestController::class, 'store']);
-
-
-
-
-
-
-
 
 
 });
