@@ -69,26 +69,25 @@ class CartController extends Controller
 
         if ($productInCart) {
             // Handle the case where the product already exists in the cart
-             return response()->json([
+            return response()->json([
                 'message' => 'Product already exists in cart.',
-            ],409);
+            ], 409);
         }
 
 
-
-        $productPricing = (double) $product->productpricing->selling_price;
+        $productPricing = (double)$product->productpricing->selling_price;
 
 
         $cart = cart::create([
             'customer_id' => $customerId,
             'product_id' => $productId,
             'quantity' => (int)$quantity,
-            'total_price'=> $productPricing*$quantity,
+            'total_price' => $productPricing * $quantity,
         ]);
         $cart->save();
         return response()->json([
             'message' => 'Item Added To Cart Successfully',
-        ],200);
+        ], 200);
 
 
     }
@@ -121,16 +120,41 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Cart $cart)
+    public function update(Request $request)
     {
-        //$cart=Cart:
+        $userId = $request->user()->id;
+        $users = User::with('customer', 'customer.card')->get();
+        $user = $users->where("id", $userId)->first();
+
+
         $productId = $request->input('product_id');
-        $cart->quantity = $request->input('quantity');
-        $cart->total_price = $cart->product->productpricing->selling_price * $cart->quantity; // Assuming product price is stored in the product model
-        $cart->save();
 
 
-        return response()->json(['success' => true, 'message' => 'Cart item updated successfully']);
+        // Find the cart record for the given product ID
+        $cart = Cart::where('product_id', $productId)->first();
+
+        if ($cart) {
+            // If the cart record exists, update the quantity
+            $quantity = $request->input('quantity');
+            $cart->quantity = $quantity;
+            $cart->total_price = $cart->product->productpricing->selling_price * $cart->quantity; // Assuming product price is stored in the product model
+
+            $cart->save();
+            return response()->json(['message' => 'Cart updated successfully']);
+
+        } else {
+            // If the cart record doesn't exist, create a new record
+            $customerId = $user->customer->id;
+            $productPrice = Product::findOrFail($productId)->productpricing->selling_price;
+            Cart::create([
+                'customer_id'=>$customerId,
+                'product_id' => $productId,
+                //'total_price' => $productPrice * $quantity,
+            ]);
+            return response()->json(['message' => 'Cart item created successfully']);
+
+        }
+
     }
 
     /**
@@ -140,12 +164,15 @@ class CartController extends Controller
     {
         //
     }
-    public function test2(){
+
+    public function test2()
+    {
         $cartItem = Cart::find(1); // Change 1 to the ID of the cart item you want to edit
 
     }
 
-    public  function test(){
+    public function test()
+    {
         $cartItem = Cart::find(1); // Change 1 to the ID of the cart item you want to edit
         print($cartItem);
 

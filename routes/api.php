@@ -45,6 +45,8 @@ Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logo
 
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::put('/cart2', [CartController::class,'update'])->name('cart.update');
+
 
     Route::get('/userss', [AuthController::class, 'index']);                //Users
     Route::get('/search/{name}', [AuthController::class, 'search']);

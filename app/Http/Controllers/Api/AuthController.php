@@ -140,7 +140,7 @@ class AuthController extends Controller
 //
 //        // Return response
 //       // return new UserResource($user);
-        return response()->json(['message' => 'User Info Updated successfully'],200);
+        return response()->json(['message' => 'User Info Updated successfully'], 200);
 
 //        // Handle any exceptions
 //
@@ -185,36 +185,57 @@ class AuthController extends Controller
         $userId = $request->user()->id;
         //print("UserID " . $userId . "\t");
         // Fetch all users with related data
-        $users = User::with('customer', 'customer.card')->get();
+        $users = User::with('customer', 'customer.order_made', 'customer.order', 'customer.favorite', 'customer.cart', 'customer.card')
+            ->get();
+//        print($users);
 
-        // Retrieve the user from the collection by ID
         $user = $users->where("id", $userId)->first();
         //print($user);
-
-        $customerId = $user->customer->id;
-        //print ("customerId " . $customerId . "\n");
-
-
+        $card=Card::where("id",$user->customer->card_id)->first();
         // Check if the user exists
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
         }
 
-        // Check if the user has related records in other tables (e.g., customer, card)
+        // Check if the user has a related customer record
         if ($user->customer) {
-            // If the user has a related customer record, delete it
+            // Delete related order_made records
+            if ($user->customer->order_made) {
+                if ($user->customer->order_made->isNotEmpty()) {
+                    $user->customer->order_made->each->delete();
+                }
+            }
+
+            // Delete related orders records
+            if ($user->customer->order) {
+                if ($user->customer->order->isNotEmpty()) {
+                    $user->customer->order->each->delete();
+                }
+            }
+
+            // Delete related favorite records
+            if ($user->customer->favorite) {
+                if ($user->customer->favorite->isNotEmpty()) {
+                    $user->customer->favorite->each->delete();
+                }
+            }
+
+            // Delete related cart records
+            if ($user->customer->cart) {
+                if ($user->customer->cart->isNotEmpty()) {
+                    $user->customer->cart->each->delete();
+                }
+            }
+
+
+
+            // Delete related customer record
             $user->customer->delete();
         }
-
-        // If the user has a related card record, delete it
-        if ($user->customer && $user->customer->card) {
-            $user->customer->card->delete();
-        }
-
-        // Delete the user
+        $card->delete();
         $user->delete();
 
-        return response()->json(['message' => 'User deleted successfully', 200]);
+        return response()->json(['message' => 'User deleted successfully'], 200);
     }
 
 

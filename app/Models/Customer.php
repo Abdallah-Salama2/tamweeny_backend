@@ -30,6 +30,10 @@ class Customer extends Model
     {
         return $this->hasMany(Favorite::class, 'customer_id', 'id');
     }
+    public function cart()
+    {
+        return $this->hasMany(Cart::class, 'customer_id', 'id');
+    }
 
     public function order()
     {
