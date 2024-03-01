@@ -177,9 +177,26 @@ class CartController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cart $cart)
+    public function delete(Request $request,$productId)
     {
         //
+        $userId = $request->user()->id;
+//        print($userId);
+        $users = User::with('customer', 'customer.card')->get();
+        //print($users);
+        $user = $users->where("id", $userId)->first();
+        $customerId = $user->customer->id;
+        //print($customerId);
+
+        // Find the cart record for the given product ID
+        $customerCart = Cart::where("customer_id", $customerId)->get();
+        //print ($customerCart);
+        $cart = $customerCart->where('product_id', $productId)->first();
+
+        $cart->delete();
+
+
+        return response()->json(['message' => 'Cart item removed successfully'], 200);
     }
 
     public function test2()
