@@ -16,7 +16,7 @@ class CartResource extends JsonResource
             'productName' => $this->product->product_name,
             'sellingPrice' => (double)$this->product->productpricing->selling_price,
             'quantity' => $this->quantity,
-            'totalPrice' => $this->total_price
+            'totalPrice' =>(double) $this->total_price
 
         ];
     }
