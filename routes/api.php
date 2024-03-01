@@ -45,7 +45,6 @@ Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logo
 
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::put('/cart2', [CartController::class,'update'])->name('cart.update');
 
 
     Route::get('/userss', [AuthController::class, 'index']);                //Users
@@ -72,7 +71,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('favorite/{productId}', [FavoriteController::class, 'add']);
 
     Route::get('/cart', [CartController::class, 'index']);
-    Route::post('cart/{productId}/{quantity}', [CartController::class, 'create']);
+    Route::put('/cart/{productId}/{operator}', [CartController::class,'update']);
 
 
     Route::get('/orders', [OrderController::class, 'index']);                //Orders
