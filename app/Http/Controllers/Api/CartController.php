@@ -134,7 +134,7 @@ class CartController extends Controller
         $customerCart = Cart::where("customer_id", $customerId)->get();
         //print ($customerCart);
         $cart = $customerCart->where('product_id', $productId)->first();
-       // print($cart);
+        // print($cart);
 
 
         if ($cart) {
@@ -145,12 +145,12 @@ class CartController extends Controller
 
                 $cart->save();
                 return response()->json(['message' => 'Cart updated successfully']);
-            } elseif($operator == "false") {
+            } elseif ($operator == "false") {
                 $cart->quantity -= 1;
                 $cart->total_price = $cart->product->productpricing->selling_price * $cart->quantity;
-                if( $cart->quantity<1){
-                    print("fk Yu");
-                    return ;
+                if ($cart->quantity < 1) {
+                    $cart->delete();
+                    return response()->json(['message' => 'Cart item removed successfully'], 200);
                 }
                 $cart->save();
                 return response()->json(['message' => 'Cart updated successfully']);
@@ -162,7 +162,7 @@ class CartController extends Controller
                 'customer_id' => $customerId,
                 'product_id' => $productId,
                 'quantity' => 1,
-                'total_price' => $productPrice ,
+                'total_price' => $productPrice,
             ]);
             return response()->json(['message' => 'Cart item created successfully']);
         }
@@ -172,12 +172,10 @@ class CartController extends Controller
     }
 
 
-
-
     /**
      * Remove the specified resource from storage.
      */
-    public function delete(Request $request,$productId)
+    public function delete(Request $request, $productId)
     {
         //
         $userId = $request->user()->id;
