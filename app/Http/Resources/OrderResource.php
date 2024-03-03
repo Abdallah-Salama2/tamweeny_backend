@@ -23,6 +23,8 @@ class OrderResource extends JsonResource
             //'paymentNumber' => $this->payment_number,
             'customerId' => $this->customer_id,
             //'deliveryId' => $this->delivery_id,
+            'ordersMade' => Orders_madeResource::collection($this->ordersMade)
+
         ];
     }
 }

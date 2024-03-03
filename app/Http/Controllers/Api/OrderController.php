@@ -22,7 +22,7 @@ class OrderController extends Controller
     {
         //
         $userId = $request->user()->id;
-       // print("UserID " . $userId . "\n");
+        // print("UserID " . $userId . "\n");
         // Fetch all users with related data
         $users = User::with('customer', 'customer.card')->get();
         // Retrieve the user from the collection by ID
@@ -34,16 +34,14 @@ class OrderController extends Controller
 
 
         $customerCartItemPrices = Cart::where("customer_id", $customerId)->pluck("total_price");
-       // print($customerCartItemPrices."\n");
+        // print($customerCartItemPrices."\n");
 
         //$customerCart =Cart::where("customer_id", $user->customer->id)->get();
-        $customerOrders=Order::where("customer_id", $customerId)->get();
+        $customerOrders = Order::where("customer_id", $customerId)->get();
 
         //Cart::where("customer_id", $user->customer->id)->get()
 
-        return response()->json([
-            OrderResource::collection($customerOrders),
-        ]);
+        return response()->json(OrderResource::collection($customerOrders));
 
 
     }
@@ -70,16 +68,17 @@ class OrderController extends Controller
 
         //$customerCartItemPrices = Cart::where("customer_id", $user->customer->id)->pluck("total_price");
 
-        $customerCart =Cart::where("customer_id", $user->customer->id)->get();
+        $customerCart = Cart::where("customer_id", $user->customer->id)->get();
         $total = $customerCart->sum('total_price');
 
 
-
-        $order=Order::create([
-            "order_date"=>now(),
-            "order_price"=>$total,
-            "customer_id"=>$customerId,
+        $order = Order::create([
+            "order_date" => now(),
+            "order_price" => $total,
+            "customer_id" => $customerId,
         ]);
+
+        Session::put("orderId",$order->id);
 
         $ordersMade = [];
         foreach ($customerCart as $cartItem) {
@@ -94,7 +93,7 @@ class OrderController extends Controller
         }
 
 
-         //Delete cart items associated with the order
+        //Delete cart items associated with the order
         foreach ($customerCart as $cartItem) {
             $cartItem->delete();
         }

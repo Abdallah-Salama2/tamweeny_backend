@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         //
-        Schema::table('cart',function (Blueprint $table){
-            $table->integer('product_id');
-            $table->foreign('product_id')->references('Id')->on('prodcts')->onDelete('cascade');
-        });
+//        Schema::table('cart',function (Blueprint $table){
+//            $table->integer('product_id');
+//            $table->foreign('product_id')->references('Id')->on('prodcts')->onDelete('cascade');
+//        });
     }
 
     /**

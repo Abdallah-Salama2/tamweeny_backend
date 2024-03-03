@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users',function (Blueprint $table){
-            $table->integer('user_type')->default(1)->change();
-            $table->decimal('latitude',10,8)->default(10.2)->change();
-            $table->decimal('longitude',11,8)->default(10.2)->change();
-        });
+//        Schema::table('users',function (Blueprint $table){
+//            $table->integer('user_type')->default(1)->change();
+//            $table->decimal('latitude',10,8)->default(10.2)->change();
+//            $table->decimal('longitude',11,8)->default(10.2)->change();
+//        });
     }
 
     /**

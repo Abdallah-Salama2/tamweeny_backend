@@ -37,33 +37,103 @@ class Orders_madeController extends Controller
 
     }
 
+//    public function fullOrder(Request $request)
+//    {
+//        //
+//
+//        $userId = $request->user()->id;
+//        //print("UserID " . $userId . "\n");
+//        // Fetch all users with related data
+//        $users = User::with('customer', 'customer.card')->get();
+//        // Retrieve the user from the collection by ID
+//        $user = $users->where("id", $userId)->first();
+//        //print($user);
+//
+//        $customerId = $user->customer->id;
+//        //print ("CustomerId " . $customerId . "\n");
+//
+//        $ordersMade = Orders_made::where("customer_id", $customerId)->get();
+//        $order_ids = $ordersMade->pluck('order_id')->unique();
+//        $orders = [];
+//
+//        foreach ($order_ids as $order_id) {
+//            $order = Order::where("id", $order_id)->first();
+//            if ($order) {
+//                $orders[] = new OrderResource($order);
+//            }
+//        }
+//
+//        foreach ($orders as $order) {
+//            print(json_encode($order->jsonSerialize()) . PHP_EOL);
+//        }
+//        return response()->json([
+//            "orderCreated" => $orders,
+//            "cartItemsInOrder" => Orders_madeResource::collection($ordersMade)
+//        ]);
+//    }
+
     public function fullOrder(Request $request)
     {
-        //
-
         $userId = $request->user()->id;
-        //print("UserID " . $userId . "\n");
-        // Fetch all users with related data
+
+        // Fetch user and related data
         $users = User::with('customer', 'customer.card')->get();
         // Retrieve the user from the collection by ID
         $user = $users->where("id", $userId)->first();
-        //print($user);
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
 
         $customerId = $user->customer->id;
-        //print ("CustomerId " . $customerId . "\n");
 
 
-        $ordersMade = (Orders_made::where("customer_id", $customerId)->get());
-        $order_id = $ordersMade->pluck('order_id')->first();
-        //print("ORDER_ID:" . $order_id . "\n");
-        $order = Order::where("id", $order_id)->first();
-        //print($order);
-
+        $orderId = Session::get("orderId");
+        print($orderId);
+        $orders = Order::find($orderId);
+        $ordersMade = Orders_made::where("order_id", $orderId)->get();
         return response()->json([
-            "orderCreated" => new OrderResource($order),
-            "cartItemsInOrder" => Orders_madeResource::collection($ordersMade)
-        ]);
+                'Order' => new OrderResource($orders),
+                'Products in order' => Orders_madeResource::collection($ordersMade)
+            ]
+        );
+
     }
+
+
+    public function fullorders(Request $request)
+    {
+        $userId = $request->user()->id;
+
+        // Fetch user and related data
+        $users = User::with('customer', 'customer.card')->get();
+        // Retrieve the user from the collection by ID
+        $user = $users->where("id", $userId)->first();
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+        $customerId = $user->customer->id;
+        $orders = Order::where("customer_id", $customerId)->get();
+
+        $responseData = [];
+
+        foreach ($orders as $order){
+            $orderData = new OrderResource($order);
+
+            // Fetch and format ordersMade data
+            $orderData['ordersMade'] = Orders_madeResource::collection(
+                Orders_made::where("order_id", $order->id)->get()
+            );
+
+            $responseData[] = $orderData;
+        }
+
+        // Return JSON response with the combined data
+        return response()->json($responseData);
+    }
+
+
+
+
 
     /**
      * Store a newly created resource in storage.

@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            //
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
-        });
+//        Schema::table('orders', function (Blueprint $table) {
+//            //
+//            $table->timestamp('created_at')->useCurrent();
+//            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+//        });
     }
 
     /**

@@ -51,6 +51,11 @@ class Product extends Model
 
     }
 
+    public function orderMade()
+    {
+        return $this->hasMany(Product::class, 'product_id', 'id');
+    }
+
     public $timestamps = false;
     protected $table = 'products'; // Adjust based on your table name
     protected $primaryKey = 'id'; //

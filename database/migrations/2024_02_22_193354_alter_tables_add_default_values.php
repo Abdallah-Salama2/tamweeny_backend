@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('cards',function (Blueprint $table){
-            $table->integer('individuals_number')->change()
-                ->default('1');
-            $table->integer('bread_points')->change()
-                ->default('1');
-            $table->integer('tamween_points')->change()
-                ->default('1');
-        });
+//        Schema::table('cards',function (Blueprint $table){
+//            $table->integer('individuals_number')->change()
+//                ->default('1');
+//            $table->integer('bread_points')->change()
+//                ->default('1');
+//            $table->integer('tamween_points')->change()
+//                ->default('1');
+//        });
     }
 };
