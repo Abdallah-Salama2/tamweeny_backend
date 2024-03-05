@@ -37,10 +37,10 @@ class OrderController extends Controller
 
 
         $customerId = $user->customer->id;
-        print("CustomerId " . $customerId . "\n");
+        //print("CustomerId " . $customerId . "\n");
 
         $customerOrders = Order::where("customer_id", $customerId)->get();
-        print($customerOrders);
+        //print($customerOrders);
 
         return response()->json(OrderResource::collection($customerOrders));
     }
