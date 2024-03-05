@@ -65,7 +65,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/products', [ProductController::class, 'index']);            //Products
     Route::get('/productId/{product}', [ProductController::class, 'searchForProductById']);
     Route::get('/productName/{product}', [ProductController::class, 'searchForProductByName']);
-    Route::get('/offers', [ProductPricingController::class, 'index']);       //ProductPricing
+    //Route::get('/offers', [ProductPricingController::class, 'index']);       //ProductPricing
 
     Route::get('/favorites', [FavoriteController::class, 'index']);          //Favorites
     Route::post('favorite/{productId}', [FavoriteController::class, 'add']);

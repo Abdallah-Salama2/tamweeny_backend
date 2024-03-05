@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
+use App\Http\Resources\OrderResource2;
 use App\Http\Resources\Orders_madeResource;
 use App\Models\Order;
 use App\Models\Orders_made;
@@ -117,7 +118,7 @@ class Orders_madeController extends Controller
         $responseData = [];
 
         foreach ($orders as $order){
-            $orderData = new OrderResource($order);
+            $orderData = new OrderResource2($order);
 
             // Fetch and format ordersMade data
             $orderData['ordersMade'] = Orders_madeResource::collection(

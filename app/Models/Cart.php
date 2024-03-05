@@ -15,15 +15,16 @@ class Cart extends Model
         'customer_id',
         'product_id',
         'quantity',
-        'total_price'
+        'order_price'
     ];
 
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');
-    }public function customer()
+    }
+    public function customer()
     {
-        return $this->belongsTo(Customer::class, 'product_id', 'id');
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
     public function order_made()
     {

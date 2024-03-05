@@ -10,6 +10,7 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Orders_made;
 use App\Models\User;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -20,30 +21,28 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        //
         $userId = $request->user()->id;
-        // print("UserID " . $userId . "\n");
-        // Fetch all users with related data
+
+        // Fetch user and related data
         $users = User::with('customer', 'customer.card')->get();
         // Retrieve the user from the collection by ID
         $user = $users->where("id", $userId)->first();
-        //print($user);
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+        // Check if the user has a customer associated with them
+        if (!$user->customer) {
+            return response()->json(["message" => "Customer not found for this user"], 404);
+        }
+
 
         $customerId = $user->customer->id;
-        //print ("CustomerId " . $customerId . "\n");
+        print("CustomerId " . $customerId . "\n");
 
-
-        $customerCartItemPrices = Cart::where("customer_id", $customerId)->pluck("total_price");
-        // print($customerCartItemPrices."\n");
-
-        //$customerCart =Cart::where("customer_id", $user->customer->id)->get();
         $customerOrders = Order::where("customer_id", $customerId)->get();
-
-        //Cart::where("customer_id", $user->customer->id)->get()
+        print($customerOrders);
 
         return response()->json(OrderResource::collection($customerOrders));
-
-
     }
 
 
@@ -78,7 +77,7 @@ class OrderController extends Controller
             "customer_id" => $customerId,
         ]);
 
-        Session::put("orderId",$order->id);
+        Session::put("orderId", $order->id);
 
         $ordersMade = [];
         foreach ($customerCart as $cartItem) {
