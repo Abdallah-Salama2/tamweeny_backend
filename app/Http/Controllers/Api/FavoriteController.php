@@ -47,7 +47,11 @@ class FavoriteController extends Controller
 
         $numberOfPages = $favoriteProducts->lastPage();
 
-
+        // Base64 encode images
+//        $products->each(function ($product) {
+//            $product->product_image = base64_encode($product->product_image);
+//            $product->category->category_image = base64_encode($product->category->category_image);
+//        });
         return response()->json($products);
 
     }

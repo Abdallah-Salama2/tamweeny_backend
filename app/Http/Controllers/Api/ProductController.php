@@ -18,73 +18,88 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $userId = $request->user()->id;
-
-        //print("UserID " . $userId . "\n");
         $users = User::with('customer', 'customer.card')->get();
-
-        // Retrieve the user from the collection by ID
         $user = $users->where("id", $userId)->first();
-        //print($user);
-
         $customerId = $user->customer->id;
-        //print ("CustomerId " . $customerId . "\n");
 
+        // Retrieve customer's favorite product IDs
+        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
+            ->pluck('product_id')
+            ->toArray();
 
-        $products = ProductResource::collection(Product::with('productpricing', 'category')->paginate(8));
+        // Retrieve all products with pricing, category
+        $allProducts = Product::with('productpricing', 'category')->paginate(8);
 
-        $numberOfPages = $products->lastPage();
+        // Transform products using ProductResource and set favoriteStats based on if they are favorites
+        $products = ProductResource::collection($allProducts);
+        $products->each(function ($product) use ($customerFavoriteProductIds) {
+            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
+        });
 
-        $customerFavorites = Favorite::where("customer_id", $customerId)->pluck('product_id');
-        //print($customerFavorites);
-
+        $numberOfPages = $allProducts->lastPage();
 
         return response()->json([
-            'products' => ProductResource::collection($products),
+            'products' => $products,
             'totalPages' => $numberOfPages
         ]);
-
-
     }
 
 
-    public function productsByCategory($catName)
+    public function productsByCategory($catName, Request $request)
     {
-        // Retrieve the category by name
-        $category = Category::where('category_name', $catName)->first();
-        $category->category_image = base64_encode($category->category_image);
-        //print($category->category_name);
+        $userId = $request->user()->id;
+        $users = User::with('customer', 'customer.card')->get();
+        $user = $users->where("id", $userId)->first();
 
-        // Retrieve all products in the category
-        $products = Product::where('cat_id', $category->id)->with('category')->get();
+        $customerId = $user->customer->id;
 
+        $category = Category::where('category_name', $catName)->firstOrFail();
+
+        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
+            ->pluck('product_id')
+            ->toArray();
+
+        $products = Product::where('cat_id', $category->id)
+            ->with('productpricing', 'category')
+            ->get();
+
+        // Transform products using ProductResource and set favoriteStats based on if they are favorites
+        $products->each(function ($product) use ($customerFavoriteProductIds) {
+            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
+        });
 
         return response()->json(ProductResource::collection($products));
     }
 
     public function searchForProductById($productId)
     {
-        $products = Product::with('productpricing', 'category')->get();
-        foreach ($products as $product) {
-            $product->product_image = base64_encode($product->product_image);
-            $product->category->category_image = base64_encode($product->category->category_image);
+        $product = Product::with('productpricing', 'category')->find($productId);
 
+        if (!$product) {
+            return response()->json(["message" => "Product Not Found"]);
         }
 
-        //print($products);
-        $product = $products->where("id", $productId)->first();
+        $userId = auth()->id();
+        // Retrieve the IDs of the user's favorite products
+        $customerFavoriteProductIds = Favorite::where('customer_id', $userId)->pluck('product_id')->toArray();
 
-        if ($product) {
-            return new ProductResource($product);
-        }
-        return response()->json(["message"=>"Product Not Found"]);
+        // Create a new ProductResource instance with the product data and the favorite stats
+        $productResource = new ProductResource($product);
+        $productResource->additional(['favoriteStats' => in_array($product->id, $customerFavoriteProductIds) ? 1 : 0]);
 
+        return $productResource;
     }
 
-    public function searchForProductByName($product_name)
+    public function searchForProductByName($productName)
     {
+        $products = Product::where('product_name', 'like', '%' . $productName . '%')->get();
 
-        $products = Product::where('product_name', "like", "%" . $product_name . "%")->get();
-        //$products->product_image = base64_encode($products->product_image);
+        $userId = auth()->id();
+        $customerFavoriteProductIds = Favorite::where('customer_id', $userId)->pluck('product_id')->toArray();
+
+        $products->each(function ($product) use ($customerFavoriteProductIds) {
+            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
+        });
 
         return response()->json(ProductResource::collection($products));
     }
