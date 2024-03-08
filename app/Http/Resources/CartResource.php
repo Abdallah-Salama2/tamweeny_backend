@@ -14,6 +14,7 @@ class CartResource extends JsonResource
             'customerId' => $this->customer_id,
             'productId' => (int)$this->product_id,
             'productName' => $this->product->product_name,
+            'productImage' => $this->product->product_image,
             'sellingPrice' => sprintf("%.2f",$this->product->productpricing->selling_price),
             'quantity' => $this->quantity,
             'totalPrice' =>sprintf("%.2f",  $this->total_price)

@@ -26,19 +26,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/images', [ProductController::class, 'store']);
-Route::get('/admin-cards/create', [AdminCardController::class, 'create'])->name('admin-cards.create');
-Route::get('/admin-card', [AdminCardController::class, 'showAdminCards']);
+//Route::get('/admin-cards/create', [AdminCardController::class, 'create'])->name('admin-cards.create');
+//Route::get('/admin-card', [AdminCardController::class, 'showAdminCards']);
 
 
-Route::get('/editCart', [CartController::class, 'test']);
-Route::put('/cart/{cart}', [CartController::class,'update'])->name('cart.update');
-
-
-// Route to store the newly created admin card
-Route::post('/cardRegistration', [AdminCardController::class, 'store']);
 
 
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/cardRegistration', [AdminCardController::class, 'store']);
+Route::get('/test2', [AdminCardController::class, 'create']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);

@@ -20,6 +20,7 @@ class Category extends Model
         'id',
         'category_name',
         'category_image',
+        'category_icon'
 
     ];
 

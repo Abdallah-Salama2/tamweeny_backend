@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Favorite;
 use App\Models\Product;
 use App\Models\User;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -36,14 +37,7 @@ class ProductController extends Controller
         $customerFavorites = Favorite::where("customer_id", $customerId)->pluck('product_id');
         //print($customerFavorites);
 
-        foreach ($products as $product) {
-            $product->product_image = base64_encode($product->product_image);
-            $product->category->category_image = base64_encode($product->category->category_image);
 
-            $product->favoriteStats = $customerFavorites->contains($product->id) ? 1 : 0;
-
-
-        }
         return response()->json([
             'products' => ProductResource::collection($products),
             'totalPages' => $numberOfPages
@@ -63,10 +57,6 @@ class ProductController extends Controller
         // Retrieve all products in the category
         $products = Product::where('cat_id', $category->id)->with('category')->get();
 
-        foreach ($products as $product) {
-            $product->product_image = base64_encode($product->product_image);
-        }
-
 
         return response()->json(ProductResource::collection($products));
     }
@@ -83,8 +73,11 @@ class ProductController extends Controller
         //print($products);
         $product = $products->where("id", $productId)->first();
 
+        if ($product) {
+            return new ProductResource($product);
+        }
+        return response()->json(["message"=>"Product Not Found"]);
 
-        return new ProductResource($product);
     }
 
     public function searchForProductByName($product_name)

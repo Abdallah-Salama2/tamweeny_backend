@@ -19,9 +19,7 @@ class CatetgoryController extends Controller
         //
         $categories=Category::all();
         // $users=User::paginate(10);
-        foreach ($categories as $category) {
-            $category->category_image = base64_encode($category->category_image);
-        }
+
         return response()->json(CategoryResource::collection($categories));
     }
 //    public function test()

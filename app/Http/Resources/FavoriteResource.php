@@ -20,7 +20,7 @@ class FavoriteResource extends JsonResource
             'customerId' => $this->customer_id,
             'productId' => $this->product_id,
             'productName' => $this->product->product_name,
-            //'productImage' => $this->product->product_image,
+            'productImage' => $this->product->product_image,
             'imageExtension' => $this->product->image_extension,
             'description' => $this->product->description,
             'sellingPrice' => $this->product->productpricing->selling_price,
