@@ -71,7 +71,7 @@ class ProductController extends Controller
         return response()->json(ProductResource::collection($products));
     }
 
-    public function searchForProductById($productId)
+    public function searchForProductById($productId, Request $request)
     {
         $product = Product::with('productpricing', 'category')->find($productId);
 
@@ -79,29 +79,52 @@ class ProductController extends Controller
             return response()->json(["message" => "Product Not Found"]);
         }
 
-        $userId = auth()->id();
-        // Retrieve the IDs of the user's favorite products
-        $customerFavoriteProductIds = Favorite::where('customer_id', $userId)->pluck('product_id')->toArray();
+        $userId = $request->user()->id;
+        $users = User::with('customer', 'customer.card')->get();
+        $user = $users->where("id", $userId)->first();
 
-        // Create a new ProductResource instance with the product data and the favorite stats
-        $productResource = new ProductResource($product);
-        $productResource->additional(['favoriteStats' => in_array($product->id, $customerFavoriteProductIds) ? 1 : 0]);
+        $customerId = $user->customer->id;        // Retrieve the IDs of the user's favorite products
+        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)->pluck('product_id')->toArray();
 
-        return $productResource;
+        // Check if the current product ID is in the list of user's favorite product IDs
+        if (in_array($productId, $customerFavoriteProductIds)) {
+            $product->favoriteStats = 1;
+        } else {
+            $product->favoriteStats = 0;
+        }
+
+        // Return the product resource with the updated favoriteStats attribute
+        return new ProductResource($product);
     }
 
-    public function searchForProductByName($productName)
+    public function searchForProductByName($productName, Request $request)
     {
+        $userId = $request->user()->id;
+        $users = User::with('customer', 'customer.card')->get();
+        $user = $users->where("id", $userId)->first();
+
+        $customerId = $user->customer->id; // Retrieve the IDs of the user's favorite products
+        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)->pluck('product_id')->toArray();
         $products = Product::where('product_name', 'like', '%' . $productName . '%')->get();
 
-        $userId = auth()->id();
-        $customerFavoriteProductIds = Favorite::where('customer_id', $userId)->pluck('product_id')->toArray();
+        if (!$products) {
+            return response()->json(["message" => "Product Not Found"]);
+        }
 
-        $products->each(function ($product) use ($customerFavoriteProductIds) {
-            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
-        });
 
-        return response()->json(ProductResource::collection($products));
+        foreach ($products as $product) {
+            $productId = $product->id;
+
+            // Check if the current product ID is in the list of user's favorite product IDs
+            if (in_array($productId, $customerFavoriteProductIds)) {
+                $product->favoriteStats = 1;
+            } else {
+                $product->favoriteStats = 0;
+            }
+        }
+
+        // Return the product resource with the updated favoriteStats attribute
+        return new ProductResource($product);
     }
 
     /**
