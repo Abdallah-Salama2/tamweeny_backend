@@ -34,7 +34,9 @@ class ProductResource extends JsonResource
             'discountUnit' => $this->productpricing->discount_unit,
             'datCreated' => $this->productpricing->date_created,
             'exipredDate' => $this->productpricing->exipred_date,
-            'favoriteStats' => $this->favoriteStats ? 1 : 0,
+//            'favoriteStats' => $this->favoriteStats ? 1 : 0,
+            'favoriteStats' => $this->when(isset($this->favoriteStats), $this->favoriteStats),
+
         ];
     }
 }
