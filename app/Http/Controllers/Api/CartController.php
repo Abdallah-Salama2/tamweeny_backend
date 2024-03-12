@@ -157,7 +157,7 @@ class CartController extends Controller
             }
         } else {
             // If the cart record doesn't exist, create a new record
-            $productPrice = (int)Product::find($productId)->productpricing->base_price;
+            $productPrice = (int)Product::find($productId)->productpricing->selling_price;
 //            print($productPrice);
             $newCart = Cart::create([
                 'customer_id' => $customerId,
