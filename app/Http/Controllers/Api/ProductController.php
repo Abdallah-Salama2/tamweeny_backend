@@ -99,32 +99,40 @@ class ProductController extends Controller
 
     public function searchForProductByName($productName, Request $request)
     {
+        if (empty($productName)) {
+            return response()->json(["message" => "Product name is required"], 400);
+        }
+
         $userId = $request->user()->id;
         $users = User::with('customer', 'customer.card')->get();
         $user = $users->where("id", $userId)->first();
 
-        $customerId = $user->customer->id; // Retrieve the IDs of the user's favorite products
+        if (!$user) {
+            return response()->json(["message" => "User not found"], 404);
+        }
+
+        $customerId = $user->customer->id;
         $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)->pluck('product_id')->toArray();
         $products = Product::where('product_name', 'like', '%' . $productName . '%')->get();
 
-        if (!$products) {
-            return response()->json(["message" => "Product Not Found"]);
+        if ($products->isEmpty()) {
+            return response()->json();
         }
 
-
+        $updatedProducts = [];
         foreach ($products as $product) {
             $productId = $product->id;
-
-            // Check if the current product ID is in the list of user's favorite product IDs
-            if (in_array($productId, $customerFavoriteProductIds)) {
-                $product->favoriteStats = 1;
-            } else {
-                $product->favoriteStats = 0;
-            }
+            $product->favoriteStats = in_array($productId, $customerFavoriteProductIds) ? 1 : 0;
+            $updatedProducts[] = $product;
         }
 
-        // Return the product resource with the updated favoriteStats attribute
-        return new ProductResource($product);
+        // Return the product resources with the updated favoriteStats attribute
+        return ProductResource::collection($updatedProducts);
+    }
+
+    public function emptyList()
+    {
+        return [];
     }
 
     /**
