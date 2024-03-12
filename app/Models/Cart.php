@@ -15,7 +15,11 @@ class Cart extends Model
         'customer_id',
         'product_id',
         'quantity',
-        'order_price'
+        'total_price'
+    ];
+
+    protected $casts = [
+        'total_price' => 'float', // Ensure it's not cast to 'integer'
     ];
 
     public function product()

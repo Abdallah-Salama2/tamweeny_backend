@@ -141,13 +141,13 @@ class CartController extends Controller
             if ($operator == "true") {
                 // If the cart record exists, update the quantity
                 $cart->quantity += 1;
-                $cart->total_price = $cart->product->productpricing->selling_price * $cart->quantity;
+                $cart->total_price = $cart->product->productpricing->base_price * $cart->quantity;
 
                 $cart->save();
                 return response()->json(['message' => 'Cart updated successfully']);
             } elseif ($operator == "false") {
                 $cart->quantity -= 1;
-                $cart->total_price = $cart->product->productpricing->selling_price * $cart->quantity;
+                $cart->total_price = $cart->product->productpricing->base_price * $cart->quantity;
                 if ($cart->quantity < 1) {
                     $cart->delete();
                     return response()->json(['message' => 'Cart item removed successfully'], 200);
@@ -157,13 +157,15 @@ class CartController extends Controller
             }
         } else {
             // If the cart record doesn't exist, create a new record
-            $productPrice = Product::findOrFail($productId)->productpricing->selling_price;
+            $productPrice = (int)Product::find($productId)->productpricing->base_price;
+//            print($productPrice);
             $newCart = Cart::create([
                 'customer_id' => $customerId,
                 'product_id' => $productId,
                 'quantity' => 1,
                 'total_price' => $productPrice,
             ]);
+            $newCart->save();
             return response()->json(['message' => 'Cart item created successfully']);
         }
 
