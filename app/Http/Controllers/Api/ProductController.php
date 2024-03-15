@@ -58,31 +58,22 @@ class ProductController extends Controller
 
         // Retrieve all products with pricing, category
         $allProducts = Product::with('productpricing', 'category')->get();
-// Retrieve the maximum values for order_count and favorite_count
-        $maxOrderCount = $allProducts->max('order_count');
-        $maxFavoriteCount = $allProducts->max('favorite_count');
 
-// Filter products that have max values for both order_count and favorite_count
-        $maxOrderCountProducts = $allProducts->filter(function ($product) use ($maxOrderCount) {
-            return $product->order_count == $maxOrderCount;
-        });
+        // Sort products based on order_count and favorite_count in descending order
+        $sortedProducts = $allProducts->sortByDesc('order_count')->sortByDesc('favorite_count');
 
-        $maxFavoriteCountProducts = $allProducts->filter(function ($product) use ($maxFavoriteCount) {
-            return $product->favorite_count == $maxFavoriteCount;
-        });
-        $recommended=[$maxOrderCountProducts[0],$maxFavoriteCountProducts[0]];
-// Merge the collections to get products that have max values for both order_count and favorite_count
-        $maxProducts = $maxOrderCountProducts->intersect($maxFavoriteCountProducts);
+        // Take only the top two recommended products
+        $recommendedProducts = $sortedProducts->take(2);
 
         // Transform products using ProductResource and set favoriteStats based on if they are favorites
-        $products = ProductResource::collection($recommended);
+        $products = ProductResource::collection($recommendedProducts);
         $products->each(function ($product) use ($customerFavoriteProductIds) {
             $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
         });
 
-
-        return response()->json($products);
+        return $products;
     }
+
 
 
     public function productsByCategory($catName, Request $request)
