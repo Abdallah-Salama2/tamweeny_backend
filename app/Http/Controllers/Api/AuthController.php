@@ -195,6 +195,17 @@ class AuthController extends Controller
         // Return response
         return response()->json(['isNewUser' => $isNewUser]);
     }
+    public function orderedBefore(Request $request)
+    {
+        $user = auth()->user();
+        // Log the user object
+        logger()->info('User:', ['user' => $user]);
+
+        // Check if the user has made any orders before
+        $isNewUser = $user->customer->order_made->isEmpty();
+        // Return response
+        return response()->json(['isNewUser' => $isNewUser]);
+    }
 
     public function userBalance(Request $request)
     {
