@@ -15,7 +15,6 @@ class Card extends Model
         'individuals_number',
         'bread_points',
         'tamween_points',
-        'customer_id'
 
     ];
 

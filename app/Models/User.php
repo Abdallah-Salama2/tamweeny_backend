@@ -32,6 +32,8 @@ class User extends Authenticatable
         'user_type',
         'latitude',
         'longitude',
+//        'created_at',
+//        'last_login_at'
     ];
 
     public function customer()
@@ -50,6 +52,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    public $timestamps = true;
 
     /**
      * The attributes that should be cast.

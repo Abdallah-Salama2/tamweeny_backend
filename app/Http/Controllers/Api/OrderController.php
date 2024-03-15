@@ -9,6 +9,7 @@ use App\Http\Resources\Orders_madeResource;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Orders_made;
+use App\Models\Product;
 use App\Models\User;
 use http\Env\Response;
 use Illuminate\Http\Request;
@@ -68,6 +69,13 @@ class OrderController extends Controller
         //$customerCartItemPrices = Cart::where("customer_id", $user->customer->id)->pluck("total_price");
 
         $customerCart = Cart::where("customer_id", $user->customer->id)->get();
+        // Check if the cart is empty
+        if ($customerCart->isEmpty()) {
+            return response()->json([
+                'message' => 'Cart is empty. Order not created.',
+            ], 400);
+        }
+
         $total = $customerCart->sum('total_price');
 
 
@@ -89,6 +97,10 @@ class OrderController extends Controller
                 'total_price' => $cartItem->total_price,
                 'customer_id' => $customerId
             ]);
+
+            // Increment the order_count for the product
+            $product = Product::find($cartItem->product_id);
+            $product->increment('order_count');
         }
 
 

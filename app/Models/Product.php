@@ -26,7 +26,9 @@ class Product extends Model
         'points_price',
         'favorite_status',
         'store_id',
-        'cat_id'
+        'cat_id',
+        'favorite_count',
+        'order_count',
     ];
 
     public function category()

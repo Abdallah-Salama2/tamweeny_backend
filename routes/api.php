@@ -45,9 +45,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 
     Route::get('/userss', [AuthController::class, 'index']);                //Users
+    Route::get('/isNew', [AuthController::class, 'isNewUser']);                //Users
     Route::get('/search/{name}', [AuthController::class, 'search']);
     Route::get('/userss/{id?}', [AuthController::class, 'findUser']);
     Route::get('/userData', [AuthController::class, 'getLoggedInUserData']);
+    Route::get('/userBalance', [AuthController::class, 'userBalance']);
 
 
     Route::get('/customers', [CustomerController::class, 'index']);         //Customers
@@ -60,6 +62,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/categories/{catName}', [ProductController::class, 'productsByCategory']);
 
     Route::get('/products', [ProductController::class, 'index']);            //Products
+    Route::get('/recommended', [ProductController::class, 'recommendedProducts']);            //Products
     Route::get('/productId/{product}', [ProductController::class, 'searchForProductById']);
     Route::get('/productName/{product}', [ProductController::class, 'searchForProductByName']);
     Route::get('/productName', [ProductController::class, 'emptyList']);

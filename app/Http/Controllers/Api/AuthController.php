@@ -11,6 +11,7 @@ use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
@@ -76,12 +77,16 @@ class AuthController extends Controller
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
+
+
+        $user->last_login_at = now();
+        $user->save();
         Session::put('user_id', $user->id);
 
 
         $token = $user->createToken($request->device_name)->plainTextToken;
 
-        return response()->json(['token' => $token, 'userId ' => $user->id], 201);
+        return response()->json(['token' => $token, 'userId' => $user->id], 201);
     }
 
 
@@ -179,61 +184,94 @@ class AuthController extends Controller
         return response()->json(new UserResource ($user));
     }
 
+    public function isNewUser(Request $request)
+    {
+        $user = auth()->user();
+        $created_at_hour = Carbon::parse($user->created_at)->format('Y-m-d H'); // Extract hour from created_at timestamp
+        $last_login_at_hour = Carbon::parse($user->last_login_at)->format('Y-m-d H'); // Extract hour from last_login_at timestamp
+
+        $isNewUser = $created_at_hour === $last_login_at_hour;
+
+        // Return response
+        return response()->json(['isNewUser' => $isNewUser]);
+    }
+
+    public function userBalance(Request $request)
+    {
+        $user = auth()->user();
+
+        // Fetch user's card information
+        $card = $user->customer->card;
+        $balance = $card->tamween_points;
+
+        // Validate and update user's information
+
+        // Return response
+        return response()->json(['Balance' => $balance]);
+    }
+
     public function deleteUser(Request $request)
     {
         // Retrieve the user ID from the session
         $userId = $request->user()->id;
         //print("UserID " . $userId . "\t");
+
         // Fetch all users with related data
         $users = User::with('customer', 'customer.order_made', 'customer.order', 'customer.favorite', 'customer.cart', 'customer.card')
             ->get();
-//        print($users);
-
         $user = $users->where("id", $userId)->first();
-        //print($user);
-        $card=Card::where("id",$user->customer->card_id)->first();
+        $customer = $user->customer;
+
+//        $card = $user->customer->card;
+//        if ($card) {
+//            print ($card);
+//        } else {
+//            print ("No card found");
+//
+//        }
         // Check if the user exists
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
         }
-
-        // Check if the user has a related customer record
-        if ($user->customer) {
-            // Delete related order_made records
-            if ($user->customer->order_made) {
-                if ($user->customer->order_made->isNotEmpty()) {
-                    $user->customer->order_made->each->delete();
-                }
+        if ($customer) {
+            $cardId = $customer->card_id;
+            if ($customer->order_made) {
+                $customer->order_made->each->delete();
+            } else {
+                logger()->warning('Order_made record not found for user', ['user_id' => $userId]);
             }
+//        print($customer->favorite);
 
-            // Delete related orders records
-            if ($user->customer->order) {
-                if ($user->customer->order->isNotEmpty()) {
-                    $user->customer->order->each->delete();
-                }
+            if ($customer->favorite) {
+                $customer->favorite->each->delete();
+            } else {
+                logger()->warning('Favorite record not found for user', ['user_id' => $userId]);
             }
-
-            // Delete related favorite records
-            if ($user->customer->favorite) {
-                if ($user->customer->favorite->isNotEmpty()) {
-                    $user->customer->favorite->each->delete();
-                }
+            if ($customer->order) {
+                $customer->order->each->delete();
+            } else {
+                logger()->warning('Order record not found for user', ['user_id' => $userId]);
             }
-
-            // Delete related cart records
-            if ($user->customer->cart) {
-                if ($user->customer->cart->isNotEmpty()) {
-                    $user->customer->cart->each->delete();
-                }
+            if ($customer->cart) {
+                $customer->cart->each->delete();
+            } else {
+                logger()->warning('Cart record not found for user', ['user_id' => $userId]);
             }
-
-
-
+            $card = Card::where("id", $cardId)->first();
             // Delete related customer record
-            $user->customer->delete();
+            if ($user->customer) {
+                $user->customer->delete();
+            }
+            $card->delete();
+            $user->delete();
+
         }
-        $card->delete();
+
+//         Get the associated card record
+
+
         $user->delete();
+
 
         return response()->json(['message' => 'User deleted successfully'], 200);
     }

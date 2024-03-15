@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\AdminCard;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -30,10 +31,10 @@ class AdminCardController extends Controller
     public function create()
     {
 
-        $products = Product::all(); // Fetch all products, adjust the query as needed
+        $categories = Category::all(); // Fetch all products, adjust the query as needed
 
         //
-        return view('test',compact('products'));
+        return view('test2',compact('categories'));
     }
 
     /**

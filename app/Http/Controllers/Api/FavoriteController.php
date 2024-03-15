@@ -118,13 +118,17 @@ class FavoriteController extends Controller
 //        print ("CustomerId " . $customerId . "\n");
 
         $product = Product::where("id", $productId)->first();
-        $productInCart = Favorite::where('customer_id', $customerId)
+        $count =  $product->favorite_count;
+        $productInFavorite = Favorite::where('customer_id', $customerId)
             ->where('product_id', $productId)
             ->first();
 
-        if ($productInCart) {
-            // Handle the case where the product already exists in the cart
-            $productInCart->delete();
+        if ($productInFavorite) {
+            // Handle the case where the product already exists in the Favorites
+            $product->favorite_count -=1;
+            $productInFavorite->delete();
+            $product->save();
+
             return response()->json([
                 'message' => 'Product removed from Favorites.',
             ], 409);
@@ -135,7 +139,10 @@ class FavoriteController extends Controller
             'customer_id' => $customerId,
             'product_id' => $productId,
         ]);
+        $product->favorite_count++;
+        $product->save();
         $favorite->save();
+
 
         return response()->json([
             'message' => 'Product Added To Favorites ',

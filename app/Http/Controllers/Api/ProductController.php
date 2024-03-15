@@ -44,6 +44,46 @@ class ProductController extends Controller
         ]);
     }
 
+    public function recommendedProducts(Request $request)
+    {
+        $userId = $request->user()->id;
+        $users = User::with('customer', 'customer.card')->get();
+        $user = $users->where("id", $userId)->first();
+        $customerId = $user->customer->id;
+
+        // Retrieve customer's favorite product IDs
+        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
+            ->pluck('product_id')
+            ->toArray();
+
+        // Retrieve all products with pricing, category
+        $allProducts = Product::with('productpricing', 'category')->get();
+// Retrieve the maximum values for order_count and favorite_count
+        $maxOrderCount = $allProducts->max('order_count');
+        $maxFavoriteCount = $allProducts->max('favorite_count');
+
+// Filter products that have max values for both order_count and favorite_count
+        $maxOrderCountProducts = $allProducts->filter(function ($product) use ($maxOrderCount) {
+            return $product->order_count == $maxOrderCount;
+        });
+
+        $maxFavoriteCountProducts = $allProducts->filter(function ($product) use ($maxFavoriteCount) {
+            return $product->favorite_count == $maxFavoriteCount;
+        });
+        $recommended=[$maxOrderCountProducts[0],$maxFavoriteCountProducts[0]];
+// Merge the collections to get products that have max values for both order_count and favorite_count
+        $maxProducts = $maxOrderCountProducts->intersect($maxFavoriteCountProducts);
+
+        // Transform products using ProductResource and set favoriteStats based on if they are favorites
+        $products = ProductResource::collection($recommended);
+        $products->each(function ($product) use ($customerFavoriteProductIds) {
+            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
+        });
+
+
+        return response()->json($products);
+    }
+
 
     public function productsByCategory($catName, Request $request)
     {

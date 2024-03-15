@@ -37,12 +37,12 @@ class Customer extends Model
 
     public function order()
     {
-        return $this->hasOne(Order::class, 'customer_id', 'id');
+        return $this->hasMany(Order::class, 'customer_id', 'id');
     }
 
     public function order_made()
     {
-        return $this->hasOne(Orders_made::class, 'customer_id', 'id');
+        return $this->hasMany(Orders_made::class, 'customer_id', 'id');
     }
 
 
