@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductPricingController;
 use App\Http\Controllers\Api\StoreController;
 use App\Http\Controllers\Api\StoreOwnerController;
+use App\Http\Controllers\FIleController;
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,6 +54,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/userData', [AuthController::class, 'getLoggedInUserData']);
     Route::get('/userBalance', [AuthController::class, 'userBalance']);
 
+    Route::get('/model', [Orders_madeController::class, 'ordersForModel']);
 
     Route::get('/customers', [CustomerController::class, 'index']);         //Customers
     Route::patch('updateAccInfo', [AuthController::class, 'updateUserInfo']);
@@ -88,14 +91,14 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/stores', [StoreController ::class, 'index']);               //Stores
     Route::get('/storesLatLong', [StoreController ::class, 'showLatLong']);  //StoresLatLang
 
-    Route::get('/test', [\App\Http\Controllers\TestController::class, 'index']);
-    Route::post('/test22', [\App\Http\Controllers\TestController::class, 'store']);
+    Route::get('/test', [TestController::class, 'index']);
+    Route::post('/test22', [TestController::class, 'store']);
 
 
 });
 
 
-Route::post("/upload", [\App\Http\Controllers\FIleController::class, 'upload']);
+Route::post("/upload", [FIleController::class, 'upload']);
 ////Route::get('/test2',[CatetgoryController::class, 'test']);
 ////Route::get('/test3',[CatetgoryController::class, 'test2']);
 //Route::post('/fake', [AuthController::class, 'fake2']);

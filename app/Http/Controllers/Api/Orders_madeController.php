@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\modelResource;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\OrderResource2;
 use App\Http\Resources\Orders_madeResource;
@@ -35,6 +36,26 @@ class Orders_madeController extends Controller
 
         $ordersMade = Orders_made::where("customer_id", $customerId)->get();
         return response()->json(Orders_madeResource::collection($ordersMade));
+
+    }
+    public function ordersForModel(Request $request)
+    {
+        //
+
+        $userId = $request->user()->id;
+        //print("UserID " . $userId . "\n");
+        // Fetch all users with related data
+        $users = User::with('customer', 'customer.card')->get();
+        // Retrieve the user from the collection by ID
+        $user = $users->where("id", $userId)->first();
+        //print($user);
+
+        $customerId = $user->customer->id;
+        //print ("CustomerId " . $customerId . "\n");
+
+
+        $ordersMade = Orders_made::where("customer_id", $customerId)->get();
+        return response()->json(modelResource::collection($ordersMade));
 
     }
 
