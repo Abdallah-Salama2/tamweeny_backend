@@ -72,7 +72,11 @@ class ProductController extends Controller
             $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
         });
 
-        return $products;
+        return response()->json([
+            'Most Ordered' => $products->first(),
+            'Most Favorited' => $products->last(), // Assuming the last one is the second most ordered
+        ]);
+//        return $products;
     }
 
 
