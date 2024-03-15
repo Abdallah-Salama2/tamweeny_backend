@@ -61,6 +61,7 @@ class ProductController extends Controller
 
         // Sort products based on order_count and favorite_count in descending order
         $sortedProducts = $allProducts->sortByDesc('order_count')->sortByDesc('favorite_count');
+        //first item the highest order 2nd item the 2nd order
 
         // Take only the top two recommended products
         $recommendedProducts = $sortedProducts->take(2);
