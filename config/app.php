@@ -144,6 +144,9 @@ return [
         // 'store' => 'redis',
     ],
 
+    'allowed_hosts' => [
+        env('APP_ALLOWED_HOSTS'),
+    ],
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

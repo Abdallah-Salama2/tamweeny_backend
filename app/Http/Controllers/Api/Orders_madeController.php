@@ -110,7 +110,7 @@ class Orders_madeController extends Controller
 
 
         $orderId = Session::get("orderId");
-        print($orderId);
+//        print($orderId);
         $orders = Order::find($orderId);
         $ordersMade = Orders_made::where("order_id", $orderId)->get();
         return response()->json([

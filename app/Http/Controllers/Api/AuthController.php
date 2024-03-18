@@ -51,7 +51,8 @@ class AuthController extends Controller
         // Create the user
         $user = User::create(UserRegisterDTO::userInfoFromRequest($request));
         $tamweenCard = Card::create(UserRegisterDTO::cardInfoFromRequest($request));
-        $customer = Customer::create(array_merge(UserRegisterDTO::customerInfoFromRequest($request), ['card_id' => $tamweenCard->id]));
+        $customer = Customer::create( ['card_id' => $tamweenCard->id,'user_id'=>$user->id]);
+        $customer->save();
 
         //$token = $user->createToken('registration-token')->plainTextToken;
         //$list = response()->json(['message' => 'Registration successful', 'user' => $user, 'customer' => $customer, 'tamweenCard' => $tamweenCard]);

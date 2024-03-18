@@ -21,13 +21,13 @@ class storeOwner extends Model
     protected $fillable = [
         'id',
         'tax_registration_number',
-        'national_id',
+        'user_id',
         'tax_card'
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'national_id', 'nationalId');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     protected $table = 'storeowner'; // Adjust based on your table name

@@ -34,7 +34,7 @@ class UserRegisterDTO
     public static function customerInfoFromRequest(Request $request): array
     {
         return [
-            'national_id' => $request->input('nationalId'),
+            'user_id' => $request->input('nationalId'),
         ];
     }
 }

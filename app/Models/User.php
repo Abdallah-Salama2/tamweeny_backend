@@ -38,7 +38,7 @@ class User extends Authenticatable
 
     public function customer()
     {
-        return $this->hasOne(Customer::class, 'national_id', 'national_id');
+        return $this->hasOne(Customer::class, 'user_id', 'id');
     }
 
 
@@ -67,12 +67,12 @@ class User extends Authenticatable
 
     public function storeOwner()
     {
-        return $this->hasOne(StoreOwner::class, 'national_id', 'national_id');
+        return $this->hasOne(StoreOwner::class, 'user_id', 'id');
     }
 
     public function governorAdmin()
     {
-        return $this->hasOne(GovernorAdmin::class, 'national_id','national_id');
+        return $this->hasOne(GovernorAdmin::class, 'user_id','id');
     }
 
 
@@ -82,7 +82,7 @@ class User extends Authenticatable
      * @var string
      */
     protected $table = 'users'; // Adjust based on your table name
-    protected $primaryKey = 'national_id'; //
+    protected $primaryKey = 'id'; //
 
 
 }

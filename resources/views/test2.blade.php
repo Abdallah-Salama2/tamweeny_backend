@@ -13,8 +13,8 @@
 @foreach($categories as $category)
     <div>
         <h2>{{ $category->category_name }}</h2>
-        <img src="data:image/jpeg;base64,{{ $category->category_image}}" alt="{{ $category->category_name }} Image">
-
+        <a href="https://imgur.com/rbo175Z"><img src="https://i.imgur.com/rbo175Z.png" title="source: imgur.com" /></a>{{--            <?php echo $category->category_image ?>--}}
+        {{--        <img src="{{$category->category_icon }}" alt="{{ $category->category_name }} Image">--}}
 
 
         {{--        <img src="{{ asset('storage/images/1708192320.jpg') }}" alt="" title="" />--}}

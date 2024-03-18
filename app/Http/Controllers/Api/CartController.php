@@ -141,7 +141,7 @@ class CartController extends Controller
             if ($operator == "true") {
                 // If the cart record exists, update the quantity
                 $cart->quantity += 1;
-                $cart->total_price = $cart->product->productpricing->base_price * $cart->quantity;
+                $cart->total_price = ($cart->product->productpricing->base_price ??null) * $cart->quantity;
 
                 $cart->save();
                 return response()->json(['message' => 'Cart updated successfully']);

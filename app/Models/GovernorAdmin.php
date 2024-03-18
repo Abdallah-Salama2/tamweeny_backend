@@ -11,7 +11,7 @@ class GovernorAdmin extends Model
 
     protected $fillable=[
         'id',
-        'national_id'
+        'user_id'
     ];
     public function adminCard()
     {
@@ -19,6 +19,6 @@ class GovernorAdmin extends Model
     }
     public function user()
     {
-        return $this->belongsTo(User::class, 'national_id','national_id');
+        return $this->belongsTo(User::class, 'user_id','id');
     }
 }

@@ -71,6 +71,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::get('/categories/{catName}', [ProductController::class, 'productsByCategory']);
     Route::get('/products', [ProductController::class, 'index']);            //Products
+    Route::get('/products2', [ProductPricingController::class, 'create']);            //Products
     Route::get('/recommended', [ProductController::class, 'recommendedProducts']);            //Products
     Route::get('/productId/product?}', [ProductController::class, 'searchForProductById']);
     Route::get('/productName/{product?}', [ProductController::class, 'searchForProductByName']);

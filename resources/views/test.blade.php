@@ -14,7 +14,7 @@
     <div>
         <h2>{{ $product->productName }}</h2>
         <p>Price: {{ $product->selling_price }}</p>
-        <img src="data:image/jpeg;base64,{{ $product->productImage }}" alt="{{ $product->productName }} Image">
+        <img src="data:image/jpeg;base64,{{ $product->productImage }}" alt="{{ $product->productImage }} Image">
     </div>
 @endforeach
 </body>

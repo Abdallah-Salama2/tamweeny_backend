@@ -12,13 +12,13 @@ class Customer extends Model
     protected $fillable = [
         // Fields for the Customer model
         'id',
-        'national_id', // Assuming you have a column named 'national_id' for the foreign key
+        'user_id', // Assuming you have a column named 'national_id' for the foreign key
         'card_id'
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'national_id', 'national_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function card()

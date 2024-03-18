@@ -28,7 +28,7 @@ class ProductController extends Controller
             ->toArray();
 
         // Retrieve all products with pricing, category
-        $allProducts = Product::with('productpricing', 'category')->paginate(8);
+        $allProducts = Product::with('productpricing', 'category')->get();
 
         // Transform products using ProductResource and set favoriteStats based on if they are favorites
         $products = ProductResource::collection($allProducts);
@@ -36,11 +36,11 @@ class ProductController extends Controller
             $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
         });
 
-        $numberOfPages = $allProducts->lastPage();
+//        $numberOfPages = $allProducts->lastPage();
 
         return response()->json([
             'products' => $products,
-            'totalPages' => $numberOfPages
+//            'totalPages' => $numberOfPages
         ]);
     }
 

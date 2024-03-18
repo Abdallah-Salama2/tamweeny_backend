@@ -26,6 +26,9 @@ class ProductPricingController extends Controller
     public function create()
     {
         //
+        $allProducts = Product::with('productpricing', 'category')->paginate(8);
+
+        return $allProducts;
     }
 
     /**
