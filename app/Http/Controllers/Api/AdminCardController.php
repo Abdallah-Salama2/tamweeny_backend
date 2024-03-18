@@ -7,6 +7,7 @@ use App\Models\AdminCard;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class AdminCardController extends Controller
 {
@@ -40,11 +41,20 @@ class AdminCardController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+
     public function store(Request $request)
     {
         // Validate the request data
         $request->validate([
-            // Add your validation rules here...
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:admin_cards,email',
+            'gender' => ['required', Rule::in(['male', 'female'])],
+            'phoneNumber' => 'required|string|max:20',
+            'socialStatus' => 'required|string|max:255',
+            'salary' => 'required|numeric|min:0',
+            'nationalIdCardAndBirthCertificate' => 'required|file|mimes:jpeg,png,pdf|max:2048',
+            'followersNationalIdCardsAndBirthCertificates.*' => 'file|mimes:jpeg,png,pdf|max:2048',
         ]);
 
         // Store the admin card details
@@ -73,10 +83,10 @@ class AdminCardController extends Controller
             'national_id_card_and_birth_certificate' => $nationalIdCardPath,
             'followers_national_id_cards_and_birth_certificates' => $followersNationalIdCardsPathsJson,
         ]);
-        return response()->json(["message"=>"Card created and waiting for approval"],200);
 
-        // Redirect or respond with success message
+        return response()->json(["message" => "Card created and waiting for approval"], 200);
     }
+
 
     /**
      * Display the specified resource.
