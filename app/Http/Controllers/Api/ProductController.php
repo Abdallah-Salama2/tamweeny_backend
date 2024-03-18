@@ -80,7 +80,6 @@ class ProductController extends Controller
     }
 
 
-
     public function productsByCategory($catName, Request $request)
     {
         $userId = $request->user()->id;
@@ -107,7 +106,7 @@ class ProductController extends Controller
         return response()->json(ProductResource::collection($products));
     }
 
-    public function searchForProductById($productId, Request $request)
+    public function searchForProductById(Request $request, ?string $productId = null)
     {
         $product = Product::with('productpricing', 'category')->find($productId);
 
@@ -133,10 +132,11 @@ class ProductController extends Controller
         return new ProductResource($product);
     }
 
-    public function searchForProductByName($productName, Request $request)
+    //?string $productName = nul in case search bar is empty so it runs the if empty
+    public function searchForProductByName(Request $request, ?string $productName = null)
     {
         if (empty($productName)) {
-            return response()->json(["message" => "Product name is required"], 400);
+            return response()->json([], 400);
         }
 
         $userId = $request->user()->id;
@@ -169,6 +169,41 @@ class ProductController extends Controller
     public function emptyList()
     {
         return [];
+    }
+
+    public function offers(Request $request)
+    {
+        $userId = $request->user()->id;
+        $users = User::with('customer', 'customer.card')->get();
+        $user = $users->where("id", $userId)->first();
+        $customerId = $user->customer->id;
+
+        // Retrieve customer's favorite product IDs
+        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
+            ->pluck('product_id')
+            ->toArray();
+
+        // Retrieve all products with pricing, category
+        $allProducts = Product::with('productpricing', 'category')->get();
+        $offers = [];
+
+        foreach ($allProducts as $product) {
+            if ($product->productpricing->base_price > $product->productpricing->selling_price) {
+                $offers[] = $product;
+            }
+
+        }
+
+        // Retrieve all products with pricing and category
+        // Transform products using ProductResource and set favoriteStats based on if they are favorites
+        $products = ProductResource::collection($offers);
+        $products->each(function ($product) use ($customerFavoriteProductIds) {
+            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
+
+        });
+
+
+        return response()->json($products);
     }
 
     /**

@@ -32,8 +32,6 @@ Route::get('/images', [ProductController::class, 'store']);
 //Route::get('/admin-card', [AdminCardController::class, 'showAdminCards']);
 
 
-
-
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/cardRegistration', [AdminCardController::class, 'store']);
 Route::get('/test2', [AdminCardController::class, 'create']);
@@ -42,42 +40,49 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
+Route::get('/userss', [AuthController::class, 'index']);                //Users
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
 
+//Route::controller(AuthController::class)->group(function (){});
 
-    Route::get('/userss', [AuthController::class, 'index']);                //Users
+    Route::group(['middleware' => ['role:customer']],function (){
+
+    });
     Route::get('/isNew', [AuthController::class, 'isNewUser']);                //Users
     Route::get('/orderedBefore', [AuthController::class, 'orderedBefore']);                //Users
     Route::get('/search/{name}', [AuthController::class, 'search']);
     Route::get('/userss/{id?}', [AuthController::class, 'findUser']);
     Route::get('/userData', [AuthController::class, 'getLoggedInUserData']);
     Route::get('/userBalance', [AuthController::class, 'userBalance']);
+    Route::patch('updateAccInfo', [AuthController::class, 'updateUserInfo']);
+    Route::Delete('deleteAccount', [AuthController::class, 'deleteUser']);
+
 
     Route::get('/model', [Orders_madeController::class, 'ordersForModel']);
 
     Route::get('/customers', [CustomerController::class, 'index']);         //Customers
-    Route::patch('updateAccInfo', [AuthController::class, 'updateUserInfo']);
-    Route::Delete('deleteAccount', [AuthController::class, 'deleteUser']);
+
     Route::get('/cards', [CardController::class, 'index']);
 
 
     Route::get('/categories', [CatetgoryController::class, 'index']);        //Categories
-    Route::get('/categories/{catName}', [ProductController::class, 'productsByCategory']);
 
+
+    Route::get('/categories/{catName}', [ProductController::class, 'productsByCategory']);
     Route::get('/products', [ProductController::class, 'index']);            //Products
     Route::get('/recommended', [ProductController::class, 'recommendedProducts']);            //Products
-    Route::get('/productId/{product}', [ProductController::class, 'searchForProductById']);
-    Route::get('/productName/{product}', [ProductController::class, 'searchForProductByName']);
-    Route::get('/productName', [ProductController::class, 'emptyList']);
-    Route::get('/offers', [ProductPricingController::class, 'index']);       //ProductPricing
+    Route::get('/productId/product?}', [ProductController::class, 'searchForProductById']);
+    Route::get('/productName/{product?}', [ProductController::class, 'searchForProductByName']);
+//    Route::get('/productName', [ProductController::class, 'emptyList']);
+    Route::get('/offers', [ProductController::class, 'offers']);       //ProductPricing
 
     Route::get('/favorites', [FavoriteController::class, 'index']);          //Favorites
     Route::post('favorite/{productId}', [FavoriteController::class, 'add']);
 
     Route::get('/cart', [CartController::class, 'index']);
-    Route::put('/cart/{productId}/{operator}', [CartController::class,'update']);
-    Route::delete('/cart/{productId}', [CartController::class,'delete']);
+    Route::put('/cart/{productId}/{operator}', [CartController::class, 'update']);
+    Route::delete('/cart/{productId}', [CartController::class, 'delete']);
 
 
     Route::get('/orders', [OrderController::class, 'index']);                //Orders
