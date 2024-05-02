@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('delivery_guys', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('vehicle_type', 50);
             $table->string('license_plate', 50);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent(); // Set timestamps to use current time
+            $table->timestamp('updated_at')->useCurrent(); // Set timestamps to use current time
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict')->onUpdate('restrict');
+//            $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict')->onUpdate('restrict');
         });
     }
 

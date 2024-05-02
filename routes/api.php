@@ -4,15 +4,15 @@ use App\Http\Controllers\Api\AdminCardController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CardController;
 use App\Http\Controllers\Api\CartController;
-use App\Http\Controllers\Api\CatetgoryController;
+use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\Orders_madeController;
 use App\Http\Controllers\Api\ProductController;
-use App\Http\Controllers\Api\ProductPricingController;
 use App\Http\Controllers\Api\StoreController;
 use App\Http\Controllers\Api\StoreOwnerController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\FIleController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
@@ -40,63 +40,72 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
-Route::get('/userss', [AuthController::class, 'index']);                //Users
+Route::get('/userss', [UserController::class, 'index']);                //Users
+//Route::get('/ay7aga', [AuthController::class, 'ay7aga']);                //Users
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::get('/ay7aga', [UserController::class, 'ay7aga']);                //Users
 
-//Route::controller(AuthController::class)->group(function (){});
+    Route::controller(UserController::class)->name('customer.')->group(function () {
+        Route::patch('updateAccInfo', 'updateUserInfo');
+//        Route::get('isNew', 'isNewUser')->name("newUser")   ;       //Users
+        Route::get('orderedBefore', 'orderedBefore');                //Users
+        Route::get('search/{name}', 'search');
+        Route::get('userss/{id?}', 'findUser');
+        Route::get('userData', 'getLoggedInUserData');
+        Route::get('userBalance', 'userBalance');
+        Route::Delete('deleteAccount', 'deleteUser');
+    });
 
-    Route::group(['middleware' => ['role:customer']],function (){
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('/categories', 'index');        //Categories
+        Route::get('/categories/{catName}', 'productsByCategory');
+    });
+
+    Route::controller(ProductController::class)->group(function () {
+        Route::get('/products', 'index');            //Products
+        Route::get('/recommended', 'recommendedProducts');            //Products
+        Route::get('/productId/{product?}', 'searchForProductById');
+        Route::get('/productName/{product?}', 'searchForProductByName');
+        Route::get('/offers', 'offers');       //ProductPricing
+    });
+
+    Route::controller(FavoriteController::class)->group(function () {
+        Route::get('/favorites', 'index');          //Favorites
+        Route::post('favorite/{productId}', 'add');
+    });
+
+    Route::controller(CartController::class)->group(function () {
+        Route::get('/cart', 'index');
+        Route::put('/cart/{productId?}/{operator?}', 'update');
+        Route::delete('/cart/{productId}', 'delete');
 
     });
-    Route::get('/isNew', [AuthController::class, 'isNewUser']);                //Users
-    Route::get('/orderedBefore', [AuthController::class, 'orderedBefore']);                //Users
-    Route::get('/search/{name}', [AuthController::class, 'search']);
-    Route::get('/userss/{id?}', [AuthController::class, 'findUser']);
-    Route::get('/userData', [AuthController::class, 'getLoggedInUserData']);
-    Route::get('/userBalance', [AuthController::class, 'userBalance']);
-    Route::patch('updateAccInfo', [AuthController::class, 'updateUserInfo']);
-    Route::Delete('deleteAccount', [AuthController::class, 'deleteUser']);
+
+    Route::controller(OrderController::class)->group(function () {
+        Route::get('/orders', 'index');                //Orders
+        Route::post('/createOrder', 'store');
+    });
+
+    Route::controller(Orders_madeController::class)->group(function () {
+        Route::get('/ordersMade', 'index');
+        Route::get('/fullOrder', 'fullOrder');
+        Route::get('/fullorders', 'fullorders');
+
+    });
+
+
+    Route::controller(StoreController::class)->group(function () {
+        Route::get('/stores', 'index');               //Stores
+        Route::get('/storesLatLong', 'showLatLong');  //StoresLatLang
+
+    });
 
 
     Route::get('/model', [Orders_madeController::class, 'ordersForModel']);
-
     Route::get('/customers', [CustomerController::class, 'index']);         //Customers
-
-    Route::get('/cards', [CardController::class, 'index']);
-
-
-    Route::get('/categories', [CatetgoryController::class, 'index']);        //Categories
-
-
-    Route::get('/categories/{catName}', [ProductController::class, 'productsByCategory']);
-    Route::get('/products', [ProductController::class, 'index']);            //Products
-    Route::get('/products2', [ProductPricingController::class, 'create']);            //Products
-    Route::get('/recommended', [ProductController::class, 'recommendedProducts']);            //Products
-    Route::get('/productId/product?}', [ProductController::class, 'searchForProductById']);
-    Route::get('/productName/{product?}', [ProductController::class, 'searchForProductByName']);
-//    Route::get('/productName', [ProductController::class, 'emptyList']);
-    Route::get('/offers', [ProductController::class, 'offers']);       //ProductPricing
-
-    Route::get('/favorites', [FavoriteController::class, 'index']);          //Favorites
-    Route::post('favorite/{productId}', [FavoriteController::class, 'add']);
-
-    Route::get('/cart', [CartController::class, 'index']);
-    Route::put('/cart/{productId}/{operator}', [CartController::class, 'update']);
-    Route::delete('/cart/{productId}', [CartController::class, 'delete']);
-
-
-    Route::get('/orders', [OrderController::class, 'index']);                //Orders
-    Route::post('/createOrder', [OrderController::class, 'store']);
-    Route::get('/ordersMade', [Orders_madeController::class, 'index']);
-    Route::get('/fullOrder', [Orders_madeController::class, 'fullOrder']);
-    Route::get('/fullorders', [Orders_madeController::class, 'fullorders']);
-
-
     Route::get('/owners', [StoreOwnerController::class, 'index']);
-    Route::get('/stores', [StoreController ::class, 'index']);               //Stores
-    Route::get('/storesLatLong', [StoreController ::class, 'showLatLong']);  //StoresLatLang
-
+    Route::get('/cards', [CardController::class, 'index']);
     Route::get('/test', [TestController::class, 'index']);
     Route::post('/test22', [TestController::class, 'store']);
 
@@ -105,10 +114,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 
 Route::post("/upload", [FIleController::class, 'upload']);
-////Route::get('/test2',[CatetgoryController::class, 'test']);
-////Route::get('/test3',[CatetgoryController::class, 'test2']);
-//Route::post('/fake', [AuthController::class, 'fake2']);
-//Route::get('/test',[ProductController::class, 'test']);
+////Route::get(' / test2',[CategoryController::class, 'test']);
+////Route::get(' / test3',[CategoryController::class, 'test2']);
+//Route::post(' / fake', [AuthController::class, 'fake2']);
+//Route::get(' / test',[ProductController::class, 'test']);
 //
-//Route::get('/users',[AuthController::class, 'test']);
+//Route::get(' / users',[AuthController::class, 'test']);
 

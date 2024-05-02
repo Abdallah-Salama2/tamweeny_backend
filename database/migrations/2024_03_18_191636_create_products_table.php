@@ -20,14 +20,15 @@ return new class extends Migration
             $table->text('description');
             $table->integer('stock_quantity');
             $table->decimal('points_price', 10, 2);
-            $table->unsignedBigInteger('store_id')->nullable();
-            $table->unsignedBigInteger('cat_id')->nullable();
+            $table->foreignId('store_id')->constrained('stores')->cascadeOnDelete();
+            $table->foreignId('cat_id')->constrained('categories')->cascadeOnDelete();
             $table->integer('favorite_count');
             $table->integer('order_count');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent(); // Set timestamps to use current time
+            $table->timestamp('updated_at')->useCurrent(); // Set timestamps to use current time
 
-            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('cat_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
+//            $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade')->onUpdate('cascade');
+//            $table->foreign('cat_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

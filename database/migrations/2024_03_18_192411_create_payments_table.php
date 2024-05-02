@@ -18,11 +18,11 @@ return new class extends Migration
             $table->decimal('payment_amount', 10, 2);
             $table->string('payment_method', 50);
             $table->integer('payment_status');
-            $table->unsignedBigInteger('customer_id');
+            $table->foreignId('customer_id')->constrained('customers')->cascadeOnDelete();
             $table->timestamps();
 
             $table->unique('customer_id');
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('restrict')->onUpdate('restrict');
+//            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('restrict')->onUpdate('restrict');
         });
     }
 

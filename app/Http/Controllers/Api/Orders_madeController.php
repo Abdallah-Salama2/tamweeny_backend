@@ -20,149 +20,86 @@ class Orders_madeController extends Controller
      */
     public function index(Request $request)
     {
-        //
-
-        $userId = $request->user()->id;
-        //print("UserID " . $userId . "\n");
-        // Fetch all users with related data
-        $users = User::with('customer', 'customer.card')->get();
-        // Retrieve the user from the collection by ID
-        $user = $users->where("id", $userId)->first();
-        //print($user);
-
-        $customerId = $user->customer->id;
-        //print ("CustomerId " . $customerId . "\n");
-
+//        $userId = $request->user()->id;
+//        $user = User::with('customer', 'customer.card')->find($userId);
+//        $customerId = $user->customer->id;
+        $customerId = auth()->user()->customer->id;
 
         $ordersMade = Orders_made::where("customer_id", $customerId)->get();
         return response()->json(Orders_madeResource::collection($ordersMade));
-
     }
+
+    /**
+     * Display orders for a model.
+     */
     public function ordersForModel(Request $request)
     {
-        //
-
-        $userId = $request->user()->id;
-        //print("UserID " . $userId . "\n");
-        // Fetch all users with related data
-        $users = User::with('customer', 'customer.card')->get();
-        // Retrieve the user from the collection by ID
-        $user = $users->where("id", $userId)->first();
-        //print($user);
-
-        $customerId = $user->customer->id;
-        //print ("CustomerId " . $customerId . "\n");
+//        $userId = $request->user()->id;
+//        $user = User::with('customer', 'customer.card')->find($userId);
+//        $customerId = $user->customer->id;
+        $customerId = auth()->user()->customer->id;
 
 
         $ordersMade = Orders_made::where("customer_id", $customerId)->get();
         return response()->json(modelResource::collection($ordersMade));
-
     }
 
-//    public function fullOrder(Request $request)
-//    {
-//        //
-//
-//        $userId = $request->user()->id;
-//        //print("UserID " . $userId . "\n");
-//        // Fetch all users with related data
-//        $users = User::with('customer', 'customer.card')->get();
-//        // Retrieve the user from the collection by ID
-//        $user = $users->where("id", $userId)->first();
-//        //print($user);
-//
-//        $customerId = $user->customer->id;
-//        //print ("CustomerId " . $customerId . "\n");
-//
-//        $ordersMade = Orders_made::where("customer_id", $customerId)->get();
-//        $order_ids = $ordersMade->pluck('order_id')->unique();
-//        $orders = [];
-//
-//        foreach ($order_ids as $order_id) {
-//            $order = Order::where("id", $order_id)->first();
-//            if ($order) {
-//                $orders[] = new OrderResource($order);
-//            }
-//        }
-//
-//        foreach ($orders as $order) {
-//            print(json_encode($order->jsonSerialize()) . PHP_EOL);
-//        }
-//        return response()->json([
-//            "orderCreated" => $orders,
-//            "cartItemsInOrder" => Orders_madeResource::collection($ordersMade)
-//        ]);
-//    }
-
+    /**
+     * Display full order details.
+     */
     public function fullOrder(Request $request)
     {
-        $userId = $request->user()->id;
-
-        // Fetch user and related data
-        $users = User::with('customer', 'customer.card')->get();
-        // Retrieve the user from the collection by ID
-        $user = $users->where("id", $userId)->first();
-        if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
-        }
-
-        $customerId = $user->customer->id;
-
+//        $userId = $request->user()->id;
+//        $user = User::with('customer', 'customer.card')->find($userId);
+//        if (!$user) {
+//            return response()->json(['error' => 'User not found'], 404);
+//        }
 
         $orderId = Session::get("orderId");
-//        print($orderId);
         $orders = Order::find($orderId);
         $ordersMade = Orders_made::where("order_id", $orderId)->get();
-        return response()->json([
-                'Order' => new OrderResource($orders),
-                'Products in order' => Orders_madeResource::collection($ordersMade)
-            ]
-        );
 
+        return response()->json([
+            'Order' => new OrderResource($orders),
+            'Products in order' => Orders_madeResource::collection($ordersMade)
+        ]);
     }
 
-
-    public function fullorders(Request $request)
+    /**
+     * Display full orders.
+     */
+    public function fullOrders(Request $request)
     {
-        $userId = $request->user()->id;
+//        $userId = $request->user()->id;
+//        $user = User::with('customer', 'customer.card')->find($userId);
+//        if (!$user) {
+//            return response()->json(['error' => 'User not found'], 404);
+//        }
+//
+//        $customerId = $user->customer->id;
+        $customerId = auth()->user()->customer->id;
 
-        // Fetch user and related data
-        $users = User::with('customer', 'customer.card')->get();
-        // Retrieve the user from the collection by ID
-        $user = $users->where("id", $userId)->first();
-        if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
-        }
-        $customerId = $user->customer->id;
         $orders = Order::where("customer_id", $customerId)->get();
 
         $responseData = [];
 
         foreach ($orders as $order){
             $orderData = new OrderResource2($order);
-
-            // Fetch and format ordersMade data
             $orderData['ordersMade'] = Orders_madeResource::collection(
                 Orders_made::where("order_id", $order->id)->get()
             );
-
             $responseData[] = $orderData;
         }
 
-        // Return JSON response with the combined data
         return response()->json($responseData);
     }
-
-
-
-
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        // Validation needed here if applicable
     }
 
     /**

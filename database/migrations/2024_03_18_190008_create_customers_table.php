@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('card_id')->nullable();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('card_id')->constrained('cards')->cascadeOnDelete();
+//            $table->unsignedBigInteger('card_id')->nullable();
             $table->timestamps();
-
-            $table->foreign('card_id')->references('id')->on('cards')->onDelete('restrict')->onUpdate('restrict');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('restrict');
+//
+//            $table->foreign('card_id')->references('id')->on('cards')->onDelete('cascade')->onUpdate('cascade');
+//            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('restrict');
         });
     }
 

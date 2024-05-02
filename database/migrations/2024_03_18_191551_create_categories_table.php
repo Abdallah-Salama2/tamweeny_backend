@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('category_name', 100);
             $table->string('category_image', 200);
             $table->string('category_icon', 200);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent(); // Set timestamps to use current time
+            $table->timestamp('updated_at')->useCurrent(); // Set timestamps to use current time
         });
     }
 

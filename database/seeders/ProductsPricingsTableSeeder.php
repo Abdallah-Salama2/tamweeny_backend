@@ -44,6 +44,7 @@ class ProductsPricingsTableSeeder extends Seeder
                 'date_created' => null,
                 'expired_date' => null,
             ],
+
             [
                 'id' => 4,
                 'product_id' => 4,
@@ -54,7 +55,16 @@ class ProductsPricingsTableSeeder extends Seeder
                 'date_created' => null,
                 'expired_date' => null,
             ],
-
+            [
+                'id' => 5,
+                'product_id' => 5,
+                'base_price' => '5.00',
+                'selling_price' => '5.00',
+                'discount' => 0,
+                'discount_unit' => '%',
+                'date_created' => null,
+                'expired_date' => null,
+            ],
             [
                 'id' => 6,
                 'product_id' => 6,
@@ -155,7 +165,6 @@ class ProductsPricingsTableSeeder extends Seeder
                 'date_created' => null,
                 'expired_date' => null,
             ],
-
             [
                 'id' => 16,
                 'product_id' => 16,
@@ -247,10 +256,20 @@ class ProductsPricingsTableSeeder extends Seeder
                 'expired_date' => null,
             ],
             [
-                'id' => 26,
-                'product_id' => 26,
+                'id' => 25,
+                'product_id' => 25,
                 'base_price' => '2.00',
                 'selling_price' => '2.00',
+                'discount' => 0,
+                'discount_unit' => '%',
+                'date_created' => null,
+                'expired_date' => null,
+            ],
+            [
+                'id' => 26,
+                'product_id' => 26,
+                'base_price' => '3.00',
+                'selling_price' => '3.00',
                 'discount' => 0,
                 'discount_unit' => '%',
                 'date_created' => null,
@@ -318,7 +337,7 @@ class ProductsPricingsTableSeeder extends Seeder
             ],
 
             [
-                'id' => 35,
+                'id' => 33,
                 'product_id' => 33,
                 'base_price' => '88.80',
                 'selling_price' => '76.56',

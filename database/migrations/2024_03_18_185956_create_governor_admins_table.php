@@ -12,10 +12,11 @@ return new class extends Migration {
     {
         Schema::create('governor_admins', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->timestamps();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->timestamp('created_at')->useCurrent(); // Set timestamps to use current time
+            $table->timestamp('updated_at')->useCurrent(); // Set timestamps to use current time
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict')->onUpdate('restrict');
+//            $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict')->onUpdate('restrict');
         });
     }
 

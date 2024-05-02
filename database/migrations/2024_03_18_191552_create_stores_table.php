@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('owner_id')->nullable();
+            $table->foreignId('owner_id')->nullable()->constrained('storeowner')->cascadeOnDelete();
             $table->string('store_name', 100);
             $table->string('address', 255);
             $table->string('phone_number', 100);
@@ -21,9 +21,10 @@ return new class extends Migration
             $table->integer('valid');
             $table->decimal('latitude', 10, 8);
             $table->decimal('longitude', 11, 8);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent(); // Set timestamps to use current time
+            $table->timestamp('updated_at')->useCurrent(); // Set timestamps to use current time
 
-            $table->foreign('owner_id')->references('id')->on('storeowner')->onDelete('restrict')->onUpdate('restrict');
+//            $table->foreign('owner_id')->references('id')->on('storeowner')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

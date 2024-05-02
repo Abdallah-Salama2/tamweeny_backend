@@ -13,17 +13,18 @@ return new class extends Migration
     {
         Schema::create('orders_made', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('order_id');
-            $table->unsignedBigInteger('product_id');
+            $table->foreignId('order_id')->constrained('orders')->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->string('product_name', 100);
             $table->integer('quantity');
             $table->float('total_price');
-            $table->unsignedBigInteger('customer_id');
-            $table->timestamps();
-
-            $table->foreign('order_id')->references('id')->on('orders')->onDelete('restrict')->onUpdate('restrict');
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('restrict')->onUpdate('restrict');
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('restrict')->onUpdate('restrict');
+            $table->foreignId('customer_id')->constrained('customers')->cascadeOnDelete();
+            $table->timestamp('created_at')->useCurrent(); // Set timestamps to use current time
+            $table->timestamp('updated_at')->useCurrent(); // Set timestamps to use current time
+//
+//            $table->foreign('order_id')->references('id')->on('orders')->onDelete('restrict')->onUpdate('restrict');
+//            $table->foreign('product_id')->references('id')->on('products')->onDelete('restrict')->onUpdate('restrict');
+//            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('restrict')->onUpdate('restrict');
         });
     }
 

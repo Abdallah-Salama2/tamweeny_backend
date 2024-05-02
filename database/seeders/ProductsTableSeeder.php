@@ -20,6 +20,7 @@ class ProductsTableSeeder extends Seeder
         // Insert data into the products table
         DB::table('products')->insert([
             [
+                'id' => 1,
                 'product_name' => 'سكر',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/FZ4ktQs.jpeg',
@@ -35,6 +36,7 @@ class ProductsTableSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'id' => 2,
                 'product_name' => 'عدس',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/BYvXhtj.jpeg',
@@ -51,6 +53,7 @@ class ProductsTableSeeder extends Seeder
             ],
             // Add more products here
             [
+                'id' => 3,
                 'product_name' => 'زيت عباد',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/0aOcvk6.jpeg',
@@ -64,7 +67,9 @@ class ProductsTableSeeder extends Seeder
                 'order_count' => 5,
                 'created_at' => $now,
                 'updated_at' => $now,
-            ], [
+            ],
+            [
+                'id' => 4,
                 'product_name' => 'زيت خليط',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/ayOwsbo.jpeg',
@@ -79,8 +84,8 @@ class ProductsTableSeeder extends Seeder
                 'created_at' => $now,
                 'updated_at' => $now,
             ],
-            // Add more products as needed
             [
+                'id' => 5,
                 'product_name' => 'شاي',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/ZN5OUHQ.jpeg',
@@ -96,6 +101,7 @@ class ProductsTableSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'id' => 6,
                 'product_name' => 'جبنه تتراباك',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/s4Z3Zu2.jpeg',
@@ -111,6 +117,7 @@ class ProductsTableSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'id' => 7,
                 'product_name' => 'صابون غسيل',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/nvMXZbA.png',
@@ -127,6 +134,7 @@ class ProductsTableSeeder extends Seeder
             ],
             // Add more products here
             [
+                'id' => 8,
                 'product_name' => 'صابون حمام',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/S09QqjP.jpeg',
@@ -143,6 +151,7 @@ class ProductsTableSeeder extends Seeder
             ],
             // Add more products as needed
             [
+                'id' => 9,
                 'product_name' => 'مكرونة',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/eFVqW3O.jpeg',
@@ -159,6 +168,7 @@ class ProductsTableSeeder extends Seeder
             ],
             // Add more products as needed
             [
+                'id' => 10,
                 'product_name' => 'ارز',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/UeGWknT.jpg',
@@ -174,6 +184,7 @@ class ProductsTableSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'id' => 11,
                 'product_name' => 'فول',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/5KfdFjq.jpeg',
@@ -189,6 +200,7 @@ class ProductsTableSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'id' => 12,
                 'product_name' => 'مكرونة ',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/d2ByB7Z.jpeg',
@@ -205,6 +217,7 @@ class ProductsTableSeeder extends Seeder
             ],
             // Add more products here
             [
+                'id' => 13,
                 'product_name' => 'دقيق ',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/wdKBjpB.jpeg',
@@ -221,6 +234,7 @@ class ProductsTableSeeder extends Seeder
             ],
             // Add more products as needed
             [
+                'id' => 14,
                 'product_name' => 'مسلي',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/wwUl7uZ.jpeg',
@@ -237,6 +251,7 @@ class ProductsTableSeeder extends Seeder
             ],
             // Add more products as needed
             [
+                'id' => 15,
                 'product_name' => 'صلصه',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/6ugrRGl.jpeg',
@@ -252,6 +267,7 @@ class ProductsTableSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'id' => 16,
                 'product_name' => 'تونه',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/dCTeEZS.jpeg',
@@ -267,6 +283,7 @@ class ProductsTableSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'id' => 17,
                 'product_name' => 'مربى',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/77Cyj2G.jpeg',
@@ -283,6 +300,7 @@ class ProductsTableSeeder extends Seeder
             ],
             // Add more products as needed
             [
+                'id' => 18,
                 'product_name' => 'جبنه تتراباك',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/VRU6QE0.jpeg',
@@ -299,6 +317,7 @@ class ProductsTableSeeder extends Seeder
             ],
             // Add more products as needed
             [
+                'id' => 19,
                 'product_name' => 'مسحوق اتوماتيك',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/RBjX4uN.jpeg',
@@ -315,6 +334,7 @@ class ProductsTableSeeder extends Seeder
             ],
             // Add more products as needed
             [
+                'id' => 20,
                 'product_name' => 'مسحوق عادي',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/JO0tq0K.jpeg',
@@ -331,6 +351,7 @@ class ProductsTableSeeder extends Seeder
             ],
             // Add more products as needed
             [
+                'id' => 21,
                 'product_name' => 'لبن جاف',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/KsEsK47.jpeg',
@@ -346,6 +367,7 @@ class ProductsTableSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'id' => 22,
                 'product_name' => 'خل',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/sKHPSP9.jpeg',
@@ -361,6 +383,7 @@ class ProductsTableSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'id' => 23,
                 'product_name' => 'ملح',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/sRtvfSe.jpeg',
@@ -377,6 +400,7 @@ class ProductsTableSeeder extends Seeder
             ],
             // Add more products as needed
             [
+                'id' => 24,
                 'product_name' => 'حلاوه طحينيه',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/X9g4nKs.jpeg',
@@ -392,6 +416,7 @@ class ProductsTableSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'id' => 25,
                 'product_name' => 'بسكويت يويوز',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/reqg5Hc.png',
@@ -408,6 +433,7 @@ class ProductsTableSeeder extends Seeder
             ],
             // Add more products as needed
             [
+                'id' => 26,
                 'product_name' => 'بسكويت يويوز ويفر',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/Qe6URWB.jpeg',
@@ -421,7 +447,9 @@ class ProductsTableSeeder extends Seeder
                 'order_count' => 0,
                 'created_at' => $now,
                 'updated_at' => $now,
-            ], [
+            ],
+            [
+                'id' => 27,
                 'product_name' => 'بسكويت تومورو',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/hlGBkoY.jpeg',
@@ -437,6 +465,7 @@ class ProductsTableSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'id' => 28,
                 'product_name' => 'بسكويت بوو',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/Jh0ggRG.png',
@@ -452,6 +481,7 @@ class ProductsTableSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'id' => 29,
                 'product_name' => 'طحينه',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/Q0q2R35.jpeg',
@@ -467,6 +497,7 @@ class ProductsTableSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'id' => 30,
                 'product_name' => 'قهوه',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/WlEh3EW.jpeg',
@@ -482,6 +513,7 @@ class ProductsTableSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'id' => 31,
                 'product_name' => 'مرقة الدجاج',
                 'product_type' => 0,
                 'product_image' => 'https://i.imgur.com/8wnvKU9.jpeg',
@@ -497,6 +529,7 @@ class ProductsTableSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'id' => 32,
                 'product_name' => 'ابو علاء قطع',
                 'product_type' => 1,
                 'product_image' => 'https://i.imgur.com/5Rip25c.jpeg',
@@ -512,6 +545,7 @@ class ProductsTableSeeder extends Seeder
                 'updated_at' => $now,
             ],
             [
+                'id' => 33,
                 'product_name' => 'شوكلاته مندولين',
                 'product_type' => 1,
                 'product_image' => 'https://i.imgur.com/62rbYY3.jpeg',

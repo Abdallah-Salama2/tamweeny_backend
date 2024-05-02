@@ -12,14 +12,15 @@ return new class extends Migration {
     {
         Schema::create('cart', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('customer_id')->nullable();
-            $table->unsignedBigInteger('product_id');
+            $table->foreignId('customer_id')->constrained('customers')->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->integer('quantity')->default(1);
             $table->decimal('total_price', 8, 2)->default(0.00);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent(); // Set timestamps to use current time
+            $table->timestamp('updated_at')->useCurrent(); // Set timestamps to use current time
 
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('restrict')->onUpdate('restrict');
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('restrict')->onUpdate('restrict');
+//            $table->foreign('product_id')->references('id')->on('products')->onDelete('restrict')->onUpdate('restrict');
+//            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('restrict')->onUpdate('restrict');
         });
     }
 

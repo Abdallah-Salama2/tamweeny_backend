@@ -8,7 +8,6 @@ use Illuminate\Notifications\Notifiable;
 
 class Product extends Model
 {
-    use HasFactory;
     use HasFactory, Notifiable;
 
     protected $hidden = [

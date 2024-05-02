@@ -4,23 +4,22 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
-use App\Models\Category;
 use App\Models\Favorite;
 use App\Models\Product;
 use App\Models\User;
-use http\Env\Response;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 
 class ProductController extends Controller
 {
 
     public function index(Request $request)
     {
-        $userId = $request->user()->id;
-        $users = User::with('customer', 'customer.card')->get();
-        $user = $users->where("id", $userId)->first();
-        $customerId = $user->customer->id;
+//        $userId = $request->user()->id;
+//        $users = User::with('customer', 'customer.card')->get();
+//        $user = $users->where("id", $userId)->first();
+//        $customerId = $user->customer->id;
+        $customerId = auth()->user()->customer->id;
+
 
         // Retrieve customer's favorite product IDs
         $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
@@ -46,10 +45,12 @@ class ProductController extends Controller
 
     public function recommendedProducts(Request $request)
     {
-        $userId = $request->user()->id;
-        $users = User::with('customer', 'customer.card')->get();
-        $user = $users->where("id", $userId)->first();
-        $customerId = $user->customer->id;
+//        $userId = $request->user()->id;
+//        $users = User::with('customer', 'customer.card')->get();
+//        $user = $users->where("id", $userId)->first();
+//        $customerId = $user->customer->id;
+        $customerId = auth()->user()->customer->id;
+
 
         // Retrieve customer's favorite product IDs
         $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
@@ -80,45 +81,21 @@ class ProductController extends Controller
     }
 
 
-    public function productsByCategory($catName, Request $request)
-    {
-        $userId = $request->user()->id;
-        $users = User::with('customer', 'customer.card')->get();
-        $user = $users->where("id", $userId)->first();
-
-        $customerId = $user->customer->id;
-
-        $category = Category::where('category_name', $catName)->firstOrFail();
-
-        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
-            ->pluck('product_id')
-            ->toArray();
-
-        $products = Product::where('cat_id', $category->id)
-            ->with('productpricing', 'category')
-            ->get();
-
-        // Transform products using ProductResource and set favoriteStats based on if they are favorites
-        $products->each(function ($product) use ($customerFavoriteProductIds) {
-            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
-        });
-
-        return response()->json(ProductResource::collection($products));
-    }
-
     public function searchForProductById(Request $request, ?string $productId = null)
     {
-        $product = Product::with('productpricing', 'category')->find($productId);
+        $product = Product::find($productId);
 
         if (!$product) {
             return response()->json(["message" => "Product Not Found"]);
         }
 
-        $userId = $request->user()->id;
-        $users = User::with('customer', 'customer.card')->get();
-        $user = $users->where("id", $userId)->first();
+//        $userId = $request->user()->id;
+//        $users = User::with('customer', 'customer.card')->get();
+//        $user = $users->where("id", $userId)->first();
+//
+//        $customerId = $user->customer->id;        // Retrieve the IDs of the user's favorite products
+        $customerId = auth()->user()->customer->id;
 
-        $customerId = $user->customer->id;        // Retrieve the IDs of the user's favorite products
         $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)->pluck('product_id')->toArray();
 
         // Check if the current product ID is in the list of user's favorite product IDs
@@ -139,15 +116,17 @@ class ProductController extends Controller
             return response()->json([], 400);
         }
 
-        $userId = $request->user()->id;
-        $users = User::with('customer', 'customer.card')->get();
-        $user = $users->where("id", $userId)->first();
+//        $userId = $request->user()->id;
+//        $users = User::with('customer', 'customer.card')->get();
+//        $user = $users->where("id", $userId)->first();
+//
+//        if (!$user) {
+//            return response()->json(["message" => "User not found"], 404);
+//        }
+//
+//        $customerId = $user->customer->id;
+        $customerId = auth()->user()->customer->id;
 
-        if (!$user) {
-            return response()->json(["message" => "User not found"], 404);
-        }
-
-        $customerId = $user->customer->id;
         $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)->pluck('product_id')->toArray();
         $products = Product::where('product_name', 'like', '%' . $productName . '%')->get();
 
@@ -173,10 +152,12 @@ class ProductController extends Controller
 
     public function offers(Request $request)
     {
-        $userId = $request->user()->id;
-        $users = User::with('customer', 'customer.card')->get();
-        $user = $users->where("id", $userId)->first();
-        $customerId = $user->customer->id;
+//        $userId = $request->user()->id;
+//        $users = User::with('customer', 'customer.card')->get();
+//        $user = $users->where("id", $userId)->first();
+//        $customerId = $user->customer->id;
+
+        $customerId = auth()->user()->customer->id;
 
         // Retrieve customer's favorite product IDs
         $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
