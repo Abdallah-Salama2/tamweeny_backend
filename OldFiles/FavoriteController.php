@@ -210,3 +210,29 @@ class FavoriteController extends Controller
         print ("customerId ".$customerId ."\n");
 
  */
+
+
+
+//public function index(Request $request)
+//{
+////        $userId = $request->user()->id;
+////        $user = User::with('customer', 'customer.card')->find($userId);
+////        $customerId = $user->customer->id;
+//    $customerId = auth()->user()->customer->id;
+//
+//
+//    $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
+//        ->pluck('product_id')
+//        ->toArray();
+//
+//    $favoriteProducts = Product::with('productpricing', 'category', 'favorite')
+//        ->whereIn('id', $customerFavoriteProductIds)
+//        ->paginate(8);
+//
+//    $products = ProductResource::collection($favoriteProducts);
+//    $products->each(function ($product) {
+//        $product->favoriteStats = 1;
+//    });
+//
+//    return response()->json($products);
+//}

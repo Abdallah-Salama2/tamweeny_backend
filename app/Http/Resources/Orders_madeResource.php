@@ -20,6 +20,7 @@ class Orders_madeResource extends JsonResource
             'productId' => $this->product_id,
             'productName' => $this->product_name,
             'description' => $this->product->category->category_name,
+
             'quantity' => $this->quantity,
             'totalPrice' => $this->total_price,
             'customerId' => $this->customer_id

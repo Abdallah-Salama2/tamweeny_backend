@@ -91,6 +91,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/ordersMade', 'index');
         Route::get('/fullOrder', 'fullOrder');
         Route::get('/fullorders', 'fullorders');
+        Route::get('/orderDetails/{orderId}', 'OrdersDetails');
 
     });
 

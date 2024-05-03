@@ -17,7 +17,6 @@ class AdminCardController extends Controller
     {
         // Validate the request data
         $request->validated();
-
         // Store the admin card details
         $nationalIdCardPath = $this->storeFile($request->file('nationalIdCardAndBirthCertificate'));
         $followersNationalIdCardsPaths = $this->storeMultipleFiles($request->file('followersNationalIdCardsAndBirthCertificates'));

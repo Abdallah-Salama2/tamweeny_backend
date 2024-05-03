@@ -20,9 +20,7 @@ class Orders_madeController extends Controller
      */
     public function index(Request $request)
     {
-//        $userId = $request->user()->id;
-//        $user = User::with('customer', 'customer.card')->find($userId);
-//        $customerId = $user->customer->id;
+
         $customerId = auth()->user()->customer->id;
 
         $ordersMade = Orders_made::where("customer_id", $customerId)->get();
@@ -70,20 +68,13 @@ class Orders_madeController extends Controller
      */
     public function fullOrders(Request $request)
     {
-//        $userId = $request->user()->id;
-//        $user = User::with('customer', 'customer.card')->find($userId);
-//        if (!$user) {
-//            return response()->json(['error' => 'User not found'], 404);
-//        }
-//
-//        $customerId = $user->customer->id;
-        $customerId = auth()->user()->customer->id;
 
-        $orders = Order::where("customer_id", $customerId)->get();
+//        $customerId = auth()->user()->customer->id;
+        $orders =OrderResource2::collection( Order::all());
 
         $responseData = [];
 
-        foreach ($orders as $order){
+        foreach ($orders as $order) {
             $orderData = new OrderResource2($order);
             $orderData['ordersMade'] = Orders_madeResource::collection(
                 Orders_made::where("order_id", $order->id)->get()
@@ -91,7 +82,27 @@ class Orders_madeController extends Controller
             $responseData[] = $orderData;
         }
 
-        return response()->json($responseData);
+        return response()->json($orders);
+    }
+
+    public function OrdersDetails(Request $request, $orderId)
+    {
+
+//        $customerId = auth()->user()->customer->id;
+
+        $orders = Orders_madeResource::collection(Orders_made::where("order_id", $orderId)->get());
+        $order=Order::find($orderId);
+
+        return response()->json([
+            'customerName' => Auth()->user()->name,
+            'customerPhone' => Auth()->user()->phone_number,
+            'customerAddress' => Auth()->user()->street . " " . Auth()->user()->city_state,
+            'products'=>$orders,
+            'outsidePayments'=>0,
+            'insidePayments'=>0,
+            'deliveryPrice'=>30,
+            'orderPrice'=>$order->order_price,
+        ]);
     }
 
     /**

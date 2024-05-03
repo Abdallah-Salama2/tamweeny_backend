@@ -465,3 +465,24 @@ class AuthController extends Controller
 //
 //        return response()->json($formattedData);
     }*/
+
+
+
+//User Login
+//    public function login(CustomerLoginRequest $request)
+//    {
+//        $user = User::where('email', $request->email)->first();
+//
+//        if (!$user || !Hash::check($request->password, $user->password)) {
+//            throw ValidationException::withMessages([
+//                'email' => ['The provided credentials are incorrect.'],
+//            ]);
+//        }
+//        $user->last_login_at = now();
+//        $user->save();
+//        Session::put('user_id', $user->id);
+//
+//        $token = $user->createToken($request->device_name)->plainTextToken;
+//
+//        return response()->json(['token' => $token, 'userId' => $user->id], 201);
+//    }

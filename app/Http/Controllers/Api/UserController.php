@@ -56,17 +56,7 @@ class UserController extends Controller
         return response()->json(new UserResource ($user));
     }
 
-    //Check New User
-//    public function isNewUser(Request $request)
-//    {
-//        $user = auth()->user();
-//        $created_at_hour = Carbon::parse($user->created_at)->format('Y-m-d H'); // Extract hour from created_at timestamp
-//        $last_login_at_hour = Carbon::parse($user->last_login_at)->format('Y-m-d H'); // Extract hour from last_login_at timestamp
-//
-//        $isNewUser = $created_at_hour === $last_login_at_hour;
-//
-//        return response()->json(['isNewUser' => $isNewUser]);
-//    }
+
 
     //Check New User 2nd method
     public function orderedBefore(): JsonResponse
@@ -191,3 +181,14 @@ class UserController extends Controller
 //
 //    return response()->json(['message' => 'User deleted successfully'], 200);
 //}
+//Check New User
+//    public function isNewUser(Request $request)
+//    {
+//        $user = auth()->user();
+//        $created_at_hour = Carbon::parse($user->created_at)->format('Y-m-d H'); // Extract hour from created_at timestamp
+//        $last_login_at_hour = Carbon::parse($user->last_login_at)->format('Y-m-d H'); // Extract hour from last_login_at timestamp
+//
+//        $isNewUser = $created_at_hour === $last_login_at_hour;
+//
+//        return response()->json(['isNewUser' => $isNewUser]);
+//    }

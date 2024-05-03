@@ -19,22 +19,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-//        $userId = $request->user()->id;
-//
-//        // Fetch user and related data
-//        $users = User::with('customer', 'customer.card')->get();
-//        // Retrieve the user from the collection by ID
-//        $user = $users->where("id", $userId)->first();
-//        if (!$user) {
-//            return response()->json(['error' => 'User not found'], 404);
-//        }
-//        // Check if the user has a customer associated with them
-//        if (!$user->customer) {
-//            return response()->json(["message" => "Customer not found for this user"], 404);
-//        }
-//
-//
-//        $customerId = $user->customer->id;
+
         $customerId = auth()->user()->customer->id;
 
         //print("CustomerId " . $customerId . "\n");
@@ -53,15 +38,7 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         //
-//        $userId = $request->user()->id;
-//        //print("UserID " . $userId . "\n");
-//        // Fetch all users with related data
-//        $users = User::with('customer', 'customer.card')->get();
-//        // Retrieve the user from the collection by ID
-//        $user = $users->where("id", $userId)->first();
-//        //print($user);
-//
-//        $customerId = $user->customer->id;
+
         $customerId = auth()->user()->customer->id;
 
         //print ("CustomerId " . $customerId . "\n");

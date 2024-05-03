@@ -18,9 +18,7 @@ class FavoriteController extends Controller
      */
     public function index(Request $request)
     {
-//        $userId = $request->user()->id;
-//        $user = User::with('customer', 'customer.card')->find($userId);
-//        $customerId = $user->customer->id;
+
         $customerId = auth()->user()->customer->id;
 
 
@@ -45,9 +43,7 @@ class FavoriteController extends Controller
      */
     public function add(Request $request, $productId)
     {
-//        $userId = $request->user()->id;
-//        $user = User::with('customer', 'customer.card')->find($userId);
-//        $customerId = $user->customer->id;
+
 
         $customerId = auth()->user()->customer->id;
 

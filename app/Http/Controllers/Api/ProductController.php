@@ -14,10 +14,7 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-//        $userId = $request->user()->id;
-//        $users = User::with('customer', 'customer.card')->get();
-//        $user = $users->where("id", $userId)->first();
-//        $customerId = $user->customer->id;
+
         $customerId = auth()->user()->customer->id;
 
 
@@ -27,7 +24,7 @@ class ProductController extends Controller
             ->toArray();
 
         // Retrieve all products with pricing, category
-        $allProducts = Product::with('productpricing', 'category')->get();
+        $allProducts = Product::with('productpricing', 'category')->paginate(8);
 
         // Transform products using ProductResource and set favoriteStats based on if they are favorites
         $products = ProductResource::collection($allProducts);
@@ -35,20 +32,18 @@ class ProductController extends Controller
             $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
         });
 
-//        $numberOfPages = $allProducts->lastPage();
+        $numberOfPages = $allProducts->lastPage();
 
         return response()->json([
             'products' => $products,
-//            'totalPages' => $numberOfPages
+            'totalPages' => $numberOfPages
         ]);
     }
 
     public function recommendedProducts(Request $request)
     {
 //        $userId = $request->user()->id;
-//        $users = User::with('customer', 'customer.card')->get();
-//        $user = $users->where("id", $userId)->first();
-//        $customerId = $user->customer->id;
+
         $customerId = auth()->user()->customer->id;
 
 
@@ -89,11 +84,6 @@ class ProductController extends Controller
             return response()->json(["message" => "Product Not Found"]);
         }
 
-//        $userId = $request->user()->id;
-//        $users = User::with('customer', 'customer.card')->get();
-//        $user = $users->where("id", $userId)->first();
-//
-//        $customerId = $user->customer->id;        // Retrieve the IDs of the user's favorite products
         $customerId = auth()->user()->customer->id;
 
         $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)->pluck('product_id')->toArray();
@@ -116,15 +106,6 @@ class ProductController extends Controller
             return response()->json([], 400);
         }
 
-//        $userId = $request->user()->id;
-//        $users = User::with('customer', 'customer.card')->get();
-//        $user = $users->where("id", $userId)->first();
-//
-//        if (!$user) {
-//            return response()->json(["message" => "User not found"], 404);
-//        }
-//
-//        $customerId = $user->customer->id;
         $customerId = auth()->user()->customer->id;
 
         $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)->pluck('product_id')->toArray();
@@ -152,10 +133,7 @@ class ProductController extends Controller
 
     public function offers(Request $request)
     {
-//        $userId = $request->user()->id;
-//        $users = User::with('customer', 'customer.card')->get();
-//        $user = $users->where("id", $userId)->first();
-//        $customerId = $user->customer->id;
+
 
         $customerId = auth()->user()->customer->id;
 
@@ -175,8 +153,6 @@ class ProductController extends Controller
 
         }
 
-        // Retrieve all products with pricing and category
-        // Transform products using ProductResource and set favoriteStats based on if they are favorites
         $products = ProductResource::collection($offers);
         $products->each(function ($product) use ($customerFavoriteProductIds) {
             $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
@@ -203,110 +179,3 @@ class ProductController extends Controller
         //
     }
 }
-
-
-//    public function productsByCategory($catId)
-//    {
-//        $products = DB::table('products')
-//            ->join('product_pricings', 'products.id', '=', 'product_pricings.product_id')
-//            ->join('categories', 'products.cat_id', '=', 'categories.Id')
-//            ->where('categories.category_name', '=', $catId)
-//            ->orderBy('products.id')
-//            ->get();
-//
-//        foreach ($products as $product) {
-//            $product->product_image = base64_encode($product->product_image);
-//            $product->category_image = base64_encode($product->category_image);
-//        }
-//
-//        return response()->json($products);
-//    }
-
-//    public function searchForProductByName($product)
-//    {
-//
-//        $products = DB::table('products')
-//            ->join('product_pricings', 'products.id', '=', 'product_pricings.product_id')
-//            ->where('products.product_name', "like", '%' . $product . '%')
-//            ->orderBy('products.id')
-//            ->get();
-//
-//
-//        return response()->json(ProductResource::collection($products));
-//    }
-
-/**
- * Store a newly created resource in storage.
- */
-//    public function store(Request $request)
-//    {
-//        $images = DB::table('products')->select('product_image')->get();
-//
-//        if ($images->isEmpty()) {
-//            abort(404);
-//        }
-//
-//        // Assuming your images are stored as BLOBs in the database
-//        // You need to iterate over all images and concatenate them
-//        $imageData = '';
-//        foreach ($images as $image) {
-//            $imageData .= $image->product_image;
-//        }
-//
-//        // Set appropriate headers for the first image
-//        $headers = [
-//            'Content-Type' => 'image/jpeg', // Change the content type according to your image type
-//            'Content-Length' => strlen($imageData),
-//        ];
-//
-//        // Return the image as response
-//        return view('test', compact('images'));
-//    }
-
-/**
- * Display the specified category products
- */
-//    public function productsByCategory($catName)
-//    {
-//        $products = Product::with('category')->get();
-//
-//        foreach ($products as $product) {
-//            $product->product_image = base64_encode($product->product_image);
-//            $product->category->category_image = base64_encode($product->category->category_image);
-//        }
-//
-//        return response()->json(ProductResource::collection($products));
-//    }
-
-/**
- * Display a listing of the resource.
- */
-//    public function test(Request $request)
-//    {
-//        $products = DB::table('products')
-//            ->join('product_pricings', 'products.productId', '=', 'product_pricings.product_id')
-//            ->select('products.*', 'product_pricings.selling_price')
-//            ->orderBy('products.productId')
-//            ->get();
-//
-//        // Encode image data as base64
-//        foreach ($products as $product) {
-//            $product->product_image = base64_encode($product->product_image);
-//        }
-//
-//        return view('test', compact('products'));
-//   }
-//    public function index(Request $request)
-//    {
-//        $products = DB::table('products')
-//            ->join('product_pricings', 'products.id', '=', 'product_pricings.product_id')
-//            ->orderBy('products.id')
-//            ->get();
-//
-//        // Encode image data as base64
-//        foreach ($products as $product) {
-//            $product->product_image = base64_encode($product->product_image);
-//        }
-//
-//        return response()->json($products);
-//    }
