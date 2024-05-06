@@ -18,7 +18,7 @@ class OrderResource2 extends JsonResource
 
         return [
             'id' => $this->id,
-            'orderDate' => $this->order_date,
+//            'orderDate' => $this->order_date,
             'orderPrice' => $this->order_price,
             'transactionNumber'=>2534,
             'transactionDate'=>'27/2/2002',

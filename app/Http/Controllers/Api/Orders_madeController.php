@@ -72,14 +72,12 @@ class Orders_madeController extends Controller
 //        $customerId = auth()->user()->customer->id;
         $orders =OrderResource2::collection( Order::where('delivery_status','Pending')->get());
 
-        $responseData = [];
 
         foreach ($orders as $order) {
             $orderData = new OrderResource2($order);
             $orderData['ordersMade'] = Orders_madeResource::collection(
                 Orders_made::where("order_id", $order->id)->get()
             );
-            $responseData[] = $orderData;
         }
 
         return response()->json($orders);
@@ -90,14 +88,12 @@ class Orders_madeController extends Controller
 //        $customerId = auth()->user()->customer->id;
         $orders =OrderResource2::collection( Order::where('delivery_status','Delivered')->get());
 
-        $responseData = [];
 
         foreach ($orders as $order) {
             $orderData = new OrderResource2($order);
             $orderData['ordersMade'] = Orders_madeResource::collection(
                 Orders_made::where("order_id", $order->id)->get()
             );
-            $responseData[] = $orderData;
         }
 
         return response()->json($orders);
