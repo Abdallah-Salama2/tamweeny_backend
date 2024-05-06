@@ -57,12 +57,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::Delete('deleteAccount', 'deleteUser');
     });
 
-    Route::resource('/categories',CategoryController::class)->only(['index','show']);
+//    Route::resource('/categories',CategoryController::class)->only(['index','show']);
 
-//    Route::controller(CategoryController::class)->group(function () {
-//        Route::get('/categories', 'index');        //Categories
-//        Route::get('/categories/{catName}', 'productsByCategory');
-//    });
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('/categories', 'index');        //Categories
+        Route::get('/categories/{catName}', 'productsByCategory');
+    });
 
     Route::get("/products/{product}",[ProductController::class,'show']);
     Route::controller(ProductController::class)->group(function () {

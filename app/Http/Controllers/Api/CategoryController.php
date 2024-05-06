@@ -76,7 +76,8 @@ class CategoryController extends Controller
             $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
         });
 
-        return response()->json(ProductResource::collection($products));    }
+        return response()->json(ProductResource::collection($products));
+    }
 
     /**
      * Update the specified resource in storage.
