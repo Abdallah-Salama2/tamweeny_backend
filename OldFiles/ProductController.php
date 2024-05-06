@@ -3,8 +3,8 @@
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
+use App\Models\Product;;
 use App\Models\Favorite;
-use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 

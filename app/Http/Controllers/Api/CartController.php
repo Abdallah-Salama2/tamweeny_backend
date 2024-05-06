@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CartResource;
+use App\Models\Product;;
 use App\Models\Cart;
-use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller

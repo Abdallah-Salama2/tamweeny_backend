@@ -3,14 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductResource;
-use App\Models\Favorite;
-use App\Models\Product;
+use App\Models\Product;;
 use App\Models\ProductPricing;
-use App\Models\User;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ProductPricingController extends Controller
 {

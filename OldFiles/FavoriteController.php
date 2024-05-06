@@ -1,18 +1,14 @@
 <?php
 
 
-
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreFavoriteRequest;
 use App\Http\Requests\UpdateFavoriteRequest;
-use App\Http\Resources\FavoriteResource;
 use App\Http\Resources\ProductResource;
-use App\Models\Cart;
+use App\Models\Product;;
 use App\Models\Favorite;
-use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 
 
 class FavoriteController extends Controller

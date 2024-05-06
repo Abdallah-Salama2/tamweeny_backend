@@ -16,31 +16,209 @@ class OrderSeeder extends Seeder
     public function run(): void
     {
         //
-        Order::Create([
-            'order_date'=>'2000-11-21',
-            'order_price'=>120,
-            'customer_id'=>1,
+        DB::table('orders')->insert([
+            [
+                'order_date' => '2000-11-21',
+                'order_price' => 66,
+                'customer_id' => 1,
+                'delivery_status' => 'Delivered'
 //            'delivery'
+            ],
+            [
+                'order_date' => '2000-11-21',
+                'order_price' => 66,
+                'customer_id' => 1,
+                'delivery_status' => 'Pending'
+
+
+//            'delivery'
+            ], [
+                'order_date' => '2000-11-21',
+                'order_price' => 66,
+                'customer_id' => 1,
+                'delivery_status' => 'Delivered'
+
+//            'delivery'
+            ],
+            [
+                'order_date' => '2000-11-21',
+                'order_price' => 66,
+                'customer_id' => 1,
+                'delivery_status' => 'Pending'
+
+//            'delivery'
+            ],
+            [
+                'order_date' => '2000-11-21',
+                'order_price' => 66,
+                'customer_id' => 2,
+                'delivery_status' => 'Delivered'
+
+//            'delivery'
+            ],
+            [
+                'order_date' => '2000-11-21',
+                'order_price' => 66,
+                'customer_id' => 2,
+                'delivery_status' => 'Pending'
+
+//            'delivery'
+            ], [
+                'order_date' => '2000-11-21',
+                'order_price' => 66,
+                'customer_id' => 2,
+                'delivery_status' => 'Delivered'
+
+//            'delivery'
+            ],
+            [
+                'order_date' => '2000-11-21',
+                'order_price' => 66,
+                'customer_id' => 2,
+                'delivery_status' => 'Pending'
+
+//            'delivery'
+            ],
+
         ]);
+
         //
         DB::table('orders_made')->insert([
             [
-                'order_id'=>1,
-                'product_id'=>1,
-                'product_name'=>'سكر',
-                'quantity'=>'2',
-                'total_price'=>26,
-                'customer_id'=>1,
+                'order_id' => 1,
+                'product_id' => 1,
+                'product_name' => 'سكر',
+                'quantity' => '2',
+                'total_price' => 26,
+                'customer_id' => 1,
 
 
-            ],['order_id'=>1,
-                'product_id'=>3,
-                'product_name'=>'زيت عباد',
-                'quantity'=>'2',
-                'total_price'=>40,
-                'customer_id'=>1,
+            ], ['order_id' => 1,
+                'product_id' => 3,
+                'product_name' => 'زيت عباد',
+                'quantity' => '2',
+                'total_price' => 40,
+                'customer_id' => 1,
 
-            ]]);
+            ],
+            [
+                'order_id' => 2,
+                'product_id' => 8,
+                'product_name' => 'صابون حمام',
+                'quantity' => '2',
+                'total_price' => 26,
+                'customer_id' => 1,
+
+
+            ], ['order_id' => 2,
+                'product_id' => 5,
+                'product_name' => 'شاي',
+                'quantity' => '2',
+                'total_price' => 40,
+                'customer_id' => 1,
+
+            ], [
+                'order_id' => 3,
+                'product_id' => 9,
+                'product_name' => 'مكرونة',
+                'quantity' => '2',
+                'total_price' => 26,
+                'customer_id' => 1,
+
+
+            ], ['order_id' => 3,
+                'product_id' => 10,
+                'product_name' => 'ارز',
+                'quantity' => '2',
+                'total_price' => 40,
+                'customer_id' => 1,
+
+            ], [
+                'order_id' => 4,
+                'product_id' => 11,
+                'product_name' => 'فول',
+                'quantity' => '2',
+                'total_price' => 26,
+                'customer_id' => 1,
+
+
+            ], ['order_id' => 4,
+                'product_id' => 13,
+                'product_name' => 'دقيق',
+                'quantity' => '2',
+                'total_price' => 40,
+                'customer_id' => 1,
+
+            ], [
+                'order_id' => 5,
+                'product_id' => 14,
+                'product_name' => 'مسلي',
+                'quantity' => '2',
+                'total_price' => 26,
+                'customer_id' => 2,
+
+
+            ], ['order_id' => 5,
+                'product_id' => 15,
+                'product_name' => 'صلصه',
+                'quantity' => '2',
+                'total_price' => 40,
+                'customer_id' => 2,
+
+            ], [
+                'order_id' => 6,
+                'product_id' => 16,
+                'product_name' => 'تونه',
+                'quantity' => '2',
+                'total_price' => 26,
+                'customer_id' => 2,
+
+
+            ], ['order_id' => 6,
+                'product_id' => 19,
+                'product_name' => 'مسحوق اتوماتيك',
+                'quantity' => '2',
+                'total_price' => 40,
+                'customer_id' => 2,
+
+            ], [
+                'order_id' => 7,
+                'product_id' => 21,
+                'product_name' => 'لبن جاف',
+                'quantity' => '2',
+                'total_price' => 26,
+                'customer_id' => 2,
+
+
+            ],
+            ['order_id' => 7,
+                'product_id' => 22,
+                'product_name' => 'خل',
+                'quantity' => '2',
+                'total_price' => 40,
+                'customer_id' => 2,
+
+            ],
+            [
+                'order_id' => 8,
+                'product_id' => 23,
+                'product_name' => 'ملح',
+                'quantity' => '2',
+                'total_price' => 26,
+                'customer_id' => 2,
+
+
+            ], ['order_id' => 8,
+                'product_id' => 24,
+                'product_name' => 'حلاوه طحينيه',
+                'quantity' => '2',
+                'total_price' => 40,
+                'customer_id' => 2,
+
+            ],
+
+
+        ]);
 
     }
 }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->dateTime('order_date');
             $table->decimal('order_price', 10, 2);
-            $table->string('delivery_status', 50)->nullable();
+            $table->string('delivery_status', 50)->default('Pending');
             $table->integer('payment_number')->nullable();
             $table->foreignId('customer_id')->constrained('customers')->cascadeOnDelete();
             $table->foreignId('delivery_id')->nullable()->constrained('delivery_guys')->cascadeOnDelete();

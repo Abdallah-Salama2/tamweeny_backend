@@ -5,10 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ProductResource;
+use App\Models\Product;;
 use App\Models\Category;
 use App\Models\Favorite;
-use App\Models\Product;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -65,8 +64,19 @@ class CategoryController extends Controller
     public function show(Category $category)
     {
         // Not implemented
-        return response()->json(['message' => 'Not implemented'], 501);
-    }
+        $customerId = auth()->user()->customer->id;
+        $category = Category::where('category_name', $category)->firstOrFail();
+        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
+            ->pluck('product_id')
+            ->toArray();
+        $products = Product::where('cat_id', $category->id)
+            ->get();
+
+        $products->each(function ($product) use ($customerFavoriteProductIds) {
+            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
+        });
+
+        return response()->json(ProductResource::collection($products));    }
 
     /**
      * Update the specified resource in storage.

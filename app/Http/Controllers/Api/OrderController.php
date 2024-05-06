@@ -8,7 +8,6 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Orders_made;
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -90,6 +89,17 @@ class OrderController extends Controller
             'message' => 'Order created successfully',
         ]);
 
+    }
+
+    public function addToDelivered($orderId){
+
+        $order=Order::find($orderId);
+        $order->delivery_status="Delivered";
+        $order->save();
+
+        return response()->json([
+            'message' => 'Delivered successfully',
+        ]);
     }
 
     /**

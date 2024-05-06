@@ -28,7 +28,7 @@ class OrderResource2 extends JsonResource
             'userLat'=> $this->customer->user->latitude,
             'userLong'=> $this->customer->user->longitude,
             //'discountCode' => $this->discount_code,
-            //'deliveryStatus' => $this->delivery_status,
+            'deliveryStatus' => $this->delivery_status,
             //'paymentNumber' => $this->payment_number,
             'customerId' => $this->customer_id,
             //'deliveryId' => $this->delivery_id,

@@ -57,13 +57,16 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::Delete('deleteAccount', 'deleteUser');
     });
 
-    Route::controller(CategoryController::class)->group(function () {
-        Route::get('/categories', 'index');        //Categories
-        Route::get('/categories/{catName}', 'productsByCategory');
-    });
+    Route::resource('/categories',CategoryController::class)->only(['index','show']);
 
+//    Route::controller(CategoryController::class)->group(function () {
+//        Route::get('/categories', 'index');        //Categories
+//        Route::get('/categories/{catName}', 'productsByCategory');
+//    });
+
+    Route::get("/products/{product}",[ProductController::class,'show']);
     Route::controller(ProductController::class)->group(function () {
-        Route::get('/products', 'index');            //Products
+        Route::get('/products', 'index'); //Products
         Route::get('/recommended', 'recommendedProducts');            //Products
         Route::get('/productId/{product?}', 'searchForProductById');
         Route::get('/productName/{product?}', 'searchForProductByName');
@@ -85,12 +88,14 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::controller(OrderController::class)->group(function () {
         Route::get('/orders', 'index');                //Orders
         Route::post('/createOrder', 'store');
+        Route::post('/order/{orderId}', 'addToDelivered');
     });
 
     Route::controller(Orders_madeController::class)->group(function () {
         Route::get('/ordersMade', 'index');
         Route::get('/fullOrder', 'fullOrder');
-        Route::get('/fullorders', 'fullorders');
+        Route::get('/fullPendingOrders', 'fullPendingOrders');
+        Route::get('/fullDeliveredOrders', 'fullDeliveredOrders');
         Route::get('/orderDetails/{orderId}', 'OrdersDetails');
 
     });

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Models\Favorite;
 use App\Models\Product;
-use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -75,6 +75,35 @@ class ProductController extends Controller
 //        return $products;
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param Product $product
+     * @return JsonResponse
+     */
+    public function show(Product $product) {
+        // Find the product
+        $product = Product::find($product->id);
+
+        if (!$product) {
+            // This block will execute if the product is not found by ID
+            // Searching for the product by name might be unnecessary, depending on your use case
+            $product = Product::where('product_name', 'like', '%' . $product->product_name . '%')->first();
+        }
+
+        $customerId = auth()->user()->customer->id;
+
+        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)->pluck('product_id')->toArray();
+
+        // Check if the current product ID is in the list of user's favorite product IDs
+        $isFavorite = in_array($product->id, $customerFavoriteProductIds);
+
+        // Add favoriteStats attribute to the product object
+        $product->favoriteStats = $isFavorite ? 1 : 0;
+
+        // Return the product resource with the updated favoriteStats attribute
+        return response()->json(ProductResource::collection($product));
+    }
 
     public function searchForProductById(Request $request, ?string $productId = null)
     {
