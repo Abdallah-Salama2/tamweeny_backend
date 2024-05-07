@@ -7,6 +7,7 @@ use App\Http\Resources\modelResource;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\OrderResource2;
 use App\Http\Resources\Orders_madeResource;
+use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Orders_made;
 use App\Models\User;
@@ -84,21 +85,44 @@ class Orders_madeController extends Controller
     }
     public function fullDeliveredOrders(Request $request)
     {
+        // Fetch all delivered orders
+        $orders = Order::where('delivery_status', 'Delivered')->get();
 
-//        $customerId = auth()->user()->customer->id;
-        $orders =OrderResource2::collection( Order::where('delivery_status','Delivered')->get());
-
+        // Initialize an array to store formatted order data
+        $formattedOrders = [];
 
         foreach ($orders as $order) {
+            // Retrieve order details
             $orderData = new OrderResource2($order);
+
+            // Retrieve items of the order
             $orderData['ordersMade'] = Orders_madeResource::collection(
                 Orders_made::where("order_id", $order->id)->get()
             );
+
+            // Push the formatted order data into the array
+            $formattedOrders[] = $orderData;
         }
 
-        return response()->json($orders);
+        // Return JSON response with formatted orders
+        return response()->json($formattedOrders);
     }
 
+//    public function model(Request $request)
+//    {
+//
+////        $customerId = auth()->user()->customer->id;
+//        $orders =OrderResource2::collection( Order::where('delivery_status','Delivered')->get());
+////        $customers=Customer::all();
+//        foreach ($orders as $order) {
+//            $orderData = new OrderResource2($order);
+//            $orderData['ordersMade'] = Orders_madeResource::collection(
+//                Orders_made::where("order_id", $order->id)->get()
+//            );
+//        }
+//
+//        return response()->json($orders);
+//    }
     public function OrdersDetails(Request $request, $orderId)
     {
 

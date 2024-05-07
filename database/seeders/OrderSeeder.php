@@ -103,24 +103,24 @@ class OrderSeeder extends Seeder
             ],
             [
                 'order_id' => 2,
-                'product_id' => 8,
-                'product_name' => 'صابون حمام',
+                'product_id' => 4,
+                'product_name' => 'زيت خليط',
                 'quantity' => '2',
                 'total_price' => 26,
                 'customer_id' => 1,
 
 
             ], ['order_id' => 2,
-                'product_id' => 5,
-                'product_name' => 'شاي',
+                'product_id' => 12,
+                'product_name' => 'مكرونة',
                 'quantity' => '2',
                 'total_price' => 40,
                 'customer_id' => 1,
 
             ], [
                 'order_id' => 3,
-                'product_id' => 9,
-                'product_name' => 'مكرونة',
+                'product_id' => 21,
+                'product_name' => 'لبن جاف',
                 'quantity' => '2',
                 'total_price' => 26,
                 'customer_id' => 1,
@@ -135,16 +135,16 @@ class OrderSeeder extends Seeder
 
             ], [
                 'order_id' => 4,
-                'product_id' => 11,
-                'product_name' => 'فول',
+                'product_id' => 18,
+                'product_name' => 'جبنه تتراباك',
                 'quantity' => '2',
                 'total_price' => 26,
                 'customer_id' => 1,
 
 
             ], ['order_id' => 4,
-                'product_id' => 13,
-                'product_name' => 'دقيق',
+                'product_id' => 12,
+                'product_name' => 'مكرونة',
                 'quantity' => '2',
                 'total_price' => 40,
                 'customer_id' => 1,

@@ -46,8 +46,8 @@ class UserSeeder extends Seeder
         $user=User::Create([
 
             'national_id' => '9988888',
-            'name' => 'test',
-            'email' => 'test@gmail.com',
+            'name' => 'Rady',
+            'email' => 'Rady@gmail.com',
             'password' => static::$password ??= Hash::make('password'),
             'phone_number' => '0222010',
             'city_state' => '3amk State',
