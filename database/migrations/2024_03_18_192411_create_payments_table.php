@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('payment_amount', 10, 2);
             $table->string('payment_method', 50);
             $table->integer('payment_status');
-            $table->foreignId('customer_id')->constrained('customers')->cascadeOnDelete();
+            $table->foreignId('customer_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
 
             $table->unique('customer_id');

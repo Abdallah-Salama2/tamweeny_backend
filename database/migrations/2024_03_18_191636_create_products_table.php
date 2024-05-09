@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('description');
             $table->integer('stock_quantity');
             $table->decimal('points_price', 10, 2);
-            $table->foreignId('store_id')->constrained('stores')->cascadeOnDelete();
+//            $table->foreignId('store_id')->constrained('stores')->cascadeOnDelete();
             $table->foreignId('cat_id')->constrained('categories')->cascadeOnDelete();
             $table->integer('favorite_count');
             $table->integer('order_count');

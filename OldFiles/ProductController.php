@@ -311,7 +311,7 @@ class ProductController extends Controller
 //        $users = User::with('customer', 'customer.card')->get();
 //        $user = $users->where("id", $userId)->first();
 //        $customerId = $user->customer->id;
-        $customerId = auth()->user()->customer->id;
+        $customerId = auth()->user()->id;
 
 
         // Retrieve customer's favorite product IDs
@@ -342,7 +342,7 @@ class ProductController extends Controller
 //        $users = User::with('customer', 'customer.card')->get();
 //        $user = $users->where("id", $userId)->first();
 //        $customerId = $user->customer->id;
-        $customerId = auth()->user()->customer->id;
+        $customerId = auth()->user()->id;
 
 
         // Retrieve customer's favorite product IDs
@@ -387,7 +387,7 @@ class ProductController extends Controller
 //        $user = $users->where("id", $userId)->first();
 //
 //        $customerId = $user->customer->id;        // Retrieve the IDs of the user's favorite products
-        $customerId = auth()->user()->customer->id;
+        $customerId = auth()->user()->id;
 
         $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)->pluck('product_id')->toArray();
 
@@ -418,7 +418,7 @@ class ProductController extends Controller
 //        }
 //
 //        $customerId = $user->customer->id;
-        $customerId = auth()->user()->customer->id;
+        $customerId = auth()->user()->id;
 
         $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)->pluck('product_id')->toArray();
         $products = Product::where('product_name', 'like', '%' . $productName . '%')->get();
@@ -450,7 +450,7 @@ class ProductController extends Controller
 //        $user = $users->where("id", $userId)->first();
 //        $customerId = $user->customer->id;
 
-        $customerId = auth()->user()->customer->id;
+        $customerId = auth()->user()->id;
 
         // Retrieve customer's favorite product IDs
         $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)

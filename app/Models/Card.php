@@ -8,6 +8,7 @@ class Card extends Model
 {
     protected $fillable = [
         'id',
+        'user_id',
         'card_name',
         'card_number',
         'card_national_id',
@@ -22,7 +23,7 @@ class Card extends Model
     // Relationship with Customer model
     public function customer()
     {
-        return $this->hasOne(Customer::class, 'card_id', 'id');
+        return $this->hasOne(User::class, 'card_id', 'id');
     }
 
     protected $table = 'cards'; // Adjust based on your table name

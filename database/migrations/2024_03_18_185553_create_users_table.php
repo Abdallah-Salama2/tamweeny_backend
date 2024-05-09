@@ -12,17 +12,19 @@ return new class extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('national_id')->unique();
+            $table->bigInteger('national_id')->nullable()->unique();
             $table->string('name', 100)->nullable();
             $table->string('email', 191)->unique();
             $table->string('password', 191);
-            $table->string('phone_number', 15);
-            $table->string('city_state', 100);
-            $table->string('street', 255);
-            $table->date('birth_date');
-            $table->integer('user_type')->default(1);
-            $table->decimal('latitude', 10, 8)->default(10.20000000);
-            $table->decimal('longitude', 11, 8)->default(10.20000000);
+            $table->string('phone_number', 15)->nullable();
+            $table->string('city_state', 100)->nullable();
+            $table->string('street', 255)->nullable();
+            $table->date('birth_date')->nullable();
+            $table->string('user_type')->default("customer");
+            $table->decimal('latitude', 10, 8)->nullable()->default(10.20000000);
+            $table->decimal('longitude', 11, 8)->nullable()->default(10.20000000);
+            $table->json('store_owner_info')->nullable();
+            $table->json('delivery_info')->nullable();
             $table->timestamps();
             $table->timestamp('last_login_at')->nullable();
         });

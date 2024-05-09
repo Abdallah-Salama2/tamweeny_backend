@@ -34,4 +34,14 @@ class Store extends Model
     protected $primaryKey = 'id'; //s
     public $timestamps = false;
 
+    public function products()
+    {
+        return $this->belongsToMany(Store::class,'stores_products');
+    }
+    public function user()
+    {
+        return $this->belongsTo(Store::class,'owner_id','id');
+    }
+
+
 }

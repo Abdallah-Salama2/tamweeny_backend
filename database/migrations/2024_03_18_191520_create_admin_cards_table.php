@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('admin_cards', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('admin_id')->nullable();
+            $table->foreignId('admin_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->integer('card_status')->default(1);
             $table->string('card_status_text', 50)->default('pending');
             $table->integer('individuals_number');
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->json('followers_national_id_cards_and_birth_certificates')->nullable();
             $table->timestamps();
 
-            $table->foreign('admin_id')->references('id')->on('governor_admins')->onDelete('cascade');
+//            $table->foreign('admin_id')->references('id')->on('governor_admins')->onDelete('cascade');
         });
     }
 

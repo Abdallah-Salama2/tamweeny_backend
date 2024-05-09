@@ -2,12 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
-class OrderResource2 extends JsonResource
+class ModelResource2 extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +15,6 @@ class OrderResource2 extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $user=User::find($this->customer_id);
 
         return [
             'id' => $this->id,
@@ -24,15 +22,15 @@ class OrderResource2 extends JsonResource
             'orderPrice' => $this->order_price,
             'transactionNumber'=>2534,
             'transactionDate'=>$this->order_date,
-            'customerName'=>$user->name,
-            'customerPhone'=> $user->phone_number,
-            'customerAddress'=> $user->street ." ".$user->city_state,
-            'userLat'=> $user->latitude,
-            'userLong'=> $user->longitude,
+            'customerName'=>auth()->user()->name,
+            'customerPhone'=> auth()->user()->phone_number,
+            'customerAddress'=> auth()->user()->street ." ".auth()->user()->city_state,
+            'userLat'=> auth()->user()->latitude,
+            'userLong'=> auth()->user()->longitude,
             //'discountCode' => $this->discount_code,
             'deliveryStatus' => $this->delivery_status,
             //'paymentNumber' => $this->payment_number,
-            'customerId' => $this->customer_id,
+                    'customerId' => $this->customer_id,
             //'deliveryId' => $this->delivery_id,
 
 
@@ -41,5 +39,3 @@ class OrderResource2 extends JsonResource
         ];
     }
 }
-
-

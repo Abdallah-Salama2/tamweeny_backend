@@ -17,8 +17,8 @@ return new class extends Migration
             $table->decimal('order_price', 10, 2);
             $table->string('delivery_status', 50)->default('Pending');
             $table->integer('payment_number')->nullable();
-            $table->foreignId('customer_id')->constrained('customers')->cascadeOnDelete();
-            $table->foreignId('delivery_id')->nullable()->constrained('delivery_guys')->cascadeOnDelete();
+            $table->foreignId('customer_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('delivery_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->timestamp('created_at')->useCurrent(); // Set timestamps to use current time
             $table->timestamp('updated_at')->useCurrent(); // Set timestamps to use current time
 

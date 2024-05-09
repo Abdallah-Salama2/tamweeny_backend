@@ -10,14 +10,14 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('governor_admins', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->timestamp('created_at')->useCurrent(); // Set timestamps to use current time
-            $table->timestamp('updated_at')->useCurrent(); // Set timestamps to use current time
-
-//            $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict')->onUpdate('restrict');
-        });
+//        Schema::create('governor_admins', function (Blueprint $table) {
+//            $table->id();
+//            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+//            $table->timestamp('created_at')->useCurrent(); // Set timestamps to use current time
+//            $table->timestamp('updated_at')->useCurrent(); // Set timestamps to use current time
+//
+////            $table->foreign('user_id')->references('id')->on('users')->onDelete('restrict')->onUpdate('restrict');
+//        });
     }
 
     /**

@@ -30,6 +30,11 @@ class Category extends Model
         return $this->hasOne(Product::class, 'cat_id', 'id');
     }
 
+    public function getRouteKeyName()
+    {
+        return 'category_name';
+        //This method checks if the user route parameter is a numeric string (which would typically indicate an ID). If it is, it returns 'id' as the route key name; otherwise, it returns 'name'
+    }
     public $timestamps = false;
 
     protected $table = 'categories'; // Adjust based on your table name

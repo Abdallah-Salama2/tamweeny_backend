@@ -30,13 +30,15 @@ class AuthController extends Controller
         $request->validated();
         // Create the user
         $user = User::create(UserRegisterDTO::userInfoFromRequest($request));
-        $tamweenCard = Card::create(UserRegisterDTO::cardInfoFromRequest($request));
-        $customer = Customer::create(['card_id' => $tamweenCard->id, 'user_id' => $user->id]);
+        Card::create(UserRegisterDTO::cardInfoFromRequest($request,$user->id));
+//        $customer = Customer::create(['card_id' => $tamweenCard->id, 'user_id' => $user->id]);
 //        $customer->save();
-
+        $user->assignRole('customer');
         return response()->json(['message' => 'Registration successful'], 201);
 
     }
+
+
 
     public function login(CustomerLoginRequest $request)
     {
@@ -48,14 +50,17 @@ class AuthController extends Controller
             $user->save();
 
             $token = $user->createToken($request->device_name)->plainTextToken;
-
-            return response()->json(['token' => $token, 'userId' => $user->id], 200);
+            return response()->json(['token' => $token, 'userId' => $user->id,'userType'=>$user->user_type], 200);
         }
-
         throw ValidationException::withMessages([
             'email' => ['The provided credentials are incorrect.'],
         ]);
     }
+
+
+
+
+
 
 
     //User Logout

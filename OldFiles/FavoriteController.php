@@ -214,7 +214,7 @@ class FavoriteController extends Controller
 ////        $userId = $request->user()->id;
 ////        $user = User::with('customer', 'customer.card')->find($userId);
 ////        $customerId = $user->customer->id;
-//    $customerId = auth()->user()->customer->id;
+//    $customerId = auth()->user()->id;
 //
 //
 //    $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)

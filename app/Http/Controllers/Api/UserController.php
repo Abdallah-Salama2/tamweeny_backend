@@ -6,6 +6,7 @@ use App\DTO\Users\UserUpdateDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\Card;
+use App\Models\ggg;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,12 +19,10 @@ class UserController extends Controller
     //List All users for test
     public function index(Request $request): JsonResponse
     {
-        $users = User::with(
-            'customer',
-            'customer.card'
-        )->get();
 
-        return response()->json(UserResource::collection($users));
+        $user = auth()->user();
+
+        return response()->json(new UserResource ($user));
     }
 
     public function ay7aga(Request $request): JsonResponse
@@ -32,9 +31,9 @@ class UserController extends Controller
 //            ->get();;
 //        $card = auth()->user()->customer->card;
 
-        $customerId = auth()->user()->customer->id;
-
-        return response()->json([$customerId]);
+        $user = User::find(1);
+        $orderCount = $user->order_count;
+        return response()->json($orderCount);
     }
 
 
@@ -47,14 +46,24 @@ class UserController extends Controller
         return response()->json(['message' => 'User Info Updated successfully'], 200);
 
     }
+    public function update(Request $request)
+    {
+        //
+        $user= auth()->user();
+        $user->fill((UserUpdateDTO::userInfoFromRequest($request)));
+        $user->save();
+
+        return response()->json(['message' => 'User Info Updated successfully'], 200);
+    }
+
 
     //Get User Data
-    public function getLoggedInUserData(Request $request): JsonResponse
-    {
-        $user = auth()->user();
-
-        return response()->json(new UserResource ($user));
-    }
+//    public function getLoggedInUserData(Request $request): JsonResponse
+//    {
+//        $user = auth()->user();
+//
+//        return response()->json(new UserResource ($user));
+//    }
 
 
 
@@ -80,7 +89,7 @@ class UserController extends Controller
     }
 
     //Delete User Account
-    public function deleteUser(): JsonResponse
+    public function destroy(): JsonResponse
     {
 
         $user = auth()->user();
@@ -105,6 +114,27 @@ class UserController extends Controller
     {
         return User::where("Name", "like", '%' . $name . '%')->get();
     }
+    public function show(User $user)
+    {
+        // Attempt to find user by name
+        $userByName = User::where("name", "like", '%' . $user . '%')->first();
+
+        // If user is found by name, return it
+        if ($userByName) {
+            return $userByName;
+        }
+
+        // If not found by name, try finding by ID
+        $userById = User::find($user);
+
+        // If user is found by ID, return it
+        if ($userById) {
+            return $userById;
+        }
+
+        // If user is not found by name or ID, return a 404 response
+        return response()->json(['message' => 'User not found'], 404);    }
+
 
 }
 //public function updateUserInfo(Request $request)

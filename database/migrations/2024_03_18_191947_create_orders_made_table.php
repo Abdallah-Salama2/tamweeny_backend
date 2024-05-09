@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('product_name', 100);
             $table->integer('quantity');
             $table->float('total_price');
-            $table->foreignId('customer_id')->constrained('customers')->cascadeOnDelete();
+            $table->foreignId('customer_id')->constrained('users')->cascadeOnDelete();
             $table->timestamp('created_at')->useCurrent(); // Set timestamps to use current time
             $table->timestamp('updated_at')->useCurrent(); // Set timestamps to use current time
 //

@@ -18,7 +18,7 @@ class CartController extends Controller
     public function index(Request $request)
     {
 
-        $customerId = auth()->user()->customer->id;
+        $customerId = auth()->user()->id;
         $customerCart = Cart::where("customer_id", $customerId)->get();
 
         return response()->json(CartResource::Collection($customerCart));
@@ -46,7 +46,7 @@ class CartController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $customerId = auth()->user()->customer->id;
+        $customerId = auth()->user()->id;
 
 
         $cart = Cart::where("customer_id", $customerId)

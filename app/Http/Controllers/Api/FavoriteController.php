@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreFavoriteRequest;
 use App\Http\Requests\UpdateFavoriteRequest;
 use App\Http\Resources\ProductResource;
-use App\Models\Product;;
+use App\Models\Product;
+
+;
+
 use App\Models\Favorite;
 use Illuminate\Http\Request;
 
@@ -18,7 +21,7 @@ class FavoriteController extends Controller
     public function index(Request $request)
     {
 
-        $customerId = auth()->user()->customer->id;
+        $customerId = auth()->user()->id;
 
 
         $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
@@ -40,11 +43,45 @@ class FavoriteController extends Controller
     /**
      * Add a product to favorites.
      */
-    public function add(Request $request, $productId)
+//    public function add(Request $request, $productId)
+//    {
+//
+//
+//        $customerId = auth()->user()->id;
+//
+//        $product = Product::find($productId);
+//        $productInFavorite = Favorite::where('customer_id', $customerId)
+//            ->where('product_id', $productId)
+//            ->first();
+//
+//        if ($productInFavorite) {
+//            $product->favorite_count -= 1;
+//            $productInFavorite->delete();
+//            $product->save();
+//
+//            return response()->json([
+//                'message' => 'Product removed from Favorites.',
+//            ], 409);
+//        }
+//
+//        $favorite = Favorite::create([
+//            'customer_id' => $customerId,
+//            'product_id' => $productId,
+//        ]);
+//
+//        $product->favorite_count++;
+//        $product->save();
+//        $favorite->save();
+//
+//        return response()->json([
+//            'message' => 'Product Added To Favorites ',
+//        ], 200);
+//    }
+
+    public function show($productId)
     {
-
-
-        $customerId = auth()->user()->customer->id;
+        //
+        $customerId = auth()->user()->id;
 
         $product = Product::find($productId);
         $productInFavorite = Favorite::where('customer_id', $customerId)

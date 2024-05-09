@@ -28,7 +28,7 @@ class Cart extends Model
     }
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+        return $this->belongsTo(User::class, 'customer_id', 'id');
     }
     public function order_made()
     {

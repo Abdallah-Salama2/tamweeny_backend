@@ -11,13 +11,15 @@ return new class extends Migration {
     public function up()
     {
         Schema::create('cart', function (Blueprint $table) {
+
             $table->id();
-            $table->foreignId('customer_id')->constrained('customers')->cascadeOnDelete();
+            $table->foreignId('customer_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->integer('quantity')->default(1);
             $table->decimal('total_price', 8, 2)->default(0.00);
-            $table->timestamp('created_at')->useCurrent(); // Set timestamps to use current time
-            $table->timestamp('updated_at')->useCurrent(); // Set timestamps to use current time
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
+
 
 //            $table->foreign('product_id')->references('id')->on('products')->onDelete('restrict')->onUpdate('restrict');
 //            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('restrict')->onUpdate('restrict');

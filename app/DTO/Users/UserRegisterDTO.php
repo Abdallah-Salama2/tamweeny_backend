@@ -2,30 +2,31 @@
 
 namespace App\DTO\Users;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 //DTO = Data Transfer Objects
 class UserRegisterDTO
 {
 
-    public static function validation(Request $request)
-    {
-
-        $request->validate([
-            'nationalId' => 'required|string|max:255|unique:users,national_id',
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email',
-            'password' => ['required', 'min:8'],
-            'phoneNumber' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'street' => 'required|string|max:255',
-            'birthDate' => 'required|date',
-            'cardName' => 'required|string|max:255',
-            'cardNumber' => 'required|string|max:255|unique:cards,card_number',
-            'cardNationalId' => 'required|string|max:255|unique:cards,card_national_id',
-            'cardPassword' => 'required|string|max:255',
-        ]);
-    }
+//    public static function validation(Request $request)
+//    {
+//
+//        $request->validate([
+//            'nationalId' => 'required|string|max:255|unique:users,national_id',
+//            'name' => 'required|string|max:255',
+//            'email' => 'required|string|email|max:255|unique:users,email',
+//            'password' => ['required', 'min:8'],
+//            'phoneNumber' => 'required|string|max:255',
+//            'city' => 'required|string|max:255',
+//            'street' => 'required|string|max:255',
+//            'birthDate' => 'required|date',
+//            'cardName' => 'required|string|max:255',
+//            'cardNumber' => 'required|string|max:255|unique:cards,card_number',
+//            'cardNationalId' => 'required|string|max:255|unique:cards,card_national_id',
+//            'cardPassword' => 'required|string|max:255',
+//        ]);
+//    }
 
     public static function userInfoFromRequest(Request $request): array
     {
@@ -38,12 +39,14 @@ class UserRegisterDTO
             'city_state' => $request->input('city'),
             'street' => $request->input('street'),
             'birth_date' => $request->input('birthDate'),
+            'user_type'=>'Customer'
         ];
     }
 
-    public static function cardInfoFromRequest(Request $request): array
+    public static function cardInfoFromRequest(Request $request, $userId): array
     {
         return [
+            'user_id'=>$userId,
             'card_name' => $request->input('cardName'),
             'card_number' => $request->input('cardNumber'),
             'card_national_id' => $request->input('cardNationalId'),
@@ -51,10 +54,10 @@ class UserRegisterDTO
         ];
     }
 
-    public static function customerInfoFromRequest(Request $request): array
-    {
-        return [
-            'user_id' => $request->input('Id'),
-        ];
-    }
+//    public static function customerInfoFromRequest(Request $request): array
+//    {
+//        return [
+//            'user_id' => $request->input('Id'),
+//        ];
+//    }
 }

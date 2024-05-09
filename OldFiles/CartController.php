@@ -11,7 +11,7 @@
 ////
 ////        $customerId = $user->customer->id;
 ////        //print ("CustomerId " . $customerId . "\n");
-//    $customerId = auth()->user()->customer->id;
+//    $customerId = auth()->user()->id;
 //
 //
 //    $customerCart = Cart::where("customer_id", $customerId)->get();

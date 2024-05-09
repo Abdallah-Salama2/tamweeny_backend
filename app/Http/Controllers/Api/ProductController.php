@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Models\Favorite;
 use App\Models\Product;
+use App\Models\Store;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -15,22 +18,14 @@ class ProductController extends Controller
     public function index(Request $request)
     {
 
-        $customerId = auth()->user()->customer->id;
+        $customerId = auth()->user()->id;
 
+        // Retrieve all products with pricing, category, and favorite status
+        $allProducts = Product::with(['productpricing', 'category'])
+            ->paginate(8);
 
-        // Retrieve customer's favorite product IDs
-        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
-            ->pluck('product_id')
-            ->toArray();
-
-        // Retrieve all products with pricing, category
-        $allProducts = Product::with('productpricing', 'category')->paginate(8);
-
-        // Transform products using ProductResource and set favoriteStats based on if they are favorites
+        // Transform products using ProductResource
         $products = ProductResource::collection($allProducts);
-        $products->each(function ($product) use ($customerFavoriteProductIds) {
-            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
-        });
 
         $numberOfPages = $allProducts->lastPage();
 
@@ -44,13 +39,13 @@ class ProductController extends Controller
     {
 //        $userId = $request->user()->id;
 
-        $customerId = auth()->user()->customer->id;
-
-
-        // Retrieve customer's favorite product IDs
-        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
-            ->pluck('product_id')
-            ->toArray();
+//        $customerId = auth()->user()->id;
+//
+//
+//        // Retrieve customer's favorite product IDs
+//        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
+//            ->pluck('product_id')
+//            ->toArray();
 
         // Retrieve all products with pricing, category
         $allProducts = Product::with('productpricing', 'category')->get();
@@ -64,9 +59,9 @@ class ProductController extends Controller
 
         // Transform products using ProductResource and set favoriteStats based on if they are favorites
         $products = ProductResource::collection($recommendedProducts);
-        $products->each(function ($product) use ($customerFavoriteProductIds) {
-            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
-        });
+//        $products->each(function ($product) use ($customerFavoriteProductIds) {
+//            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
+//        });
 
         return response()->json([
             'Most Ordered' => $products->first(),
@@ -79,31 +74,34 @@ class ProductController extends Controller
      * Display the specified resource.
      *
      * @param Product $product
-     * @return JsonResponse
+     * @return ProductResource|JsonResponse
      */
-    public function show(Product $product) {
-        // Find the product
-        $product = Product::find($product->id);
 
-        if (!$product) {
+
+    public function show(Product $product)
+    {
+        if (empty($product)) {
+            return response()->json([], 400);
+        }
+        // Find the product
+        $productByName = Product::where('product_name', 'like', '%' . $product->product_name . '%')->first();
+
+//
+        if ($productByName) {
             // This block will execute if the product is not found by ID
             // Searching for the product by name might be unnecessary, depending on your use case
-            $product = Product::where('product_name', 'like', '%' . $product->product_name . '%')->first();
+            return new ProductResource($productByName);
         }
 
-        $customerId = auth()->user()->customer->id;
+        $productById = User::find($product);
+        if ($productById) {
+            return new ProductResource($productById);
+        }
 
-        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)->pluck('product_id')->toArray();
+        return response()->json(['message' => 'Product not found'], 404);
 
-        // Check if the current product ID is in the list of user's favorite product IDs
-        $isFavorite = in_array($product->id, $customerFavoriteProductIds);
-
-        // Add favoriteStats attribute to the product object
-        $product->favoriteStats = $isFavorite ? 1 : 0;
-
-        // Return the product resource with the updated favoriteStats attribute
-        return response()->json(ProductResource::collection($product));
     }
+
 
     public function searchForProductById(Request $request, ?string $productId = null)
     {
@@ -113,16 +111,16 @@ class ProductController extends Controller
             return response()->json(["message" => "Product Not Found"]);
         }
 
-        $customerId = auth()->user()->customer->id;
-
-        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)->pluck('product_id')->toArray();
-
-        // Check if the current product ID is in the list of user's favorite product IDs
-        if (in_array($productId, $customerFavoriteProductIds)) {
-            $product->favoriteStats = 1;
-        } else {
-            $product->favoriteStats = 0;
-        }
+//        $customerId = auth()->user()->id;
+//
+//        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)->pluck('product_id')->toArray();
+//
+//        // Check if the current product ID is in the list of user's favorite product IDs
+//        if (in_array($productId, $customerFavoriteProductIds)) {
+//            $product->favoriteStats = 1;
+//        } else {
+//            $product->favoriteStats = 0;
+//        }
 
         // Return the product resource with the updated favoriteStats attribute
         return new ProductResource($product);
@@ -135,24 +133,24 @@ class ProductController extends Controller
             return response()->json([], 400);
         }
 
-        $customerId = auth()->user()->customer->id;
+//        $customerId = auth()->user()->id;
 
-        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)->pluck('product_id')->toArray();
+//        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)->pluck('product_id')->toArray();
         $products = Product::where('product_name', 'like', '%' . $productName . '%')->get();
 
         if ($products->isEmpty()) {
             return response()->json();
         }
-
-        $updatedProducts = [];
-        foreach ($products as $product) {
-            $productId = $product->id;
-            $product->favoriteStats = in_array($productId, $customerFavoriteProductIds) ? 1 : 0;
-            $updatedProducts[] = $product;
-        }
+//
+//        $updatedProducts = [];
+//        foreach ($products as $product) {
+//            $productId = $product->id;
+////            $product->favoriteStats = in_array($productId, $customerFavoriteProductIds) ? 1 : 0;
+//            $updatedProducts[] = $product;
+//        }
 
         // Return the product resources with the updated favoriteStats attribute
-        return ProductResource::collection($updatedProducts);
+        return ProductResource::collection($products);
     }
 
     public function emptyList()
@@ -164,12 +162,12 @@ class ProductController extends Controller
     {
 
 
-        $customerId = auth()->user()->customer->id;
-
-        // Retrieve customer's favorite product IDs
-        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
-            ->pluck('product_id')
-            ->toArray();
+//        $customerId = auth()->user()->id;
+//
+//        // Retrieve customer's favorite product IDs
+//        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
+//            ->pluck('product_id')
+//            ->toArray();
 
         // Retrieve all products with pricing, category
         $allProducts = Product::with('productpricing', 'category')->get();
@@ -183,15 +181,58 @@ class ProductController extends Controller
         }
 
         $products = ProductResource::collection($offers);
-        $products->each(function ($product) use ($customerFavoriteProductIds) {
-            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
-
-        });
+//        $products->each(function ($product) use ($customerFavoriteProductIds) {
+//            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
+//
+//        });
 
 
         return response()->json($products);
     }
 
+
+    public function fillStoreProductsTable(): void
+    {
+        // Retrieve all stores and products
+        $stores = Store::all();
+        $products = Product::where('product_type',0)->get();
+
+        foreach ($products as$product){
+            $product->stock_quantity -=10;
+        }
+
+        // Distribute products to stores
+        foreach ($products as $product) {
+            // Determine the quantity to distribute to each store
+            $totalStores = count($stores);
+            $quantityPerStore =  $product->stock_quantity / $totalStores; //60
+//            $remainingQuantity = $totalQuantityPerProduct;//300
+            foreach ($stores as $store) {
+                // Calculate quantity to assign to the current store
+                $quantity = min($quantityPerStore,  $product->stock_quantity);//60
+                $product->stock_quantity -= $quantity;//300-60
+                $product->save();
+                // Insert into the stores_products table
+                DB::table('stores_products')->insert([
+                    'store_id' => $store->id,
+                    'product_id' => $product->id,
+                    'quantity' => $quantity,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                // Break the loop if no more quantity remaining
+                if ( $product->stock_quantity <= 0) {
+                    break;
+                }
+            }
+        }
+        foreach ($products as$product){
+            $product->stock_quantity +=10;
+            $product->save();
+
+        }
+    }
     /**
      * Update the specified resource in storage.
      */

@@ -200,7 +200,7 @@ class Orders_madeController extends Controller
 //
 //
 //        $customerId = $user->customer->id;
-        $customerId = auth()->user()->customer->id;
+        $customerId = auth()->user()->id;
 
         //print("CustomerId " . $customerId . "\n");
 
@@ -225,7 +225,7 @@ public function store(Request $request)
 //        //print($user);
 //
 //        $customerId = $user->customer->id;
-    $customerId = auth()->user()->customer->id;
+    $customerId = auth()->user()->id;
 
     //print ("CustomerId " . $customerId . "\n");
 
@@ -303,7 +303,7 @@ class Orders_madeController extends Controller
 //function index(Request $request)
 //{
 //
-//    $customerId = auth()->user()->customer->id;
+//    $customerId = auth()->user()->id;
 //
 //    $ordersMade = Orders_made::where("customer_id", $customerId)->get();
 //    return response()->json(Orders_madeResource::collection($ordersMade));
@@ -318,7 +318,7 @@ class Orders_madeController extends Controller
 ////        $userId = $request->user()->id;
 ////        $user = User::with('customer', 'customer.card')->find($userId);
 ////        $customerId = $user->customer->id;
-//    $customerId = auth()->user()->customer->id;
+//    $customerId = auth()->user()->id;
 //
 //
 //    $ordersMade = Orders_made::where("customer_id", $customerId)->get();
@@ -360,7 +360,7 @@ class Orders_madeController extends Controller
 ////        }
 ////
 ////        $customerId = $user->customer->id;
-//    $customerId = auth()->user()->customer->id;
+//    $customerId = auth()->user()->id;
 //
 //    $orders = Order::where("customer_id", $customerId)->get();
 //

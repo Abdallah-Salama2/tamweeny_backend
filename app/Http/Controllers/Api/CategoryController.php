@@ -28,17 +28,18 @@ class CategoryController extends Controller
     public function productsByCategory($catName, Request $request): JsonResponse
     {
 
-        $customerId = auth()->user()->customer->id;
+        $customerId = auth()->user()->id;
         $category = Category::where('category_name', $catName)->firstOrFail();
-        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
-            ->pluck('product_id')
-            ->toArray();
+//        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
+//            ->pluck('product_id')
+//            ->toArray();
         $products = Product::where('cat_id', $category->id)
+            ->WithFavoriteStatus($customerId)
             ->get();
 
-        $products->each(function ($product) use ($customerFavoriteProductIds) {
-            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
-        });
+//        $products->each(function ($product) use ($customerFavoriteProductIds) {
+//            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
+//        });
 
         return response()->json(ProductResource::collection($products));
     }
@@ -64,17 +65,13 @@ class CategoryController extends Controller
     public function show(Category $category)
     {
         // Not implemented
-        $customerId = auth()->user()->customer->id;
-        $category = Category::where('category_name', $category)->firstOrFail();
-        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
-            ->pluck('product_id')
-            ->toArray();
+        $customerId = auth()->user()->id;
+        $category = Category::where('category_name', $category->category_name)->firstOrFail();
+
         $products = Product::where('cat_id', $category->id)
+            ->WithFavoriteStatus($customerId)
             ->get();
 
-        $products->each(function ($product) use ($customerFavoriteProductIds) {
-            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
-        });
 
         return response()->json(ProductResource::collection($products));
     }

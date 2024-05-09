@@ -22,7 +22,7 @@ class Orders_madeController extends Controller
     public function index(Request $request)
     {
 
-        $customerId = auth()->user()->customer->id;
+        $customerId = auth()->user()->id;
 
         $ordersMade = Orders_made::where("customer_id", $customerId)->get();
         return response()->json(Orders_madeResource::collection($ordersMade));
@@ -36,7 +36,7 @@ class Orders_madeController extends Controller
 //        $userId = $request->user()->id;
 //        $user = User::with('customer', 'customer.card')->find($userId);
 //        $customerId = $user->customer->id;
-        $customerId = auth()->user()->customer->id;
+        $customerId = auth()->user()->id;
 
 
         $ordersMade = Orders_made::where("customer_id", $customerId)->get();
@@ -70,7 +70,7 @@ class Orders_madeController extends Controller
     public function fullPendingOrders(Request $request)
     {
 
-//        $customerId = auth()->user()->customer->id;
+//        $customerId = auth()->user()->id;
         $orders =OrderResource2::collection( Order::where('delivery_status','Pending')->get());
 
 
@@ -111,7 +111,7 @@ class Orders_madeController extends Controller
 //    public function model(Request $request)
 //    {
 //
-////        $customerId = auth()->user()->customer->id;
+////        $customerId = auth()->user()->id;
 //        $orders =OrderResource2::collection( Order::where('delivery_status','Delivered')->get());
 ////        $customers=Customer::all();
 //        foreach ($orders as $order) {
@@ -126,7 +126,7 @@ class Orders_madeController extends Controller
     public function OrdersDetails(Request $request, $orderId)
     {
 
-//        $customerId = auth()->user()->customer->id;
+//        $customerId = auth()->user()->id;
 
         $orders = Orders_madeResource::collection(Orders_made::where("order_id", $orderId)->get());
         $order=Order::find($orderId);
