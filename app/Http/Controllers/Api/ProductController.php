@@ -22,16 +22,16 @@ class ProductController extends Controller
 
         // Retrieve all products with pricing, category, and favorite status
         $allProducts = Product::with(['productpricing', 'category'])
-            ->paginate(8);
+            ->get();
 
         // Transform products using ProductResource
         $products = ProductResource::collection($allProducts);
 
-        $numberOfPages = $allProducts->lastPage();
+//        $numberOfPages = $allProducts->lastPage();
 
         return response()->json([
             'products' => $products,
-            'totalPages' => $numberOfPages
+//            'totalPages' => $numberOfPages
         ]);
     }
 
@@ -69,6 +69,7 @@ class ProductController extends Controller
         ]);
 //        return $products;
     }
+
 
     /**
      * Display the specified resource.
