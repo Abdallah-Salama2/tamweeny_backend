@@ -13,7 +13,7 @@ return new class extends Migration {
 
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('order_date');
+            $table->date('order_date');
             $table->decimal('order_price', 10, 2);
             $table->string('delivery_status', 50)->default('Pending');
             $table->integer('payment_number')->nullable();

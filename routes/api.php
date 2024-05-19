@@ -84,11 +84,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     });
     Route::get('/fillStoresProducts', [ProductController::class, 'fillStoreProductsTable']);
 
-    Route::resource("/favorites",FavoriteController::class)->only(["index","show"]);
-//    Route::controller(FavoriteController::class)->group(function () {
-//        Route::get('/favorites', 'index');          //Favorites
-//        Route::post('favorite/{productId}', 'add');
-//    });
+//    Route::resource("/favorites",FavoriteController::class)->only(["index","show"]);
+    Route::controller(FavoriteController::class)->group(function () {
+        Route::get('/favorites', 'index');          //Favorites
+        Route::post('favorite/{productId}', 'add');
+    });
 
     Route::controller(CartController::class)->group(function () {
         Route::get('/cart', 'index');

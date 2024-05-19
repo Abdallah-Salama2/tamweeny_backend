@@ -43,44 +43,10 @@ class FavoriteController extends Controller
     /**
      * Add a product to favorites.
      */
-//    public function add(Request $request, $productId)
-//    {
-//
-//
-//        $customerId = auth()->user()->id;
-//
-//        $product = Product::find($productId);
-//        $productInFavorite = Favorite::where('customer_id', $customerId)
-//            ->where('product_id', $productId)
-//            ->first();
-//
-//        if ($productInFavorite) {
-//            $product->favorite_count -= 1;
-//            $productInFavorite->delete();
-//            $product->save();
-//
-//            return response()->json([
-//                'message' => 'Product removed from Favorites.',
-//            ], 409);
-//        }
-//
-//        $favorite = Favorite::create([
-//            'customer_id' => $customerId,
-//            'product_id' => $productId,
-//        ]);
-//
-//        $product->favorite_count++;
-//        $product->save();
-//        $favorite->save();
-//
-//        return response()->json([
-//            'message' => 'Product Added To Favorites ',
-//        ], 200);
-//    }
-
-    public function show($productId)
+    public function add(Request $request, $productId)
     {
-        //
+
+
         $customerId = auth()->user()->id;
 
         $product = Product::find($productId);
@@ -111,6 +77,40 @@ class FavoriteController extends Controller
             'message' => 'Product Added To Favorites ',
         ], 200);
     }
+
+//    public function show($productId)
+//    {
+//        //
+//        $customerId = auth()->user()->id;
+//
+//        $product = Product::find($productId);
+//        $productInFavorite = Favorite::where('customer_id', $customerId)
+//            ->where('product_id', $productId)
+//            ->first();
+//
+//        if ($productInFavorite) {
+//            $product->favorite_count -= 1;
+//            $productInFavorite->delete();
+//            $product->save();
+//
+//            return response()->json([
+//                'message' => 'Product removed from Favorites.',
+//            ], 409);
+//        }
+//
+//        $favorite = Favorite::create([
+//            'customer_id' => $customerId,
+//            'product_id' => $productId,
+//        ]);
+//
+//        $product->favorite_count++;
+//        $product->save();
+//        $favorite->save();
+//
+//        return response()->json([
+//            'message' => 'Product Added To Favorites ',
+//        ], 200);
+//    }
 
     /**
      * Store a newly created resource in storage.
