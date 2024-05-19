@@ -19,7 +19,7 @@ defineProps({
     <AuthenticatedLayout>
         <div class="overflow-hidden">
             <h1 class=" font-bold " style="color: #c6ffe6; font-size: 60px; margin-right: 25px ;  "> جميع الطلبات </h1>
-            <div class="relative  shadow-md sm:rounded-lg mt-32">
+            <div class="relative  shadow-md sm:rounded-lg mt-28">
                 <table class="w-11/12 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400  mr-12"
                        style="">
                     <thead class="text-xs  text-gray-100 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-100">
@@ -37,7 +37,7 @@ defineProps({
                             سعر الطلب
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            اضافة طيار
+                            الطيار
                         </th>
                     </tr>
                     </thead>
@@ -51,7 +51,9 @@ defineProps({
                             {{ order.customer.name }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ order.delivery_status }}
+                            <div class=" bg-black p-2" style="width: fit-content;">
+                                {{ order.delivery_status }}
+                            </div>
                         </td>
                         <td class="px-6 py-4">
                             {{ order.order_price }}
