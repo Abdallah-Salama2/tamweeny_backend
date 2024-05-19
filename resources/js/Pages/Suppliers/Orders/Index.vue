@@ -82,6 +82,7 @@ const assignDelivery = (orderId) => {
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 حالة الطلب
+
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 سعر الطلب
@@ -106,7 +107,16 @@ const assignDelivery = (orderId) => {
                                 {{ order.customer.name }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ order.delivery_status }}
+                                <div
+                                    :class="{
+                                'bg-orange-600 p-2 rounded-3xl':order.delivery_status === 'onHold',
+                                'bg-blue-600 p-2 rounded-3xl': order.delivery_status === 'Pending',
+                                'bg-green-800 p-2 rounded-3xl': order.delivery_status === 'Delivered',
+
+                            }"
+                                    style="width: fit-content;">
+                                    {{ order.delivery_status }}
+                                </div>
                             </td>
                             <td class="px-6 py-4">
                                 {{ order.order_price }}
@@ -130,9 +140,9 @@ const assignDelivery = (orderId) => {
                             <td class="px-6 py-4  text-center">
                                 <button @click="assignDelivery(order.id)" class="mb-1" type="button"
                                         :class="{
-                                    'bg-gray-500': order.delivery_status === 'Pending',
+                                    'bg-gray-500': order.delivery_status !== 'onHold',
                                     'bg-green-700': order.delivery_status === 'onHold'}"
-                                        :disabled="order.delivery_status === 'Pending'"
+                                        :disabled="order.delivery_status !== 'onHold'"
                                         style="color:#C6FFE6;width:50%;justify-content: center;padding: 10px;border-radius: 20px">
                                     تأكيد
                                 </button>

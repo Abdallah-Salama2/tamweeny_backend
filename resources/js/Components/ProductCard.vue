@@ -1,7 +1,7 @@
 <template>
 
     <!-- Product Card -->
-    <div class=" flex flex-col cardWidth relative shadow-2xl rounded-3xl color">
+    <div class=" flex flex-col cardWidth relative shadow-2xl rounded-3xl color" >
         <div class="relative">
             <!-- Main image -->
             <div @mouseenter="isHovered = true" @mouseleave="isHovered = false"
@@ -71,13 +71,13 @@
 
         <Modal class="" :show="showModal" @close="showModal = false">
             <!-- Content of the modal -->
-            <Link @click="showModal = false" class=" absolute left-2 top-2">
-                <svg class="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                     width="24" height="24" fill="none" viewBox="0 0 24 24">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M6 18 17.94 6M18 18 6.06 6"/>
-                </svg>
-            </Link>
+<!--            <Link @click="showModal = false" class=" absolute left-2 top-2">-->
+<!--                <svg class="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"-->
+<!--                     width="24" height="24" fill="none" viewBox="0 0 24 24">-->
+<!--                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"-->
+<!--                          d="M6 18 17.94 6M18 18 6.06 6"/>-->
+<!--                </svg>-->
+<!--            </Link>-->
             <div class="w-full flex flex-col  relative shadow-2xl rounded-3xl color"
                  style="height: 800px; width: 400px; margin: auto;">
                 <img v-if="product.product_image"

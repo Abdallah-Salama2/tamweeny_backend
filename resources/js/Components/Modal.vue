@@ -25,7 +25,7 @@
                 >
                     <div
                         v-show="show"
-                        class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:mx-auto"
+                        class="   rounded-lg overflow-hidden shadow-xl transform transition-all  sm:mx-auto"
                         :class="maxWidthClass"
                     >
                         <slot v-if="show" />
@@ -81,6 +81,11 @@ const maxWidthClass = computed(() => {
     display: flex;
     justify-content: center;
     align-items: center;
+
+}
+
+.cardBackvorund{
+    background: rgba(35, 35, 35, 80%);
 
 }
 </style>

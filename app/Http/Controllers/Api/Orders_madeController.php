@@ -72,9 +72,10 @@ class Orders_madeController extends Controller
     {
 
 //        $customerId = auth()->user()->id;
-        $orders =OrderResource2::collection( Order::where('delivery_status','Pending')->get());
-
-
+        $orders = OrderResource2::collection(Order::where('delivery_status', 'Pending')->get());
+        if ($orders->isEmpty()) {
+            return response()->json(['error' => 'No orders yet'], 500);
+        }
         foreach ($orders as $order) {
             $orderData = new OrderResource2($order);
             $orderData['ordersMade'] = Orders_madeResource::collection(
@@ -84,6 +85,7 @@ class Orders_madeController extends Controller
 
         return response()->json($orders);
     }
+
     public function fullDeliveredOrders(Request $request)
     {
         // Fetch all delivered orders
@@ -108,15 +110,16 @@ class Orders_madeController extends Controller
         // Return JSON response with formatted orders
         return response()->json($formattedOrders);
     }
+
     public function modelOrders(Request $request)
     {
         // Fetch all delivered orders
-        $orders = Orders_made::with('product','product.category')->get();
+        $orders = Orders_made::with('product', 'product.category')->get();
 
         // Extract category names from each order and count occurrences
-        $categoryCounts = $orders->mapToGroups(function($order) {
+        $categoryCounts = $orders->mapToGroups(function ($order) {
             return [$order->product->category->category_name => 1];
-        })->map(function($item) {
+        })->map(function ($item) {
             return count($item);
         });
 
@@ -160,17 +163,17 @@ class Orders_madeController extends Controller
 //        $customerId = auth()->user()->id;
 
         $orders = Orders_madeResource::collection(Orders_made::where("order_id", $orderId)->get());
-        $order=Order::find($orderId);
+        $order = Order::find($orderId);
 
         return response()->json([
             'customerName' => Auth()->user()->name,
             'customerPhone' => Auth()->user()->phone_number,
             'customerAddress' => Auth()->user()->street . " " . Auth()->user()->city_state,
-            'products'=>$orders,
-            'outsidePayments'=>0,
-            'insidePayments'=>0,
-            'deliveryPrice'=>30,
-            'orderPrice'=>$order->order_price,
+            'products' => $orders,
+            'outsidePayments' => 0,
+            'insidePayments' => 0,
+            'deliveryPrice' => 30,
+            'orderPrice' => $order->order_price,
         ]);
     }
 

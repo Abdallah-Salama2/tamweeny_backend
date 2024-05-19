@@ -51,7 +51,14 @@ defineProps({
                             {{ order.customer.name }}
                         </td>
                         <td class="px-6 py-4">
-                            <div class=" bg-black p-2" style="width: fit-content;">
+                            <div
+                                :class="{
+                                'bg-orange-600 p-2 rounded-3xl':order.delivery_status === 'onHold',
+                                'bg-blue-600 p-2 rounded-3xl': order.delivery_status === 'Pending',
+                                'bg-green-800 p-2 rounded-3xl': order.delivery_status === 'Delivered',
+
+                            }"
+                                style="width: fit-content;">
                                 {{ order.delivery_status }}
                             </div>
                         </td>
