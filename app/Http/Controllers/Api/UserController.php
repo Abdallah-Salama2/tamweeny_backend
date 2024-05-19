@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\Card;
 use App\Models\ggg;
+use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -25,15 +27,21 @@ class UserController extends Controller
         return response()->json(new UserResource ($user));
     }
 
-    public function ay7aga(Request $request): JsonResponse
+
+
+    public function ay7aga(Request $request)
     {
 //        $gg =User::with('customer', 'customer.order_made', 'customer.order', 'customer.favorite', 'customer.cart', 'customer.card')
 //            ->get();;
 //        $card = auth()->user()->customer->card;
+//        $customerId = auth()->user()->id;
 
-        $user = User::find(1);
-        $orderCount = $user->order_count;
-        return response()->json($orderCount);
+        $orders = Order::with('customer','delivery')
+            ->orderBy('order_date', 'desc')
+            ->get();
+        return  response()->json([
+            'cardNumber'=>$orders
+        ]);
     }
 
 
@@ -57,13 +65,13 @@ class UserController extends Controller
     }
 
 
-    //Get User Data
-//    public function getLoggedInUserData(Request $request): JsonResponse
-//    {
-//        $user = auth()->user();
-//
-//        return response()->json(new UserResource ($user));
-//    }
+//    Get User Data
+    public function getLoggedInUserData(Request $request): JsonResponse
+    {
+        $user = auth()->user();
+
+        return response()->json(new UserResource ($user));
+    }
 
 
 

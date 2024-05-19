@@ -86,16 +86,16 @@ class OrderSeeder extends Seeder
         DB::table('orders_made')->insert([
             [
                 'order_id' => 1,
-                'product_id' => 1,
-                'product_name' => 'سكر',
+                'product_id' => 6,
+                'product_name' => 'جبنه تتراباك',
                 'quantity' => '2',
                 'total_price' => 26,
                 'customer_id' => 1,
 
 
-            ], ['order_id' => 1,
-                'product_id' => 3,
-                'product_name' => 'زيت عباد',
+            ], ['order_id' => 2,
+                'product_id' => 18,
+                'product_name' => 'جبنه تتراباك',
                 'quantity' => '2',
                 'total_price' => 40,
                 'customer_id' => 1,
@@ -103,22 +103,6 @@ class OrderSeeder extends Seeder
             ],
             [
                 'order_id' => 2,
-                'product_id' => 4,
-                'product_name' => 'زيت خليط',
-                'quantity' => '2',
-                'total_price' => 26,
-                'customer_id' => 1,
-
-
-            ], ['order_id' => 2,
-                'product_id' => 12,
-                'product_name' => 'مكرونة',
-                'quantity' => '2',
-                'total_price' => 40,
-                'customer_id' => 1,
-
-            ], [
-                'order_id' => 3,
                 'product_id' => 21,
                 'product_name' => 'لبن جاف',
                 'quantity' => '2',
@@ -126,15 +110,31 @@ class OrderSeeder extends Seeder
                 'customer_id' => 1,
 
 
-            ], ['order_id' => 3,
-                'product_id' => 10,
-                'product_name' => 'ارز',
+            ], ['order_id' => 1,
+                'product_id' => 1,
+                'product_name' => 'سكر',
                 'quantity' => '2',
                 'total_price' => 40,
                 'customer_id' => 1,
 
             ], [
                 'order_id' => 4,
+                'product_id' => 14,
+                'product_name' => 'مسلي',
+                'quantity' => '2',
+                'total_price' => 26,
+                'customer_id' => 1,
+
+
+            ], ['order_id' => 3,
+                'product_id' => 24,
+                'product_name' => 'حلاوه طحينيه',
+                'quantity' => '2',
+                'total_price' => 40,
+                'customer_id' => 1,
+
+            ], [
+                'order_id' => 3,
                 'product_id' => 18,
                 'product_name' => 'جبنه تتراباك',
                 'quantity' => '2',

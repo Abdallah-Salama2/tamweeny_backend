@@ -23,73 +23,60 @@ class UserSeeder extends Seeder
     {
         //
 
-
-
-
-        $driver=User::Create([
-
-            'national_id' => '1321321',
-            'name' => 'Driver',
-            'email' => 'driver@gmail.com',
-            'password' => static::$password ??= Hash::make('password'),
-            'phone_number' => '0222010',
-            'city_state' => '3amk State',
-            'street' => '3amk Street',
-            'birth_date' => '2000-11-21',
-            'user_type'=>2,
-            'latitude'=>11.20000000,
-            'longitude'=>11.20000000,
-        ]);
-        Delivery::create([
-            'user_id'=>$driver->id,
-            'vehicle_type'=>'vehicle',
-            'license_plate'=>'license',
-
-        ]);
-
-        $driver->assignRole('delivery');
-
-
-        $storeOnwer=User::Create([
-
-            'national_id' => '222232',
-            'name' => 'Owner',
-            'email' => 'Owner@gmail.com',
-            'password' => static::$password ??= Hash::make('password'),
-            'phone_number' => '0222010',
-            'city_state' => '3amk State',
-            'street' => '3amk Street',
-            'birth_date' => '2000-11-21',
-            'user_type'=>3,
-            'latitude'=>11.20000000,
-            'longitude'=>11.20000000,
-        ]);
-        storeOwner::create([
-            'tax_registration_number'=>'11111',
-            'user_id'=>$storeOnwer->id,
-            'tax_card'=>'taxCard'
-        ]);
-        $storeOnwer->assignRole('storeOwner');
-
         $admin=User::Create([
 
-            'national_id' => '33333322',
+            'national_id' => '111',
             'name' => 'Admin',
-            'email' => 'Admin@gmail.com',
+            'email' => 'admin@gmail.com',
             'password' => static::$password ??= Hash::make('password'),
             'phone_number' => '0222010',
             'city_state' => '3amk State',
             'street' => '3amk Street',
             'birth_date' => '2000-11-21',
-            'user_type'=>4,
+            'user_type'=>'Admin',
             'latitude'=>11.20000000,
             'longitude'=>11.20000000,
         ]);
 
-        GovernorAdmin::create([
-            'user_id'=>$admin->id,
-        ]);
         $admin->assignRole('admin');
+
+
+
+        $user=User::Create([
+
+            'national_id' => '222',
+            'name' => 'Alas',
+            'email' => 'alas@gmail.com',
+            'password' => static::$password ??= Hash::make('password'),
+            'phone_number' => '0222010',
+            'city_state' => '3amk State',
+            'street' => '3amk Street',
+            'birth_date' => '2000-11-21',
+            'user_type'=>'Customer',
+            'latitude'=>11.20000000,
+            'longitude'=>11.20000000,
+        ]);
+        Card::create([
+            'user_id'=>$user->id,
+            'card_name'=>'Alas',
+            'card_number'=>1,
+            'card_national_id'=>1,
+            'card_password'=>static::$password ??= Hash::make('password'),
+        ]);
+
+        $user->assignRole('customer');
+
+        $supplier = User::create([
+            'email' => 'Supplier@gmail.com',
+            'name'=>'Tux',
+            'password' => static::$password ?? Hash::make('password'),
+            'user_type' => 'Supplier',
+            'store_owner_info' => json_encode([
+                'tax_card_number'=>11,
+                'tax_registration_number'=>11
+            ]),
+        ]);
+        $supplier->assignRole('supplier');
 
 
     }

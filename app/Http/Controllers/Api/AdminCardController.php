@@ -61,7 +61,7 @@ class AdminCardController extends Controller
     private function storeFile($file)
     {
         // Store the file with its original name
-        return $file->storeAs('public/uploads', $file->getClientOriginalName());
+        return $file->storeAs('/public/uploads', $file->getClientOriginalName());
     }
 
     /**

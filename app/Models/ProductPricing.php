@@ -29,5 +29,6 @@ class ProductPricing extends Model
 
     protected $table = 'product_pricings'; // Adjust based on your table name
     protected $primaryKey = 'id'; //
+    public $timestamps = false; //
 
 }

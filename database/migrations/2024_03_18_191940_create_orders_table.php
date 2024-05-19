@@ -4,13 +4,13 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up()
     {
+
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->dateTime('order_date');
@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('delivery_status', 50)->default('Pending');
             $table->integer('payment_number')->nullable();
             $table->foreignId('customer_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('delivery_id')->nullable()->constrained('users')->cascadeOnDelete();
+            $table->foreignId('delivery_id')->nullable()->constrained('users', 'id')
+                ->where('user_type', 'delivery')->cascadeOnDelete(); // Constraint added here
             $table->timestamp('created_at')->useCurrent(); // Set timestamps to use current time
             $table->timestamp('updated_at')->useCurrent(); // Set timestamps to use current time
 

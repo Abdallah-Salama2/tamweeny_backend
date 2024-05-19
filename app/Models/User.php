@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use LaravelAndVueJS\Traits\LaravelPermissionToVueJS;
 use Spatie\Permission\Traits\HasRoles;
 
 
@@ -14,7 +15,9 @@ class User extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory, Notifiable;
+    use LaravelPermissionToVueJS;
     use HasRoles;
+
 
     /**
      * The attributes that are mass assignable.
@@ -127,6 +130,10 @@ class User extends Authenticatable
     public function order()
     {
         return $this->hasMany(Order::class, 'customer_id', 'id');
+    }
+    public function order2()
+    {
+        return $this->hasMany(Order::class, 'delivery_id', 'id');
     }
 
     public function order_made()

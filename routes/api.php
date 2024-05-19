@@ -77,7 +77,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 //    Route::get("/products/{product}",[ProductController::class,'show']);
     Route::controller(ProductController::class)->group(function () {
-        Route::get('/products', 'index'); //Products
+        Route::get('/products', 'index');// ['@role customer , delviery']//Products
         Route::get('/productId/{product?}', 'searchForProductById');
         Route::get('/productName/{product?}', 'searchForProductByName');
         Route::get('/offers', 'offers');       //ProductPricing
@@ -108,6 +108,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::controller(Orders_madeController::class)->group(function () {
         Route::get('/ordersMade', 'index');
         Route::get('/fullOrder', 'fullOrder');
+        Route::get('/modelOrders', 'modelOrders');
         Route::get('/fullPendingOrders', 'fullPendingOrders');
         Route::get('/fullDeliveredOrders', 'fullDeliveredOrders');
         Route::get('/orderDetails/{orderId}', 'OrdersDetails');

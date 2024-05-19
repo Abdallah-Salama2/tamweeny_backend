@@ -10,6 +10,7 @@ use App\Http\Resources\Orders_madeResource;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Orders_made;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -106,6 +107,36 @@ class Orders_madeController extends Controller
 
         // Return JSON response with formatted orders
         return response()->json($formattedOrders);
+    }
+    public function modelOrders(Request $request)
+    {
+        // Fetch all delivered orders
+        $orders = Orders_made::with('product','product.category')->get();
+
+        // Extract category names from each order and count occurrences
+        $categoryCounts = $orders->mapToGroups(function($order) {
+            return [$order->product->category->category_name => 1];
+        })->map(function($item) {
+            return count($item);
+        });
+
+        // Sort categories by count in descending order
+        $sortedCategories = $categoryCounts->sortDesc();
+
+        // Get the top two categories
+        $topCategories = $sortedCategories->take(2)->keys();
+
+        // Recommend two products from each of the top two categories
+        $recommendations = [];
+        foreach ($topCategories as $category) {
+            $products = Product::whereHas('category', function ($query) use ($category) {
+                $query->where('category_name', $category);
+            })->inRandomOrder()->take(2)->get();
+            $recommendations[$category] = $products;
+        }
+
+        // Return JSON response with recommendations
+        return response()->json($recommendations);
     }
 
 //    public function model(Request $request)

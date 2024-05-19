@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('product_name', 100);
             $table->integer('product_type');
-            $table->string('product_image', 200);
+            $table->string('product_image', 200)->nullable();
             $table->string('image_extension', 10)->default('jpg');
             $table->text('description');
             $table->integer('stock_quantity');

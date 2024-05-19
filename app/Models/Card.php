@@ -21,9 +21,9 @@ class Card extends Model
 
 
     // Relationship with Customer model
-    public function customer()
+    public function user()
     {
-        return $this->hasOne(User::class, 'card_id', 'id');
+        return $this->belongsTo(User::class, 'card_id', 'id');
     }
 
     protected $table = 'cards'; // Adjust based on your table name

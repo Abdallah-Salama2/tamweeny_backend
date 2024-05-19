@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Illuminate\Database\Connectors;
 
 use Exception;

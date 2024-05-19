@@ -32,7 +32,13 @@ class Order extends Model
         return $this->belongsTo(User::class, 'customer_id', 'id');
     }
 
+    public function delivery()
+    {
+        return $this->belongsTo(User::class, 'delivery_id', 'id');
+    }
+
     protected $table = 'orders'; // Adjust based on your table name
     protected $primaryKey = 'id'; //
+    public $timestamps=false;
 
 }

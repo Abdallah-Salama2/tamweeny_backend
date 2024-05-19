@@ -95,7 +95,7 @@ class CategoriesTableSeeder extends Seeder
             ],
             [
                 'id' => 12,
-                'category_name' => 'زينة السلطة ومستلزماتها\r\n',
+                'category_name' => 'زينة السلطة ومستلزماتها',
                 'category_image' => 'https://i.imgur.com/iyxZPJq.jpg',
                 'category_icon' => 'https://i.imgur.com/kqUFhr0.png',
                 'created_at' => $currentTimestamp,

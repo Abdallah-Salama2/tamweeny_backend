@@ -40,11 +40,11 @@ class Product extends Model
 //        }]);
 //    }
 
-    public function getRouteKeyName()
-    {
-        return request()->route('product') === (string)(int)request()->route('product') ? 'id' : 'product_name';
-        //This method checks if the user route parameter is a numeric string (which would typically indicate an ID). If it is, it returns 'id' as the route key name; otherwise, it returns 'name'
-    }
+//    public function getRouteKeyName()
+//    {
+//        return request()->route('product') === (string)(int)request()->route('product') ? 'id' : 'product_name';
+//        //This method checks if the user route parameter is a numeric string (which would typically indicate an ID). If it is, it returns 'id' as the route key name; otherwise, it returns 'name'
+//    }
     public function category()
     {
         return $this->belongsTo(Category::class, 'cat_id', 'id');

@@ -3,13 +3,24 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'cd64e9cabb6b6b96b31c221a4c9690e56a435d28',
+        'reference' => 'b52379f4bf387503b898e8080440cc7b1b63e732',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
+        'ahmedsaoud31/laravel-permission-to-vuejs' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '7c0d54d031cc84c3ed0ac9c356e2b15283e77145',
+            'type' => 'plugin',
+            'install_path' => __DIR__ . '/../ahmedsaoud31/laravel-permission-to-vuejs',
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
+            'dev_requirement' => false,
+        ),
         'brianium/paratest' => array(
             'pretty_version' => 'v7.4.3',
             'version' => '7.4.3.0',
@@ -436,7 +447,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'cd64e9cabb6b6b96b31c221a4c9690e56a435d28',
+            'reference' => 'b52379f4bf387503b898e8080440cc7b1b63e732',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
