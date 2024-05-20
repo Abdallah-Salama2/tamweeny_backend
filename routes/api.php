@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AdminCardController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CardController;
@@ -13,7 +14,6 @@ use App\Http\Controllers\Api\Orders_madeController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\StoreController;
 use App\Http\Controllers\Api\StoreOwnerController;
-use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\FIleController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;

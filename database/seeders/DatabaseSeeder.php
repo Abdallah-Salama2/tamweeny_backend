@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Http\Controllers\Api\ProductController;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -23,5 +24,7 @@ class DatabaseSeeder extends Seeder
 //            OrderSeeder::class,
             // Add more seeders here if needed
         ]);
+        $productController = new ProductController();
+        $productController->fillStoreProductsTable();
     }
 }

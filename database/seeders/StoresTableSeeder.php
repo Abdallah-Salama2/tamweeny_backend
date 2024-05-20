@@ -14,7 +14,7 @@ class StoresTableSeeder extends Seeder
 
         DB::table('stores')->insert([
             [
-                'id' => 1,
+                'id' => 6,
                 'owner_id' => null,
                 'store_name' => 'مكتب تموين مدينة نصر',
                 'address' => '78 مساكن عثمان بجوار شركه كاسيو مدينة نصر',

@@ -28,7 +28,6 @@ class UserController extends Controller
     }
 
 
-
     public function ay7aga(Request $request)
     {
 //        $gg =User::with('customer', 'customer.order_made', 'customer.order', 'customer.favorite', 'customer.cart', 'customer.card')
@@ -36,28 +35,33 @@ class UserController extends Controller
 //        $card = auth()->user()->customer->card;
 //        $customerId = auth()->user()->id;
 
-        $orders = Order::with('customer','delivery')
-            ->orderBy('order_date', 'desc')
-            ->get();
-        return  response()->json([
-            'cardNumber'=>$orders
-        ]);
+        $collection = collect(['apple', 'banana', 'cherry']);
+        $new=$collection->filter('apple');
+        print_r($new);
+        $newCollection = $collection->map(function ($item) {
+            return strtoupper($item);
+        });
+//        print($newCollection);
+        //        foreach ($collection as $k) {
+//            echo $k;
+//        }
     }
 
 
     public function updateUserInfo(Request $request): JsonResponse
     {
-        $user= auth()->user();
+        $user = auth()->user();
         $user->fill((UserUpdateDTO::userInfoFromRequest($request)));
         $user->save();
 
         return response()->json(['message' => 'User Info Updated successfully'], 200);
 
     }
+
     public function update(Request $request)
     {
         //
-        $user= auth()->user();
+        $user = auth()->user();
         $user->fill((UserUpdateDTO::userInfoFromRequest($request)));
         $user->save();
 
@@ -72,7 +76,6 @@ class UserController extends Controller
 
         return response()->json(new UserResource ($user));
     }
-
 
 
     //Check New User 2nd method
@@ -122,6 +125,7 @@ class UserController extends Controller
     {
         return User::where("Name", "like", '%' . $name . '%')->get();
     }
+
     public function show(User $user)
     {
         // Attempt to find user by name
@@ -141,7 +145,8 @@ class UserController extends Controller
         }
 
         // If user is not found by name or ID, return a 404 response
-        return response()->json(['message' => 'User not found'], 404);    }
+        return response()->json(['message' => 'User not found'], 404);
+    }
 
 
 }
@@ -181,12 +186,11 @@ class UserController extends Controller
 //}
 
 
-
 //Kont 3amel kol dah 3shan mkontsh mzbt migrations w m3rfsh ya3ny eih cascade on Delete
 
 //public function deleteUser(Request $request): \Illuminate\Http\JsonResponse
 //{
-    // Retrieve the user ID from the session
+// Retrieve the user ID from the session
 //        $userId = auth()->user()->id;
 //    $user = auth()->user();
 //    $card = auth()->user()->customer->card;

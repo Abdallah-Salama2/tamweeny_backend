@@ -6,6 +6,7 @@ use App\Models\Card;
 use App\Models\Customer;
 use App\Models\Delivery;
 use App\Models\GovernorAdmin;
+use App\Models\Store;
 use App\Models\storeOwner;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -75,6 +76,16 @@ class UserSeeder extends Seeder
                 'tax_card_number'=>11,
                 'tax_registration_number'=>11
             ]),
+        ]);
+        Store::create([
+           'owner_id'=>$supplier->id,
+           'store_name'=>'TuxStore' ,
+            'address'=>'TuxAddr',
+            'phone_number'=>111,
+            'type'=>'بقالة',
+            'valid'=>1,
+            'latitude'=>'30.05283352',
+            'longitude'=>'30.05283352',
         ]);
         $supplier->assignRole('supplier');
 

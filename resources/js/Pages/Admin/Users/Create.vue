@@ -3,6 +3,7 @@
 
     <AuthenticatedLayout>
         <form @submit.prevent="create" >
+            <h1>ADD STORE LOCATION ON MAP BY LATITUDE AND LONGITUDE</h1>
             <div class="   overflow-y-visible   mt-3   relative ">
                 <div class="mr-2  absolute  top-10 right-32 text-xl">
                     <label for="supplier">موزع</label>
@@ -19,28 +20,28 @@
                 <div style="float: right" class="mr-96 mt-2 personalInfo">
                     <h1 class="text-3xl font-bold">البيانات الشخصيه</h1>
                     <label for="name" class="text-white">الاسم</label><br>
-                    <input v-model="data.name" id="name" type="text" class=""><br>
+                    <input v-model="data.name" id="name" type="text" class="" required><br>
 <!--                    <div v-if="data.errors.name" class="input-error">-->
 <!--                        {{ data.errors.name }}-->
 <!--                        &lt;!&ndash; form.erros used to show validation error hyro7 3la beds fe validation w yshof eih rules bta3etha &ndash;&gt;-->
 <!--                    </div>-->
                     <label for="nationalId" class="text-white">الرقم القومى</label><br>
-                    <input v-model="data.nationalId" id="nationalId" type="number" name="nationalId"><br>
+                    <input v-model="data.nationalId" id="nationalId" type="number" name="nationalId" required><br>
 <!--                    <div v-if="data.errors.nationalId" class="input-error">-->
 <!--                        {{ data.errors.nationalId }}-->
 <!--                        &lt;!&ndash; form.erros used to show validation error hyro7 3la beds fe validation w yshof eih rules bta3etha &ndash;&gt;-->
 <!--                    </div>-->
                     <label for="phoneNumber" class="text-white">رقم المحمول</label><br>
-                    <input v-model="data.phoneNumber" id="number" type="tel" name="phoneNumber"><br>
+                    <input v-model="data.phoneNumber" id="number" type="tel" name="phoneNumber" required><br>
                     <label for="birthDate" class="text-white">تاريخ الميلاد</label><br>
-                    <input v-model="data.birthDate" id="birthDate" type="date" name="birthDate"><br>
+                    <input v-model="data.birthDate" id="birthDate" type="date" name="birthDate" required><br>
                     <label for="address" class="text-white">عنوان السكن</label><br>
-                    <input v-model="data.address" id="address" type="text" name="address"><br>
+                    <input v-model="data.address" id="address" type="text" name="address" required><br>
                     <section v-if="userType === 'Supplier'">
-                    <label for="storeName" class="text-white">اسم محل التوزيع</label><br>
-                    <input v-model="data.storeName" id="storeName" type="text" name="name"><br>
+                    <label for="storeName" class="text-white" >اسم محل التوزيع</label><br>
+                    <input v-model="data.storeName" id="storeName" type="text" name="name" required><br>
                     <label for="storeAddress" class="text-white">عنوان محل التوزيع</label><br>
-                    <input v-model="data.storeAddress" id="storeAddress" type="text" name="name"><br>
+                    <input v-model="data.storeAddress" id="storeAddress" type="text" name="name" required><br>
                     <!--                    <label for="cardNumber" class="text-white">رقم بطاقة التموين</label><br>-->
                     <!--                    <input v-model="data.cardNumber" id="cardNumber" type="number" name="cardNumber" class="mb-5"><br>-->
                     </section>
@@ -54,18 +55,18 @@
                     <section v-if="userType === 'Supplier'">
 
                     <label for="cardNumber" class="text-white">رقم البطاقة الضريبية</label><br>
-                    <input v-model="data.cardNumber" id="cardNumber" type="number" name="card_name" class="mb-5"><br>
+                    <input v-model="data.cardNumber" id="cardNumber" type="number" name="card_name" class="mb-5" required><br>
                     <label for="taxNumber" class="text-white">رقم التسجيل الضريبي</label><br>
-                    <input v-model="data.taxNumber" id="taxNumber" type="number" name="card_name" class="mb-5"><br>
+                    <input v-model="data.taxNumber" id="taxNumber" type="number" name="card_name" class="mb-5" required><br>
                     </section>
 
                     <h1 class="text-3xl font-bold">كلمة السر والامان </h1>
 
                     <label for="email" class="text-white">البريد الألكترونى</label><br>
-                    <input v-model="data.email" id="email" type="email" name="name"><br>
+                    <input v-model="data.email" id="email" type="email" name="name" required><br>
 
                     <label for="password" class="text-white">كلمة السر </label><br>
-                    <input v-model="data.password" id="password" type="password" name="card_name" class="mb-5"><br>
+                    <input v-model="data.password" id="password" type="password" name="card_name" class="mb-5" required><br>
 
 
                 </div>

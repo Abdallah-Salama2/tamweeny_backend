@@ -6,6 +6,7 @@ use App\Models\Favorite;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @method static addGlobalScope(string $string, \Closure $param)
@@ -25,8 +26,10 @@ trait FavoriteScope
     public static function bootFavoriteScope()
     {
         static::addGlobalScope('withFavoriteStatus', function (Builder $builder) {
-            $userId = auth()->user()->id;
-            $builder->withFavoriteStatus($userId);
+            if (Auth::check()) {
+                $userId = auth()->user()->id;
+                $builder->withFavoriteStatus($userId);
+            }
         });
     }
 }

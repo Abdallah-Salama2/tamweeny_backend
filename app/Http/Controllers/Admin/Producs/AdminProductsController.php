@@ -30,8 +30,9 @@ class AdminProductsController extends Controller
         //
 //        $customerId = auth()->user()->id;
 
-        $products = Product::with('productpricing','category')->where('product_type', 0)->latest()->get();
-        return Inertia::render('Admin/Products/Index', ['products' => $products]);
+        $products = Product::with('productpricing', 'category')->where('product_type', 0)->latest()->get();
+        $categories = Category::all();
+        return Inertia::render('Admin/Products/Index', ['products' => $products, 'categories' => $categories]);
     }
 
     /**
@@ -50,6 +51,7 @@ class AdminProductsController extends Controller
     public function store(Request $request)
     {
         $imgPath = ''; // Define the variable with a default value
+//        dd($request);
 
         // product_name: '',
         //    // product_type: '',
@@ -81,21 +83,28 @@ class AdminProductsController extends Controller
 //            dd($imgPath);
 //        dd(asset($imgPath));
 //        dd(($request->product_image));
+        $category = Category::where('category_name', $request->category)->first();
+//        if($category){
+//            $category->id=9;
+//        }
 
-      $product= Product::create([
+
+        $product = Product::create([
             'product_name' => $request->product_name,
             'product_type' => 0,
             'description' => $request->description,
             'stock_quantity' => $request->stock_quantity,
             'points_price' => '0.00',
-            'cat_id' => $request->category,
+            'cat_id' => $category ?? 9,
             'favorite_count' => 0,
             'order_count' => 0,
-           'product_image'=>asset($imgPath)
+            'product_image' => asset($imgPath)
         ]);
         ProductPricing::create([
-            'product_id'=>$product->id,
-            'selling_price'=>$request->selling_price,
+            'product_id' => $product->id,
+            'base_price' => $request->selling_price,
+            'selling_price' => $request->selling_price,
+            'discount'=>0,
         ]);
 
         return redirect(route('admin.product.index'));
@@ -138,22 +147,23 @@ class AdminProductsController extends Controller
         $imgPath = ''; // Define the variable with a default value
 
 //        dd($request);
-        $request->validate([
-            'product_name' => 'required|string|max:255',
-//            'product_image.*' => 'mimes:jpg,png,jpeg,webp|max:5000',
-            'description' => 'required|string',
-            'stock_quantity' => 'required|numeric|min:0',
-            'category' => 'required|exists:categories,id', // Assuming 'category' is a foreign key referencing a 'categories' table
-            'selling_price' => 'required|numeric|min:0',
-        ]);
+//        $request->validate([
+//            'product_name' => 'required|string|max:255',
+////            'product_image.*' => 'mimes:jpg,png,jpeg,webp|max:5000',
+//            'description' => 'required|string',
+//            'stock_quantity' => 'required|numeric|min:0',
+//            'category' => 'required|exists:categories,id', // Assuming 'category' is a foreign key referencing a 'categories' table
+//            'selling_price' => 'required|numeric|min:0',
+//        ]);
 
 //        dd($request->hasFile('product_image'));
+        $category = Category::where('category_name', $request->category)->first();
 
         if ($request->hasFile('product_image')) {
 
             $imgPath = $this->saveFile($request->product_image, '/productsImages');
             $product->update([
-               'product_image'=> asset($imgPath),
+                'product_image' => asset($imgPath),
             ]);
         }
 
@@ -161,14 +171,16 @@ class AdminProductsController extends Controller
             'product_name' => $request->product_name,
             'description' => $request->description,
             'stock_quantity' => $request->stock_quantity,
-            'cat_id' => $request->category,
+            'cat_id' => $category->id,
             // Add other fields as necessary
         ]);
-        $priceing=ProductPricing::where("product_id",$product->id);
+        $priceing = ProductPricing::where("product_id", $product->id);
         $priceing->update([
-            'product_id'=>$product->id,
-            'selling_price'=>$request->selling_price,
+            'product_id' => $product->id,
+            'selling_price' => $request->selling_price,
         ]);
+        return redirect(route('admin.product.index'));
+
 //        return response()->json(['message' => 'Product updated successfully']);
 
     }

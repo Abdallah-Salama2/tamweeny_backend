@@ -73,9 +73,9 @@ class Orders_madeController extends Controller
 
 //        $customerId = auth()->user()->id;
         $orders = OrderResource2::collection(Order::where('delivery_status', 'Pending')->get());
-        if ($orders->isEmpty()) {
-            return response()->json(['error' => 'No orders yet'], 500);
-        }
+//        if ($orders->isEmpty()) {
+//            return response()->json(['error' => 'No orders yet'], 500);
+//        }
         foreach ($orders as $order) {
             $orderData = new OrderResource2($order);
             $orderData['ordersMade'] = Orders_madeResource::collection(

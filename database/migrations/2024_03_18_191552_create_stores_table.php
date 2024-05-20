@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
             $table->foreignId('owner_id')->nullable()->constrained('users')->cascadeOnDelete();
-            $table->string('store_name', 100);
-            $table->string('address', 255);
-            $table->string('phone_number', 100);
-            $table->string('type', 50);
-            $table->integer('valid');
-            $table->decimal('latitude', 10, 8);
-            $table->decimal('longitude', 11, 8);
+            $table->string('store_name', 100)->nullable();
+            $table->string('address', 255)->nullable();
+            $table->string('phone_number', 100)->nullable();
+            $table->string('type', 50)->nullable();
+            $table->integer('valid')->nullable();
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
             $table->timestamp('created_at')->useCurrent(); // Set timestamps to use current time
             $table->timestamp('updated_at')->useCurrent(); // Set timestamps to use current time
 

@@ -20,7 +20,9 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('/get-permissions', function () {
+    return auth()->check()?auth()->user()->jsPermissions():0;
+});
 Route::get('/', function () {
     return Inertia::render('Auth/Login', [
         'status' => session('status'),
@@ -59,9 +61,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('orders', OrderController::class);
 
-    Route::get('/get-permissions', function () {
-        return auth()->check()?auth()->user()->jsPermissions():0;
-    });
+
 //    Route::resource('order',\App\Http\Controllers\Api\OrderController::class);
 });
 

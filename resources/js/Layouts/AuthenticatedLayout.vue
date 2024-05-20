@@ -1,10 +1,14 @@
 <script setup>
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import {route} from "ziggy-js";
 import {Link, usePage} from '@inertiajs/vue3'
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
 
+const page = usePage()
+const flashSuccess = computed(() => page.props.flash.success)
+// const user = computed(() => page.props.user)
 const isUserMenuOpen = ref(false);
+const user = page.props.auth.user;
 
 const toggleUserMenu = () => {
     isUserMenuOpen.value = !isUserMenuOpen.value;
@@ -35,48 +39,48 @@ const toggleUserMenu = () => {
                                 class="self-center text-xl font-semibold mr-2 sm:text-2xl whitespace-nowrap dark:text-white">Tamweeny</span>
                         </a>
                     </div>
-                    <div class="flex items-center">
-                        <div class="flex items-center ms-3">
-                            <div class="relative">
-                                <button @click="toggleUserMenu" type="button"
-                                        class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                                        aria-haspopup="true" :aria-expanded="isUserMenuOpen.toString()">
-                                    <span class="sr-only">Open user menu</span>
-                                    <img class="w-12 h-12 rounded-full"
-                                         src="../img/WhatsApp%20Image%202024-05-15%20at%2019.04.29_ad4d8a32.jpg"
-                                         alt="user photo">
-                                </button>
-                            </div>
-                            <div v-if="isUserMenuOpen"
-                                 class="absolute top-full left-0 z-50 mt-2 w-64 bg-white -translate-y-2 border border-gray-200 dark:bg-gray-800 dark:border-gray-700"
-                                 id="dropdown-user" role="menu">
-                                <div class="px-4 py-3" role="none">
-                                    <p class="text-sm text-gray-900 dark:text-white" role="none"
-                                       style="font-family: Roboto,serif ">
-                                        3amk
-                                    </p>
-                                    <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
-                                       role="none">
-                                        3amk@admin.com
-                                    </p>
-                                </div>
-                                <ul class="py-1" role="none">
-                                    <li>
-                                        <Link :href="route('profile.edit')"
-                                              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600  dark:hover:rounded-3xl dark:hover:text-white"
-                                              role="menuitem">البيانات الشخصيه
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link :href="route('logout')" method="POST" as="button"
-                                              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:rounded-3xl  dark:hover:text-white"
-                                              role="menuitem">تسجيل الخروج
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    <!--                    <div class="flex items-center">-->
+                    <!--                        <div class="flex items-center ms-3">-->
+                    <!--                            <div class="relative">-->
+                    <!--                                <button @click="toggleUserMenu" type="button"-->
+                    <!--                                        class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"-->
+                    <!--                                        aria-haspopup="true" :aria-expanded="isUserMenuOpen.toString()">-->
+                    <!--                                    <span class="sr-only">Open user menu</span>-->
+                    <!--                                    <img class="w-12 h-12 rounded-full"-->
+                    <!--                                         src="../img/WhatsApp%20Image%202024-05-15%20at%2019.04.29_ad4d8a32.jpg"-->
+                    <!--                                         alt="user photo">-->
+                    <!--                                </button>-->
+                    <!--                            </div>-->
+                    <!--                            <div v-if="isUserMenuOpen"-->
+                    <!--                                 class="absolute top-full left-0 z-50 mt-2 w-64 bg-white -translate-y-2 border border-gray-200 dark:bg-gray-800 dark:border-gray-700"-->
+                    <!--                                 id="dropdown-user" role="menu">-->
+                    <!--                                <div class="px-4 py-3" role="none">-->
+                    <!--                                    <p class="text-sm text-gray-900 dark:text-white" role="none"-->
+                    <!--                                       style="font-family: Roboto,serif ">-->
+                    <!--                                        3amk-->
+                    <!--                                    </p>-->
+                    <!--                                    <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300"-->
+                    <!--                                       role="none">-->
+                    <!--                                        3amk@admin.com-->
+                    <!--                                    </p>-->
+                    <!--                                </div>-->
+                    <!--                                <ul class="py-1" role="none">-->
+                    <!--                                    <li>-->
+                    <!--                                        <Link :href="route('profile.edit')"-->
+                    <!--                                              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600  dark:hover:rounded-3xl dark:hover:text-white"-->
+                    <!--                                              role="menuitem">البيانات الشخصيه-->
+                    <!--                                        </Link>-->
+                    <!--                                    </li>-->
+                    <!--                                    <li>-->
+                    <!--                                        <Link :href="route('logout')" method="POST" as="button"-->
+                    <!--                                              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:rounded-3xl  dark:hover:text-white"-->
+                    <!--                                              role="menuitem">تسجيل الخروج-->
+                    <!--                                        </Link>-->
+                    <!--                                    </li>-->
+                    <!--                                </ul>-->
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
                 </div>
             </div>
         </nav>
@@ -86,6 +90,22 @@ const toggleUserMenu = () => {
                class=" fixed top-0 right-0 z-40 w-1/6 layout sideBar h-screen pt-20 transition-transform -translate-x-full   sm:translate-x-0  "
                aria-label="Sidebar" style="z-index:1">
             <div class="h-full px-3 pb-4 overflow-y-auto  dark:layout mt-2">
+                <div class=" text-center py-2 font-bold">
+                    <img class="w-24 h-24 rounded-full" style="margin-right: 103px;"
+                         src="../img/WhatsApp%20Image%202024-05-15%20at%2019.04.29_ad4d8a32.jpg"
+                         alt="user photo">
+                    <div class="px-4 py-3" role="none">
+                        <p class="text-md text-gray-900 dark:text-white" role="none"
+                           style="font-family: Roboto,serif ">
+                            <!--                            {{ user.name }}-->
+                            3amk
+                        </p>
+                        <p class=" font-bold text-md text-gray-900 truncate dark:text-gray-300"
+                           role="none">
+                            {{ user.email }}
+                        </p>
+                    </div>
+                </div>
                 <ul class="space-y-2 font-medium">
                     <li>
                         <ResponsiveNavLink :href="route('admin.product.index')"
@@ -121,21 +141,21 @@ const toggleUserMenu = () => {
                             </ResponsiveNavLink>
                         </div>
                     </li>
-                    <!--                        <li>-->
-                    <!--                            <a href="#"-->
-                    <!--                               class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">-->
-                    <!--                                <svg-->
-                    <!--                                    class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"-->
-                    <!--                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"-->
-                    <!--                                    viewBox="0 0 18 18">-->
-                    <!--                                    <path-->
-                    <!--                                        d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z"/>-->
-                    <!--                                </svg>-->
-                    <!--                                <span class="flex-1 ms-3 whitespace-nowrap">Kanban</span>-->
-                    <!--                                <span-->
-                    <!--                                    class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">Pro</span>-->
-                    <!--                            </a>-->
-                    <!--                        </li>-->
+                    <li>
+                        <a href="#"
+                           class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                            <svg
+                                class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                viewBox="0 0 18 18">
+                                <path
+                                    d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z"/>
+                            </svg>
+                            <span class="flex-1 ms-3 whitespace-nowrap">الفئات</span>
+                            <span
+                                class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">Pro</span>
+                        </a>
+                    </li>
                     <li>
                         <ResponsiveNavLink :href="route('admin.product.index')"
                                            :active="route().current('admin.products.')"
@@ -260,6 +280,23 @@ const toggleUserMenu = () => {
                             <span class="flex-1 ms-3 whitespace-nowrap">انشاء حساب للموظفين</span>
                         </ResponsiveNavLink>
                     </li>
+                    <li>
+
+                        <ResponsiveNavLink :href="route('logout')" method="POST" as="button"
+                                           :active="route().current('admin.user.create')"
+                                           class="absolute  bottom-5 right-20 flex  p-2  rounded-lg  hover:bg-gray-100 dark:hover:bg-gray-700 group ">
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                 xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                 viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"/>
+                            </svg>
+
+
+                            <span class="flex-1 ms-3 whitespace-nowrap">تسجيل الخروج</span>
+                        </ResponsiveNavLink>
+                    </li>
                 </ul>
             </div>
         </aside>
@@ -285,7 +322,10 @@ const toggleUserMenu = () => {
 body {
     background: rgba(45, 45, 45, 100%) url('/resources/js/img/base desktop.png') no-repeat center center fixed;
     background-size: cover;
+}
 
+body::-webkit-scrollbar {
+    display: none;
 }
 
 .activeColor {

@@ -81,24 +81,24 @@ const create = () => {
                 </div>
                 <input id="fileInput"
                        class="border rounded-md file:px-2 file:py-2 border-gray-200 dark:border-gray-700 file:text-gray-700 file:dark:text-gray-400 file:border-0 file:bg-gray-100 file:dark:bg-gray-800 file:font-medium file:hover:bg-gray-200 file:dark:hover:bg-gray-700 file:hover:cursor-pointer file:mr-4"
-                       type="file" @change="previewImage" @input="addFile" style="margin-right: 630px;margin-top: 20px">
+                       type="file" @change="previewImage" @input="addFile" style="margin-right: 630px;margin-top: 20px" required>
 
                 <div class="gg">
                     <div style="float: right" class="mr-96 mt-2">
                         <h1 class="text-3xl font-bold">بيانات المنتج</h1>
                         <label for="product_name" class="text-white">اسم المنتج</label><br>
-                        <input v-model="data.product_name" id="product_name" type="text" class=""><br>
+                        <input v-model="data.product_name" id="product_name" type="text" class="" required><br>
                         <span v-if="data.errors.product_name" class="text-red-500">{{ data.errors.product_name }}</span>
                         <label for="description" class="text-white">الوصف</label><br>
-                        <input v-model="data.description" id="description" type="text"><br>
+                        <input v-model="data.description" id="description" type="text" required><br>
                         <span v-if="data.errors.description" class="text-red-500">{{ data.errors.description }}</span>
                         <label for="price" class="text-white">السعر</label><br>
-                        <input v-model="data.selling_price" id="price" type="number"><br>
+                        <input v-model="data.selling_price" id="price" type="number" required><br>
                         <label for="stock_quantity" class="text-white">الكمية</label><br>
-                        <input v-model="data.stock_quantity" id="amount" type="number"><br>
+                        <input v-model="data.stock_quantity" id="amount" type="number" required><br>
                         <span v-if="data.errors.stock_quantity" class="text-red-500">{{ data.errors.stock_quantity }}</span>
                         <label for="category" class="text-white">الفئة</label><br>
-                        <select id="category" v-model="data.category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <select id="category" v-model="data.category" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                             <option selected>اختر</option>
                             <option :key="category.id" :value="category.id" v-for="category in categories">{{ category.category_name }}</option>
                         </select><br>
