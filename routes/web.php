@@ -1,11 +1,14 @@
 <?php
 
-use App\Http\Controllers\Admin\Producs\AdminProductsController;
+use App\Http\Controllers\Admin\CardsController;
+use App\Http\Controllers\Admin\Products\AdminProductsController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Supplier\OffersController;
+use App\Http\Controllers\Supplier\OrdersController;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -24,6 +27,8 @@ Route::get('/get-permissions', function () {
     return auth()->check()?auth()->user()->jsPermissions():0;
 });
 Route::get('/', function () {
+    Debugbar::info('INFO');
+
     return Inertia::render('Auth/Login', [
         'status' => session('status'),
     ]);
@@ -48,10 +53,9 @@ Route::middleware('auth')->group(function () {
     Route::post('admin/addUser/{userType}',[UserController::class,'store'])->name('admin.user.store');
 
     Route::get('/admin/offer/index', [OffersController::class,'index'])->middleware(['auth',])->name('admin.offer.index');
-    Route::get('/admin/offer/index', [OffersController::class,'index'])->middleware(['auth',])->name('admin.offer.index');
 
-    Route::get('supplier/orders',[\App\Http\Controllers\Supplier\OrdersController::class,'index'])->name('supplier.order.index');
-    Route::post('supplier/orders/{orderId}',[\App\Http\Controllers\Supplier\OrdersController::class,'update'])->name('supplier.order.update');
+    Route::get('supplier/orders',[OrdersController::class,'index'])->name('supplier.order.index');
+    Route::post('supplier/orders/{orderId}',[OrdersController::class,'update'])->name('supplier.order.update');
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -60,6 +64,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/product/{product}', [AdminProductsController::class, 'destroy'])->name('admin.product.destroy');
 
     Route::resource('orders', OrderController::class);
+
+    Route::get('/admin/cards', [CardsController::class,'index'])->middleware(['auth',])->name('admin.card.index');
+    Route::post('/admin/cards', [CardsController::class,'update'])->middleware(['auth',])->name('admin.card.update');
 
 
 //    Route::resource('order',\App\Http\Controllers\Api\OrderController::class);

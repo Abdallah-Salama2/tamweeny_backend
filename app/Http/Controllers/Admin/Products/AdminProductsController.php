@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Producs;
+namespace App\Http\Controllers\Admin\Products;
 
 use App\Http\Controllers\Controller;
+use App\Http\trait\GeneralTrait;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductPricing;
+use App\Services\FileStorage\Interfaces\FileStorageInterface;
+use App\Services\Product\Interfaces\ProductFetcherInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
-use App\Http\trait\GeneralTrait;
 
 class AdminProductsController extends Controller
 {
@@ -18,22 +19,61 @@ class AdminProductsController extends Controller
     /**
      * Display a listing of the resource.
      */
+    protected $productFetcher;
 
+    public function __construct(
+        ProductFetcherInterface $productFetcher,
+
+    )
+    {
+        $this->productFetcher = $productFetcher;
+
+    }
 
     public function upload()
     {
 
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        //
-//        $customerId = auth()->user()->id;
+        $filters = $request->only(['quantityFrom', 'quantityTo', 'priceFrom', 'priceTo', 'category']);
+        $name = $request->input('name', '');
 
-        $products = Product::with('productpricing', 'category')->where('product_type', 0)->latest()->get();
         $categories = Category::all();
-        return Inertia::render('Admin/Products/Index', ['products' => $products, 'categories' => $categories]);
+
+        $productsQuery = $this->productFetcher->getAllProducts()->where('product_type', 0);
+
+        if ($name) {
+            $productsQuery->where('product_name', 'like', '%' . $name . '%');
+        }
+
+        $products = $productsQuery->filter($filters)->paginate(8);
+        return Inertia::render('Admin/Products/Index', [
+            'filters' => $filters,
+            'categories' => $categories,
+            'name' => $name,
+            'products' => $products,
+//            dd($proudcts),
+
+//            dd($this->productFetcher->getAllProducts()->where('product_type', 0)->filter($filters)->latest()->paginate(8))
+        ]);
     }
+
+    public function findProduct($productName){
+
+    }
+
+
+//    public function index()
+//    {
+//        //
+////        $customerId = auth()->user()->id;
+//
+//        $products = Product::with('productpricing', 'category')->where('product_type', 0)->latest()->get();
+//        $categories = Category::all();
+//        return Inertia::render('Admin/Products/Index', ['products' => $products, 'categories' => $categories]);
+//    }
 
     /**
      * Show the form for creating a new resource.
@@ -48,7 +88,7 @@ class AdminProductsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request,FileStorageInterface $fileStorageService)
     {
         $imgPath = ''; // Define the variable with a default value
 //        dd($request);
@@ -78,7 +118,7 @@ class AdminProductsController extends Controller
 
         if ($request->hasFile('product_image')) {
 
-            $imgPath = $this->saveFile($request->product_image, '/productsImages');
+            $imgPath = $fileStorageService->storeFile($request->product_image, '/public/uploads/productsImages');
         }
 //            dd($imgPath);
 //        dd(asset($imgPath));
@@ -104,7 +144,7 @@ class AdminProductsController extends Controller
             'product_id' => $product->id,
             'base_price' => $request->selling_price,
             'selling_price' => $request->selling_price,
-            'discount'=>0,
+            'discount' => 0,
         ]);
 
         return redirect(route('admin.product.index'));
@@ -141,7 +181,7 @@ class AdminProductsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, Product $product,FileStorageInterface $fileStorageService)
     {
         //
         $imgPath = ''; // Define the variable with a default value
@@ -161,7 +201,7 @@ class AdminProductsController extends Controller
 
         if ($request->hasFile('product_image')) {
 
-            $imgPath = $this->saveFile($request->product_image, '/productsImages');
+            $imgPath = $fileStorageService->storeFile($request->product_image, '/public/uploads/productsImages');
             $product->update([
                 'product_image' => asset($imgPath),
             ]);

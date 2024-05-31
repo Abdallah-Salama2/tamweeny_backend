@@ -26,12 +26,12 @@ class AdminCardRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:admin_cards,email',
-            'gender' => ['required', Rule::in(['male', 'female'])],
+            'gender' => ['required', Rule::in(['male', 'female','ذكر','انثى'])],
             'phoneNumber' => 'required|string|max:20',
             'socialStatus' => 'required|string|max:255',
             'salary' => 'required|numeric|min:0',
             'nationalIdCardAndBirthCertificate' => 'required|file|mimes:jpeg,png,pdf|max:2048',
-            'followersNationalIdCardsAndBirthCertificates.*' => 'file|mimes:jpeg,png,pdf|max:2048',
+            'followersNationalIdCardsAndBirthCertificates.*' => 'file|mimes:jpeg,txt,png,pdf|max:2048',
         ];
     }
 }

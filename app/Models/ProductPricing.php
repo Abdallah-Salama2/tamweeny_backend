@@ -22,6 +22,8 @@ class ProductPricing extends Model
 
     ];
 
+    protected $sortable=['selling_price'];
+
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');

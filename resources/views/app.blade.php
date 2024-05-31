@@ -23,6 +23,8 @@
                 jsPermissions: {!! auth()->check()?auth()->user()->jsPermissions():0 !!}
             }
         </script>
+        <script src="https://kit.fontawesome.com/beb8de93b0.js" crossorigin="anonymous"></script>
+
     </head>
     <body class="font-sans antialiased w-full p-0 m-0">
         @inertia

@@ -9,12 +9,12 @@ use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\Orders_madeController;
+use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductPricingController;
 use App\Http\Controllers\Api\StoreController;
 use App\Http\Controllers\Api\StoreOwnerController;
 use App\Http\Controllers\FIleController;
 use App\Http\Controllers\TestController;
-use App\Http\Controllers\Api\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*

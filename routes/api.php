@@ -1,19 +1,18 @@
 <?php
 
-use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AdminCardController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CardController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CustomerController;
-use App\Http\Controllers\Api\DeliveryAuthController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\Orders_madeController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\StoreController;
 use App\Http\Controllers\Api\StoreOwnerController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\FIleController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
@@ -75,7 +74,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/recommended', [ProductController::class,'recommendedProducts']);            //Products
 //    Route::resource('products',ProductController::class)->only(['index']);
 
-//    Route::get("/products/{product}",[ProductController::class,'show']);
+    Route::get("/products/{product}",[ProductController::class,'show']);
     Route::controller(ProductController::class)->group(function () {
         Route::get('/products', 'index');// ['@role customer , delviery']//Products
         Route::get('/productId/{product?}', 'searchForProductById');
@@ -83,6 +82,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/offers', 'offers');       //ProductPricing
     });
     Route::get('/fillStoresProducts', [ProductController::class, 'fillStoreProductsTable']);
+    Route::post('/recommendedProducts2/{id1}/{id2}', [ProductController::class, 'recommendedProducts2']);
+
 
 //    Route::resource("/favorites",FavoriteController::class)->only(["index","show"]);
     Route::controller(FavoriteController::class)->group(function () {

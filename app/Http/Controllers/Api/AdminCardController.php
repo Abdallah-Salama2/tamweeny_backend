@@ -5,110 +5,57 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminCardRequest;
 use App\Models\AdminCard;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use App\Models\User;
+use App\Services\FileStorage\FolderCounterService;
+use App\Services\FileStorage\Interfaces\FileStorageInterface;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class AdminCardController extends Controller
 {
-    /**
-     * Store a newly created resource in storage.
-     */
+    private $fileStorageService;
+
+    public function __construct(FileStorageInterface $fileStorageService)
+    {
+        $this->fileStorageService = $fileStorageService;
+    }
+
     public function store(AdminCardRequest $request)
     {
-        // Validate the request data
         $request->validated();
-        // Store the admin card details
-        $nationalIdCardPath = $this->storeFile($request->file('nationalIdCardAndBirthCertificate'));
-        $followersNationalIdCardsPaths = $this->storeMultipleFiles($request->file('followersNationalIdCardsAndBirthCertificates'));
 
-        // Create a new AdminCard instance and store the file paths in the database
-        $adminCard = AdminCard::create([
-            'name' => $request->input('name'),
-            'admin_id' => 1, // Assuming a default admin ID here
-            'email' => $request->input('email'),
-            'gender' => $request->input('gender'),
-            'phone_number' => $request->input('phoneNumber'),
-            'social_status' => $request->input('socialStatus'),
-            'salary' => $request->input('salary'),
-            'individuals_number' => 1,
-            'national_id_card_and_birth_certificate' => $nationalIdCardPath,
-            'followers_national_id_cards_and_birth_certificates' => json_encode($followersNationalIdCardsPaths),
-        ]);
+        try {
+            // Generate unique directory path
+            $uniqueDir = '/public/uploads/CardFiles/' . $this->fileStorageService->getNextFolderCounter();
+            Storage::makeDirectory($uniqueDir);
 
-        return response()->json(["message" => "Card created and waiting for approval"], 200);
-    }
+            // Store files
+            $nationalIdCardPath = $this->fileStorageService->storeFile($request->file('nationalIdCardAndBirthCertificate'), $uniqueDir);
+            $followersNationalIdCardsPaths = $this->fileStorageService->storeMultipleFiles($request->file('followersNationalIdCardsAndBirthCertificates'), $uniqueDir);
 
-    /**
-     * Validate the request data.
-     */
-    private function validateRequest(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:admin_cards,email',
-            'gender' => ['required', Rule::in(['male', 'female'])],
-            'phoneNumber' => 'required|string|max:20',
-            'socialStatus' => 'required|string|max:255',
-            'salary' => 'required|numeric|min:0',
-            'nationalIdCardAndBirthCertificate' => 'required|file|mimes:jpeg,png,pdf|max:2048',
-            'followersNationalIdCardsAndBirthCertificates.*' => 'file|mimes:jpeg,png,pdf|max:2048',
-        ]);
-    }
+            // Retrieve the admin user
+            $user = User::where('user_type', 'Admin')->firstOrFail();
+//            dd($user);
+            // Create AdminCard record
+            $adminCard = AdminCard::create([
+                'name' => $request->input('name'),
+                'admin_id' => $user->id,
+                'email' => $request->input('email'),
+                'gender' => $request->input('gender'),
+                'phone_number' => $request->input('phoneNumber'),
+                'social_status' => $request->input('socialStatus'),
+                'salary' => $request->input('salary'),
+                'individuals_number' => 1,
+                'national_id_card_and_birth_certificate' => asset($nationalIdCardPath),
+                'followers_national_id_cards_and_birth_certificates' => json_encode(array_map('asset', $followersNationalIdCardsPaths)),
+            ]);
 
-    /**
-     * Store a single file and return its path.
-     */
-    private function storeFile($file)
-    {
-        // Store the file with its original name
-        return $file->storeAs('/public/uploads', $file->getClientOriginalName());
-    }
-
-    /**
-     * Store multiple files and return an array of paths.
-     */
-    private function storeMultipleFiles($files)
-    {
-        $paths = [];
-
-        if ($files) {
-            foreach ($files as $file) {
-                $paths[] = $this->storeFile($file);
-            }
+            return response()->json(["message" => "Card created and waiting for approval"], 200);
+        } catch (\Exception $e) {
+            Log::error("Error storing admin card: " . $e->getMessage());
+            return response()->json(["message" => "An error occurred while creating the card"], 500);
         }
-
-        return $paths;
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        // Your implementation
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        // Your implementation
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        // Your implementation
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        // Your implementation
-    }
+    // Other methods (show, edit, update, destroy) can be implemented similarly
 }

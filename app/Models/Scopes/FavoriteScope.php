@@ -18,6 +18,7 @@ trait FavoriteScope
      */
     public function scopeWithFavoriteStatus($query, $userId)
     {
+        //make sure favorites is the same as relation name in product model
         return $query->with(['favorite' => function ($query) use ($userId) {
             $query->where('customer_id', $userId);
         }]);

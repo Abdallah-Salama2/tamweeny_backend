@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('admin_cards', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('admin_id')->nullable()->constrained('users')->cascadeOnDelete();
-            $table->integer('card_status')->default(1);
-            $table->string('card_status_text', 50)->default('pending');
+            $table->integer('card_number')->nullable();
+            $table->string('card_status_text', 50)->default('Pending');
             $table->integer('individuals_number');
             $table->bigInteger('tamween_points')->default(0);
             $table->bigInteger('bread_points')->default(0);

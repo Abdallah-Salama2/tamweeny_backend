@@ -116,6 +116,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Card::class, 'user_id', 'id');
     }
+    public function adminCard()
+    {
+        return $this->hasOne(AdminCard::class, 'admin_id','id');
+    }
 
     public function favorite()
     {
