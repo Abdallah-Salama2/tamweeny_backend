@@ -2,8 +2,8 @@
 
 namespace App\Services\Product;
 
+use App\Interfaces\Product\ProductOfferInterface;
 use App\Models\Product;
-use App\Services\Product\Interfaces\ProductOfferInterface;
 use Illuminate\Database\Eloquent\Collection;
 
 class ProductOfferService implements ProductOfferInterface

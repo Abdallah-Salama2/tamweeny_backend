@@ -1,4 +1,46 @@
 <?php
+
+namespace App\DTO\Users;
+
+use Illuminate\Http\Request;
+
+class UserUpdateDTO
+{
+    public static function userInfoFromRequest(Request $request): array
+    {
+        $fields = [
+            'nationalId' => 'national_id',
+            'name' => 'name',
+            'email' => 'email',
+            'password' => 'password',
+            'phoneNumber' => 'phone_number',
+            'city' => 'city_state',
+            'street' => 'street',
+            'birthDate' => 'birth_date',
+        ];
+
+        $data = [];
+
+        foreach ($fields as $requestField => $dbField) {
+            if ($request->has($requestField)) {
+                $data[$dbField] = $request->input($requestField);
+            }
+        }
+
+        return $data;
+    }
+
+    public static function cardInfoFromRequest(Request $request): array
+    {
+        return $request->only([
+            'cardName',
+            'cardNumber',
+            'cardNationalId',
+            'cardPassword',
+        ]);
+    }
+}
+
 //
 //namespace App\DTO\Users;
 //
@@ -37,7 +79,7 @@
 //    }
 //}
 
-
+/*
 namespace App\DTO\Users;
 
 use Illuminate\Http\Request;
@@ -98,3 +140,4 @@ class UserUpdateDTO
     }
 
 }
+*/

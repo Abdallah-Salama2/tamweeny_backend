@@ -20,7 +20,7 @@ class UserController extends Controller
         //
 //        $customerId = auth()->user()->id;
 
-        $users = User::with('card')->where('user_type', 'Customer')->get();
+        $users = User::with('card','order')->where('user_type', 'Customer')->get();
 
 
         return Inertia::render('Admin/Users/CustomerIndex', ['users' => $users]);

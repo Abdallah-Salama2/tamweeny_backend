@@ -47,8 +47,8 @@ const sortBy = (column) => {
 
   <AuthenticatedLayout>
     <div class="overflow-hidden">
-      <h1 class="font-bold" style="color: #c6ffe6; font-size: 60px; margin-right: 25px;"> جميع الطلبات </h1>
-      <div class="relative shadow-md sm:rounded-lg mt-28">
+      <h1 class="font-bold mt-2" style="color: #c6ffe6; font-size: 60px; margin-right: 25px;"> جميع الطلبات </h1>
+      <div class="relative shadow-md sm:rounded-lg mt-20">
         <table class="w-11/12 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mr-12">
           <thead class="text-xs text-gray-100 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-100">
             <tr>

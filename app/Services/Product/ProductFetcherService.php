@@ -2,13 +2,13 @@
 
 namespace App\Services\Product;
 
+use App\Interfaces\Product\ProductFetcherInterface;
 use App\Models\Product;
-use App\Services\Product\Interfaces\ProductFetcherInterface;
 
 class ProductFetcherService implements ProductFetcherInterface
 {
 
-    public function getAllProducts(int $perPage = 8)
+    public function getAllProducts()
     {
         // TODO: Implement getAllProducts() method.
         return Product::with(['productpricing', 'category']);

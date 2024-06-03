@@ -3,6 +3,7 @@
 namespace App\Http;
 
 
+use App\Http\Middleware\HandleInertiaRequests;
 use Hamcrest\Core\Is;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -24,6 +25,8 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \Illuminate\Session\Middleware\StartSession::class,
+        HandleInertiaRequests::class,
+
 
     ];
 
@@ -42,7 +45,6 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
-            \Illuminate\Session\Middleware\StartSession::class,
 
         ],
 
@@ -77,5 +79,10 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'isAdminLoggedIn' => \App\Http\Middleware\IsAdminMiddleWare::class,
 
+    ];
+
+    protected $routeMiddleware = [
+        // Other middleware
+        'test.flash' => \App\Http\Middleware\TestFlashMessage::class,
     ];
 }

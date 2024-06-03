@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Admin\Products;
 
 use App\Http\Controllers\Controller;
 use App\Http\trait\GeneralTrait;
+use App\Interfaces\Product\ProductFetcherInterface;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductPricing;
 use App\Services\FileStorage\Interfaces\FileStorageInterface;
-use App\Services\Product\Interfaces\ProductFetcherInterface;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -21,13 +21,9 @@ class AdminProductsController extends Controller
      */
     protected $productFetcher;
 
-    public function __construct(
-        ProductFetcherInterface $productFetcher,
-
-    )
+    public function __construct(ProductFetcherInterface $productFetcher)
     {
         $this->productFetcher = $productFetcher;
-
     }
 
     public function upload()
@@ -37,6 +33,9 @@ class AdminProductsController extends Controller
 
     public function index(Request $request)
     {
+//        dd(session()->all());
+//        dd(session()->all());
+
         $filters = $request->only(['quantityFrom', 'quantityTo', 'priceFrom', 'priceTo', 'category']);
         $name = $request->input('name', '');
 
@@ -60,7 +59,8 @@ class AdminProductsController extends Controller
         ]);
     }
 
-    public function findProduct($productName){
+    public function findProduct($productName)
+    {
 
     }
 
@@ -88,7 +88,7 @@ class AdminProductsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request,FileStorageInterface $fileStorageService)
+    public function store(Request $request, FileStorageInterface $fileStorageService)
     {
         $imgPath = ''; // Define the variable with a default value
 //        dd($request);
@@ -146,8 +146,11 @@ class AdminProductsController extends Controller
             'selling_price' => $request->selling_price,
             'discount' => 0,
         ]);
+//        dd(session()->all());
+        session()->flash('success', 'تم اضافة المنتج بنجاح');
 
-        return redirect(route('admin.product.index'));
+        return redirect(route('admin.product.index'))
+            ->with('success', 'تم اضافة المنتج بنجاح');
 
     }
 
@@ -181,7 +184,7 @@ class AdminProductsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product,FileStorageInterface $fileStorageService)
+    public function update(Request $request, Product $product, FileStorageInterface $fileStorageService)
     {
         //
         $imgPath = ''; // Define the variable with a default value
@@ -219,8 +222,14 @@ class AdminProductsController extends Controller
             'product_id' => $product->id,
             'selling_price' => $request->selling_price,
         ]);
-        return redirect(route('admin.product.index'));
+//        dd(session()->all());
+        session()->flash('success', 'تم اضافة المنتج بنجاح');
 
+        return redirect(route('admin.product.index'))
+            ->with('success', 'تم اضافة المنتج بنجاح');
+
+
+// Add this line to check session data
 //        return response()->json(['message' => 'Product updated successfully']);
 
     }
@@ -233,7 +242,6 @@ class AdminProductsController extends Controller
     {
         //
         $product->delete();
-        return redirect(route('admin.product.index'));
 
     }
 

@@ -40,7 +40,7 @@ class Store extends Model
     }
     public function user()
     {
-        return $this->belongsTo(Store::class,'owner_id','id');
+        return $this->belongsTo(User::class,'owner_id','id');
     }
 
 

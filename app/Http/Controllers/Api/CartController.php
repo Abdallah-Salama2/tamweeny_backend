@@ -4,27 +4,33 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CartResource;
-use App\Models\Product;;
+use App\Models\Product;
 use App\Models\Cart;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
+    protected $customerId;
+
+    /*Global Customer ID: The $customerId property is defined and initialized in the constructor using a middleware closure to ensure the authenticated user's ID is set for each request.
+    Middleware: The middleware function ensures the $customerId is set before any controller method is executed.*/
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->customerId = auth()->user()->id;
+            return $next($request);
+        });
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-
-        $customerId = auth()->user()->id;
-        $customerCart = Cart::where("customer_id", $customerId)->get();
-
-        return response()->json(CartResource::Collection($customerCart));
+        $customerCart = Cart::where("customer_id", $this->customerId)->get();
+        return response()->json(CartResource::collection($customerCart));
     }
-
-
 
     /**
      * Update the quantity of a product in the cart.
@@ -46,10 +52,7 @@ class CartController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $customerId = auth()->user()->id;
-
-
-        $cart = Cart::where("customer_id", $customerId)
+        $cart = Cart::where("customer_id", $this->customerId)
             ->where('product_id', $productId)
             ->first();
 
@@ -70,7 +73,7 @@ class CartController extends Controller
 
         $productPrice = (int)Product::find($productId)->productpricing->selling_price;
         $newCart = Cart::create([
-            'customer_id' => $customerId,
+            'customer_id' => $this->customerId,
             'product_id' => $productId,
             'quantity' => 1,
             'total_price' => $productPrice,
@@ -83,13 +86,9 @@ class CartController extends Controller
     /**
      * Remove a product from the cart.
      */
-    public function delete(Request $request, $productId)
+    public function delete($productId)
     {
-        $userId = $request->user()->id;
-        $user = User::with('customer', 'customer.card')->find($userId);
-        $customerId = $user->customer->id;
-
-        $cart = Cart::where("customer_id", $customerId)
+        $cart = Cart::where("customer_id", $this->customerId)
             ->where('product_id', $productId)
             ->first();
 
@@ -101,5 +100,3 @@ class CartController extends Controller
         return response()->json(['message' => 'Cart item not found'], 404);
     }
 }
-
-

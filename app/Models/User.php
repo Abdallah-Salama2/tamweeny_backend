@@ -18,7 +18,6 @@ class User extends Authenticatable
     use LaravelPermissionToVueJS;
     use HasRoles;
 
-
     /**
      * The attributes that are mass assignable.
      *
@@ -39,24 +38,39 @@ class User extends Authenticatable
         'longitude',
         'store_owner_info',
         'delivery_info'
-//        'created_at',
-//        'last_login_at'
+
     ];
 
-
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'delivery_info' => 'array',
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 
+    public $timestamps = true;
+    protected $table = 'users'; // Adjust based on your table name
+    protected $primaryKey = 'id'; //
 
     public function getRouteKeyName()
     {
         return request()->route('user') === (string)(int)request()->route('user') ? 'id' : 'name';
         //This method checks if the user route parameter is a numeric string (which would typically indicate an ID). If it is, it returns 'id' as the route key name; otherwise, it returns 'name'
     }
-
 
 
     /*In your example, you have a resource route defined for 'users':
@@ -72,25 +86,6 @@ class User extends Authenticatable
     In this context, the parameter 'user' in the route refers to the placeholder for the user's identifier, which could be either the user's ID or name, based on the logic you implemented in getRouteKeyName().
 
     So, when you call request()->route('user'), Laravel retrieves the value of the 'user' route parameter, whether it's an ID or a name, depending on your implementation in getRouteKeyName().*/
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-
-    public $timestamps = true;
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'delivery_info' => 'array',
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
 
 
     public function getDeliveryInfoAttribute($value)
@@ -116,9 +111,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Card::class, 'user_id', 'id');
     }
+
     public function adminCard()
     {
-        return $this->hasOne(AdminCard::class, 'admin_id','id');
+        return $this->hasOne(AdminCard::class, 'admin_id', 'id');
     }
 
     public function favorite()
@@ -135,6 +131,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class, 'customer_id', 'id');
     }
+
     public function order2()
     {
         return $this->hasMany(Order::class, 'delivery_id', 'id');
@@ -146,13 +143,6 @@ class User extends Authenticatable
     }
 
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'users'; // Adjust based on your table name
-    protected $primaryKey = 'id'; //
 
 
 }

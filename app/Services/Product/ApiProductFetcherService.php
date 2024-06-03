@@ -2,9 +2,9 @@
 
 namespace App\Services\Product;
 
-use App\Services\Product\Interfaces\ProductFetcherInterface;
+use App\Interfaces\Product\ProductFetcherInterface;
 
-class ApiProductFetcherService implements Interfaces\ProductFetcherInterface
+class ApiProductFetcherService implements ProductFetcherInterface
 {
 
     public function getAllProducts(int $perPage = 8)

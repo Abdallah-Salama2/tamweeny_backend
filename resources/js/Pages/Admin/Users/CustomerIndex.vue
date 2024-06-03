@@ -18,6 +18,7 @@ defineProps({
   <Head title="Users" />
 
   <AuthenticatedLayout>
+    <!--    <p>{{ users }}</p>-->
     <div class=" flex flex-row flex-wrap gap-10   justify-center  mt-2  ">
       <user-card
         v-for="user in users"

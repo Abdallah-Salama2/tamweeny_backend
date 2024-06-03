@@ -6,18 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminCardRequest;
 use App\Models\AdminCard;
 use App\Models\User;
-use App\Services\FileStorage\FolderCounterService;
+use App\Services\AdminCardService;
 use App\Services\FileStorage\Interfaces\FileStorageInterface;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class AdminCardController extends Controller
 {
-    private $fileStorageService;
 
-    public function __construct(FileStorageInterface $fileStorageService)
+    protected $adminCardService;
+
+    public function __construct(AdminCardService $adminCardService)
     {
-        $this->fileStorageService = $fileStorageService;
+        $this->adminCardService = $adminCardService;
     }
 
     public function store(AdminCardRequest $request)
@@ -25,30 +26,7 @@ class AdminCardController extends Controller
         $request->validated();
 
         try {
-            // Generate unique directory path
-            $uniqueDir = '/public/uploads/CardFiles/' . $this->fileStorageService->getNextFolderCounter();
-            Storage::makeDirectory($uniqueDir);
-
-            // Store files
-            $nationalIdCardPath = $this->fileStorageService->storeFile($request->file('nationalIdCardAndBirthCertificate'), $uniqueDir);
-            $followersNationalIdCardsPaths = $this->fileStorageService->storeMultipleFiles($request->file('followersNationalIdCardsAndBirthCertificates'), $uniqueDir);
-
-            // Retrieve the admin user
-            $user = User::where('user_type', 'Admin')->firstOrFail();
-//            dd($user);
-            // Create AdminCard record
-            $adminCard = AdminCard::create([
-                'name' => $request->input('name'),
-                'admin_id' => $user->id,
-                'email' => $request->input('email'),
-                'gender' => $request->input('gender'),
-                'phone_number' => $request->input('phoneNumber'),
-                'social_status' => $request->input('socialStatus'),
-                'salary' => $request->input('salary'),
-                'individuals_number' => 1,
-                'national_id_card_and_birth_certificate' => asset($nationalIdCardPath),
-                'followers_national_id_cards_and_birth_certificates' => json_encode(array_map('asset', $followersNationalIdCardsPaths)),
-            ]);
+            $this->adminCardService->createNewCard($request);
 
             return response()->json(["message" => "Card created and waiting for approval"], 200);
         } catch (\Exception $e) {

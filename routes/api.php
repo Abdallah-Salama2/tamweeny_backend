@@ -53,14 +53,16 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 //    Route::get('userBalance', 'userBalance');
 
     Route::controller(UserController::class)->name('customer.')->group(function () {
+
         Route::patch('updateAccInfo', 'updateUserInfo');
         Route::get('isNew', 'isNewUser')->name("newUser")   ;       //Users
         Route::get('search/{name}', 'search');
-        Route::get('userss/{id?}', 'findUser');
+        Route::get('users/{id?}', 'findUser');
         Route::get('userData', 'getLoggedInUserData');
         Route::get('orderedBefore', 'orderedBefore');                //Users
         Route::get('userBalance', 'userBalance');
-        Route::Delete('deleteAccount', 'deleteUser');
+        Route::Delete('deleteAccount', 'destroy');
+
     });
 
 

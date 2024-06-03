@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use App\Services\Product\Interfaces\ProductFetcherInterface;
-use App\Services\Product\Interfaces\ProductOfferInterface;
-use App\Services\Product\Interfaces\ProductRecommendationInterface;
+use App\Interfaces\Product\ProductFetcherInterface;
+use App\Interfaces\Product\ProductOfferInterface;
+use App\Interfaces\Product\ProductRecommendationInterface;
 use App\Services\Product\ProductFetcherService;
 use App\Services\Product\ProductOfferService;
 use App\Services\Product\ProductRecommendationService;

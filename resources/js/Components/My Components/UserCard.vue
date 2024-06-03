@@ -16,7 +16,7 @@
       <label for="birthDate" class="text-white">تاريخ الميلاد</label><br />
       <input id="birthDate" type="date" name="name" :value="user.birth_date" /><br />
       <label for="address" class="text-white">عنوان السكن</label><br />
-      <input id="address" type="text" name="name" :value="user.street +' '+ user.city_state" /><br />
+      <input id="address" type="text" name="name" :value="user.street ? user.street :'' +' '+ user.city_state ? user.city_state :''" /><br />
       <div v-if="card">
         <label for="cardNumber" class="text-white">رقم بطاقة التموين</label><br />
         <input id="cardNumber" type="number" name="card_name" class="mb-5" :value="user.card ? user.card.card_number : ''" /><br />
@@ -24,22 +24,68 @@
       <!--            <span class="block spanColor">{{ user.card.card_number }}</span>-->
     </div>
 
-    <Link v-if="showOrders" class="labelColor">سجل الطلبات</Link>
+    <button v-if="showOrders" class="labelColor" @click="showModal = true">
+      سجل الطلبات
+    </button>
+    <Modal class="" :show="showModal" @close="showModal = false">
+      <!-- Content of the modal -->
+      <!--            <Link @click="showModal = false" class=" absolute left-2 top-2">-->
+      <!--                <svg class="w-8 h-8 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"-->
+      <!--                     width="24" height="24" fill="none" viewBox="0 0 24 24">-->
+      <!--                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"-->
+      <!--                          d="M6 18 17.94 6M18 18 6.06 6"/>-->
+      <!--                </svg>-->
+      <!--            </Link>-->
+      <div
+        class="w-full flex flex-col  relative shadow-2xl rounded-3xl color"
+        style="height: 400px; width: 400px; margin: auto;"
+      >
+        <table class="w-12/12 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
+          <thead class="text-xs text-gray-100 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-100">
+            <tr>
+              <th scope="col" class="px-6 py-3">
+                تاريخ الطلب
+              </th>
+              <th scope="col" class="px-6 py-3">
+                سعر الطلب
+              </th>
+              <th scope="col" class="px-6 py-3">
+                حالة الطلب
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="order in user.order" :key="order.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 text-white">
+              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                {{ order.order_date ? order.order_date : "N/A" }}
+              </th>
+              <td class="px-6 py-4">
+                {{ order.order_price ? order.order_price : "N/A" }}
+              </td>
+              <td class="px-6 py-4">
+                {{ order.delivery_status ? order.delivery_status : "N/A" }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class=" ">
+        <!-- Your modal content here -->
+      </div>
+    </Modal>
   </div>
 </template>
 
 
 <script setup>
-import { Link } from '@inertiajs/vue3'
-
 import { defineProps, ref } from 'vue'
-import { route } from 'ziggy-js'
-import { router } from '@inertiajs/vue3'
+
+import Modal from '@/Components/Modal.vue'
 
 // Define a ref to store the products
 // const products = ref([]);
 // Define a ref to track hover states for each product
-const props = defineProps({
+defineProps({
   user: Object,
   // cardNumber:Object,
   // cardNumber:user.card.card_name,
@@ -53,6 +99,7 @@ const props = defineProps({
   },
 })
 
+const showModal = ref(false)
 
 </script>
 

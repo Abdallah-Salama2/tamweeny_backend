@@ -166,13 +166,13 @@ const user = page.props.auth.user
             </ResponsiveNavLink>
             <!--            </div>-->
           </li>
-
-
           <!--Categories-->
+
           <li>
-            <a
-              href="#"
-              class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+            <ResponsiveNavLink
+              :href="route('admin.categories.index')"
+              :active="route().current('admin.categories.index')"
+              class="flex items-center p-2  rounded-lg  hover:bg-gray-100 dark:hover:bg-gray-700 group "
             >
               <svg
                 class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -187,9 +187,9 @@ const user = page.props.auth.user
               <span
                 class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300"
               >Pro</span>
-            </a>
+            </ResponsiveNavLink>
+            <!--            </div>-->
           </li>
-
 
           <!--Notification-->
           <li>
@@ -290,8 +290,8 @@ const user = page.props.auth.user
           <!--All Stores In System-->
           <li>
             <ResponsiveNavLink
-              :href="route('admin.product.index')"
-              :active="route().current('admin.products.')"
+              :href="route('admin.store.index')"
+              :active="route().current('admin.store.index')"
               class="flex items-center p-2  rounded-lg  hover:bg-gray-100 dark:hover:bg-gray-700 group "
             >
               <svg

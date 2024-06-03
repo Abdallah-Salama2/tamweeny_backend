@@ -100,11 +100,11 @@ const sortBy = (column) => {
   <AuthenticatedLayout>
     <div class="">
       <form @submit.prevent="assignDelivery(data.order_id)">
-        <h1 class=" font-bold " style="color: #c6ffe6; font-size: 60px; margin-right: 25px ;  ">
+        <h1 class=" font-bold mt-2 " style="color: #c6ffe6; font-size: 60px; margin-right: 25px ;  ">
           جميع
           الطلبات
         </h1>
-        <div class="relative  shadow-md sm:rounded-lg mt-28">
+        <div class="relative  shadow-md sm:rounded-lg mt-20">
           <table
             class="w-11/12 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400  mr-12"
             style=""

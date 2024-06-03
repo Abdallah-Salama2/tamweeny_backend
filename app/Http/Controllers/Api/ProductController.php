@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
+use App\Interfaces\Product\ProductFetcherInterface;
+use App\Interfaces\Product\ProductOfferInterface;
+use App\Interfaces\Product\ProductRecommendationInterface;
 use App\Models\Product;
 use App\Models\Store;
-use App\Services\Product\Interfaces\ProductFetcherInterface;
-use App\Services\Product\Interfaces\ProductOfferInterface;
-use App\Services\Product\Interfaces\ProductRecommendationInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -45,8 +45,8 @@ class ProductController extends Controller
     {
         $recommendedProducts = $this->productRecommendation->getRecommendedProducts();
         return response()->json([
-            'Most Ordered' => new ProductResource($recommendedProducts->first()),
-            'Most Favorited' => new ProductResource($recommendedProducts->last()),
+            'Most Ordered' => new ProductResource($recommendedProducts[0]),
+            'Most Favorited' => new ProductResource($recommendedProducts[1]),
         ]);
     }
 

@@ -25,7 +25,7 @@ class ProductResource extends JsonResource
 //        $id=$favorite['id'];
         return [
             'id' => $this->id,
-            'productName' => $this->description,
+            'productName' => $this->product_name,
             'productType' => $this->product_type,
             'productImage' => $this->product_image,
             'imageExtension' => $this->image_extension,

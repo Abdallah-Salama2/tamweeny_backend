@@ -9,24 +9,6 @@ use Illuminate\Http\Request;
 class UserRegisterDTO
 {
 
-//    public static function validation(Request $request)
-//    {
-//
-//        $request->validate([
-//            'nationalId' => 'required|string|max:255|unique:users,national_id',
-//            'name' => 'required|string|max:255',
-//            'email' => 'required|string|email|max:255|unique:users,email',
-//            'password' => ['required', 'min:8'],
-//            'phoneNumber' => 'required|string|max:255',
-//            'city' => 'required|string|max:255',
-//            'street' => 'required|string|max:255',
-//            'birthDate' => 'required|date',
-//            'cardName' => 'required|string|max:255',
-//            'cardNumber' => 'required|string|max:255|unique:cards,card_number',
-//            'cardNationalId' => 'required|string|max:255|unique:cards,card_national_id',
-//            'cardPassword' => 'required|string|max:255',
-//        ]);
-//    }
 
     public static function userInfoFromRequest(Request $request): array
     {

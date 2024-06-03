@@ -2,8 +2,8 @@
 
 namespace App\Services\Product;
 
+use App\Interfaces\Product\ProductRecommendationInterface;
 use App\Models\Product;
-use App\Services\Product\Interfaces\ProductRecommendationInterface;
 
 class ProductRecommendationService implements ProductRecommendationInterface
 {
