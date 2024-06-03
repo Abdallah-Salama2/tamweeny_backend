@@ -74,6 +74,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 //    });
 
     Route::get('/recommended', [ProductController::class,'recommendedProducts']);            //Products
+    Route::get('/model', [ProductController::class,'model']);            //Products
 //    Route::resource('products',ProductController::class)->only(['index']);
 
     Route::get("/products/{product}",[ProductController::class,'show']);

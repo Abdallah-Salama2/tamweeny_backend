@@ -40,6 +40,14 @@ class ProductController extends Controller
             'totalPages' => $numberOfPages
         ]);
     }
+    public function model(Request $request)
+    {
+        $allProducts = $this->productFetcher->getAllProducts()->get();
+        $products = ProductResource::collection($allProducts);
+        return response()->json([
+            'products' => $products,
+        ]);
+    }
 
     public function recommendedProducts(Request $request)
     {
