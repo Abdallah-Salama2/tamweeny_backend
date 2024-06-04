@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\DTO\Users\UserUpdateDTO;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\modelResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\UserService;
@@ -17,8 +18,10 @@ class UserController extends Controller
     //List all users
     public function index(): JsonResponse
     {
-        $users = User::all();
-        return  response()->json($users);
+        $users = User::with('card','favorite','order_made')->where('user_type','customer')->get();
+//        return  response()->json($users);
+        return  response()->json(modelResource::collection($users));
+
     }
 
     // Update user info

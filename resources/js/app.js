@@ -6,6 +6,9 @@ import { createInertiaApp } from '@inertiajs/vue3'
 import LaravelPermissionToVueJS from 'laravel-permission-to-vuejs'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 import { ZiggyVue } from 'ziggy-js'
+import Toaster from '@meforma/vue-toaster'
+import ToastPlugin from 'vue-toast-notification'
+
 // import { VBHover } from 'bootstrap-vue'
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel'
@@ -17,6 +20,11 @@ createInertiaApp({
   setup({ el, App, props, plugin }) {
     return createApp({ render: () => h(App, props) })
       .use(plugin)
+      .use(Toaster, {
+      // One of the options
+        position: 'top',
+      })
+      .use(ToastPlugin)
       .use(ZiggyVue)
       .use(LaravelPermissionToVueJS)
       .mount(el)

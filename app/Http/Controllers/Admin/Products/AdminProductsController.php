@@ -47,7 +47,7 @@ class AdminProductsController extends Controller
             $productsQuery->where('product_name', 'like', '%' . $name . '%');
         }
 
-        $products = $productsQuery->filter($filters)->paginate(8);
+        $products = $productsQuery->filter($filters)->latest()->paginate(8);
         return Inertia::render('Admin/Products/Index', [
             'filters' => $filters,
             'categories' => $categories,

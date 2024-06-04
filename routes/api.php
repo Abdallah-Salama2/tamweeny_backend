@@ -38,11 +38,13 @@ Route::get('/test2', [AdminCardController::class, 'create']);
 Route::post('/login', [AuthController::class, 'login']);
 //Route::post('/login', [DeliveryAuthController::class, 'login']);
 
-Route::get('/model', [Orders_madeController::class, 'model']);
+//Route::get('/model', [Orders_madeController::class, 'model']);
+Route::get('/modelProducts', [ProductController::class,'model']);            //Products
+Route::get('/modelUsers', [UserController::class,'index']);            //Products
 
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
-Route::get('/userss', [UserController::class, 'index']);                //Users
+//Route::get('/userss', [UserController::class, 'index']);                //Users
 //Route::get('/ay7aga', [AuthController::class, 'ay7aga']);                //Users
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
@@ -74,7 +76,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 //    });
 
     Route::get('/recommended', [ProductController::class,'recommendedProducts']);            //Products
-    Route::get('/model', [ProductController::class,'model']);            //Products
 //    Route::resource('products',ProductController::class)->only(['index']);
 
     Route::get("/products/{product}",[ProductController::class,'show']);
@@ -126,6 +127,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     });
 
+    Route::post('/recommendations', [ProductController::class, 'getRecommendations']);
+
 
 //    Route::get('/model', [Orders_madeController::class, 'ordersForModel']);
     Route::get('/customers', [CustomerController::class, 'index']);         //Customers
@@ -145,4 +148,5 @@ Route::post("/upload", [FIleController::class, 'upload']);
 //Route::get(' / test',[ProductController::class, 'test']);
 //
 //Route::get(' / users',[AuthController::class, 'test']);
+
 

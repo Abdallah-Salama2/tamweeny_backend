@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class ProductController extends Controller
 {
@@ -31,7 +32,7 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        $allProducts = $this->productFetcher->getAllProducts()->paginate(8);
+        $allProducts = $this->productFetcher->getAllProducts()->latest()->paginate(8);
         $products = ProductResource::collection($allProducts);
         $numberOfPages = $allProducts->lastPage();
 
@@ -43,11 +44,21 @@ class ProductController extends Controller
     public function model(Request $request)
     {
         $allProducts = $this->productFetcher->getAllProducts()->get();
-        $products = ProductResource::collection($allProducts);
-        return response()->json([
-            'products' => $products,
-        ]);
+        $productsArray = [];
+
+        foreach ($allProducts as $product) {
+            $productsArray[] = [
+                'product_id' => $product->id,
+                'description' => $product->description,
+                'category' => $product->category->category_name,
+                'order_count' => $product->order_count,
+                'favorite_count' => $product->favorite_count,
+            ];
+        }
+
+        return response()->json($productsArray);
     }
+
 
     public function recommendedProducts(Request $request)
     {
@@ -58,6 +69,20 @@ class ProductController extends Controller
         ]);
     }
 
+
+    public function getRecommendations(Request $request)
+    {
+        $user = auth()->user()->name;
+        $response = Http::post('http://127.0.0.1:8000/recommend', [
+            'user' => $user,
+        ]);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        return response()->json(['error' => 'Failed to fetch recommendations'], 500);
+    }
 
     public function recommendedProducts2(Request $request, $productId1, $productId2)
     {

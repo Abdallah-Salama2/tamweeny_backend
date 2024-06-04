@@ -15,15 +15,9 @@ class modelResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-//            'id' => $this->id,
-//            'orderId' => $this->order_id,
-//            'productId' => $this->product_id,
-            'productName' => $this->product_name,
-            'description' => $this->product->category->category_name,
-            'category' => $this->product->category->category_name,
-//            'quantity' => $this->quantity,
-//            'totalPrice' => $this->total_price,
-//            'customerId' => $this->customer_id
+            'user'=>$this->name,
+            'past_orders'=>$this->order_made->pluck('product_id'),
+            'favorites'=>$this->favorite->pluck('product_id')
         ];
     }
 }

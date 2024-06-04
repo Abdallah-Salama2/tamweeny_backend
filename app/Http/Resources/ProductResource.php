@@ -34,7 +34,7 @@ class ProductResource extends JsonResource
             'pointsPrice' => $this->points_price,
             'storeId' => (int)$this->store_id,
             'categoryId' => (int)$this->cat_id,
-            'favoriteCount	' => $this->favorite_count,
+            'favoriteCount' => $this->favorite_count,
             'orderCount' => $this->order_count,
             'categoryName' => $this->category->category_name,
             'categoryImage' => $this->category->category_image,

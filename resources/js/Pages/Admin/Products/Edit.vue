@@ -1,11 +1,10 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Head, Link, useForm } from '@inertiajs/vue3'
-import ProductCard from '@/Components/My Components/ProductCard.vue'
-import { onMounted, onBeforeMount, ref, computed } from 'vue'
-import UserCard from '@/Components/My Components/UserCard.vue'
-import PrimaryButton from '@/Components/PrimaryButton.vue'
+import { ref } from 'vue'
 import { route } from 'ziggy-js'
+import { createToaster } from '@meforma/vue-toaster'
+
 
 const isHovered = ref(false)
 const csrfToken = ref(document.head.querySelector('meta[name="csrf-token"]').content)
@@ -14,9 +13,7 @@ const token = document.head.querySelector('meta[name="csrf-token"]').content
 const isPreviewed = ref(false)
 const placeholderImageSrc = ref('')
 
-// const ay7aga="asdad";
 const props = defineProps({
-  // cardNumber:Array
   product: Object,
   categories: Array,
 })
@@ -29,13 +26,10 @@ const data = useForm({
   category: props.product.category.category_name,
   selling_price: props.product.productpricing.selling_price,
 },{
-  // Options object
   headers: {
-    // 'Authorization': `Bearer ${token}`, // Your authorization header
     'Content-Type': 'multipart/form-data',
-    // 'X-CSRF-TOKEN': csrfToken.value, // CSRF token header
-    // Add any other headers you need
-  } })
+  },
+})
 
 const reset = () => {
   data.product_image = null
@@ -56,41 +50,29 @@ const previewImage = (event) => {
   if (file) {
     const reader = new FileReader()
     reader.onload = (e) => {
-      // Update the placeholderImageSrc directly
       placeholderImageSrc.value = e.target.result
-      // Set isPreviewed to true to show the new image
       isPreviewed.value = true
     }
     reader.readAsDataURL(file)
   } else {
-    // Clear the placeholderImageSrc and set isPreviewed to false
     placeholderImageSrc.value = ''
     isPreviewed.value = false
   }
 }
 
-
 const update = () => {
-  // const formData = new FormData();
-  // formData.append('product_name', data.product_name);
-  // formData.append('description', data.description);
-  // formData.append('stock_quantity', data.stock_quantity);
-  // formData.append('category', data.category);
-  // formData.append('selling_price', data.selling_price);
-  // if (data.product_image) {
-  //     formData.append('product_image', data.product_image);
-  // }
+  const toaster = createToaster({ position: 'top-right', duration: 5000, width: '100%' })
 
-  data.post(route('admin.product.update',props.product))
+  toaster.success('تم تعديل المنتج')
+  data.post(route('admin.product.update', props.product))
 }
-
 </script>
 
 <template>
-  <Head title="Edit  Product" />
+  <Head title="Edit Product" />
 
   <AuthenticatedLayout>
-    <div class=" overflow-y-visible mt-3   relative">
+    <div class="overflow-y-visible mt-3 relative">
       <Link :href="route('admin.product.index')">
         <svg
           class="w-10 h-10 absolute right-8 top-5 text-gray-800 dark:text-white" aria-hidden="true"
@@ -110,7 +92,7 @@ const update = () => {
           @mouseleave="isHovered = false"
         >
           <img
-            v-if="!isPreviewed" id="previewImage" :src="product.product_image" alt="prdouct.png"
+            v-if="!isPreviewed" id="previewImage" :src="product.product_image" alt="product.png"
             style="width: 180px; height: 180px"
           />
           <img v-else :src="placeholderImageSrc" alt="" style="width: 180px; height: 180px" />
@@ -134,9 +116,7 @@ const update = () => {
             <input id="price" v-model="data.selling_price" type="number" /><br />
             <label for="stock_quantity" class="text-white">الكمية</label><br />
             <input id="amount" v-model="data.stock_quantity" type="number" /><br />
-            <span v-if="data.errors.stock_quantity" class="text-red-500">{{
-              data.errors.stock_quantity
-            }}</span>
+            <span v-if="data.errors.stock_quantity" class="text-red-500">{{ data.errors.stock_quantity }}</span>
             <label for="category" class="text-white">الفئة</label><br />
             <select
               id="category" v-model="data.category"
@@ -170,8 +150,6 @@ const update = () => {
 </template>
 
 <style scoped>
-
-
 p, h1, label {
     color: #c6ffe6;
 }
@@ -180,15 +158,12 @@ p, h1, label {
     color: #61bc84;
 }
 
-
 .gg input {
     color: white;
     background-color: transparent;
     width: 300px;
     border-radius: 10px;
     margin-bottom: 10px;
-//border: none;
-    /* Add more custom styles here */
 }
 
 .cursor-pointer {
@@ -197,5 +172,28 @@ p, h1, label {
 
 .btn-wrapper {
     text-align: center;
+}
+
+/* Toaster styles */
+.toast {
+    width: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.toast .toast-container {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+    margin: 0;
+    padding: 10px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
 }
 </style>

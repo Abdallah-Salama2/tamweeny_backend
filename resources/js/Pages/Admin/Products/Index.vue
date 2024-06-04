@@ -9,7 +9,7 @@ import ProductCard from '@/Components/My Components/ProductCard.vue'
 import Pagination from '@/Components/My Components/Pagination.vue'
 
 defineProps({
-  products: Array,
+  products: Object,
   categories: Array,
   name: String,
   filters: {

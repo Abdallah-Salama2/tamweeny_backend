@@ -6,6 +6,7 @@ import { Inertia } from '@inertiajs/inertia'
 import NProgress from 'nprogress'
 import { ref } from 'vue'
 import axios from 'axios'
+import { createToaster } from '@meforma/vue-toaster'
 
 const csrfToken = ref(document.head.querySelector('meta[name="csrf-token"]').content)
 const isHovered = ref(false)
@@ -59,6 +60,9 @@ const previewImage = (event) => {
 }
 
 const create = () => {
+  const toaster = createToaster({ position: 'top-right', duration: 5000, width: '100%' })
+
+  toaster.success('تم اضافة المنتج')
   data.post(route('admin.product.store'))
 }
 </script>
