@@ -27,6 +27,13 @@ class UserController extends Controller
         return  response()->json(modelResource::collection($users));
 
     }
+    public function tokenAndName(): JsonResponse
+    {
+//        $token=session('api_token');
+
+        return  response()->json(['Name'=>auth()->user()->name]);
+
+    }
 
     // Update user info
     public function updateUserInfo(Request $request): JsonResponse
@@ -48,7 +55,7 @@ class UserController extends Controller
     // Get logged in user data
     public function getLoggedInUserData(): JsonResponse
     {
-        $user = Auth::user();
+        $user = auth()->user();
         return response()->json(new UserResource($user));
     }
 

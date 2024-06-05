@@ -9,9 +9,12 @@ use App\Interfaces\Product\ProductOfferInterface;
 use App\Interfaces\Product\ProductRecommendationInterface;
 use App\Models\Product;
 use App\Models\Store;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
+use function Pest\Laravel\json;
 
 class ProductController extends Controller
 {
@@ -20,9 +23,9 @@ class ProductController extends Controller
     protected $productOffer;
 
     public function __construct(
-        ProductFetcherInterface        $productFetcher =null,
-        ProductRecommendationInterface $productRecommendation =null,
-        ProductOfferInterface          $productOffer=null
+        ProductFetcherInterface        $productFetcher = null,
+        ProductRecommendationInterface $productRecommendation = null,
+        ProductOfferInterface          $productOffer = null
     )
     {
         $this->productFetcher = $productFetcher;
@@ -41,6 +44,7 @@ class ProductController extends Controller
             'totalPages' => $numberOfPages
         ]);
     }
+
     public function model(Request $request)
     {
         $allProducts = $this->productFetcher->getAllProducts()->get();
@@ -69,55 +73,81 @@ class ProductController extends Controller
         ]);
     }
 
+    public function sendData()
+    {
+        $url = 'http://127.0.0.1:5000/post-data'; // Flask app URL
+
+        // Data to be sent
+        $data = [
+            'name' => 'John',
+            'age' => 30
+        ];
+
+        // Sending POST request
+        $response = Http::post($url, $data);
+
+        // Returning response from Flask
+        return $response->json();
+    }
 
     public function getRecommendations()
     {
-        try {
-            // Make an HTTP GET request to your Flask API endpoint
-            $response = Http::get('http://127.0.0.1:5000/');
-            // Check if the request was successful (status code 200)
-            if ($response->ok()) {
-                $data = $response->json();
-                $rec = [];
-                foreach ($data as $id) {
-                    // Fetch all products based on recommendations
-                    $products = Product::where("id", $id)->get();
-                    // Add products to the recommendations array
-                    $rec = array_merge($rec, $products->toArray());
-                }
-                // Return the collection of products as a JSON response
-                return response()->json(ProductResource::collection($rec));
-
-            } else {
-                // Handle the case where the request was not successful
-                return response()->json([
-                    'error' => 'Failed to fetch recommendations from Flask API'
-                ], $response->status());
-            }
-        } catch (\Exception $e) {
-            // Handle any exceptions that occur during the request
-            return response()->json([
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        $token = Session::get('api_token');
+        $gg = (string)$token;
+        $user = User::where('name', $gg)->first();
+        return $user->name;
     }
 
 
+//    public function recommendedProducts2(Request $request)
+//    {
+//
+////        return $token;
+////        $flask_url = "http://127.0.0.1:5000/?token={$api_token}";
+////        dd($flask_url);
+////        $response = Http::get($flask_url);
+////        $data = $response->json();
+//
+//        $productId1 = $data[0];
+//        $productId2 = $data[1];
+//
+//        $product1 = Product::find($productId1);
+//        $product2 = Product::find($productId2);
+//
+//        $collection = [$product1, $product2];
+//
+//        return response()->json(ProductResource::collection($collection));
+//    }
+
     public function recommendedProducts2(Request $request)
     {
+        // Get the current authenticated user's name
+        $name = auth()->user()->name;
+
+        // Make a GET request to the Flask API
         $response = Http::get('http://127.0.0.1:5000/');
         $data = $response->json();
-        $productId1=$data[0];
-        $productId2=$data[1];
 
-        $product1 = Product::find($productId1);
-        $product2 = Product::find($productId2);
+        // Check if the user's name is in the data array keys
+        if (array_key_exists($name, $data)) {
+            // Retrieve the product IDs
+            $productIds = $data[$name];
+            $productId1 = $productIds[0];
+            $productId2 = $productIds[1];
 
-        $collection = [$product1, $product2];
-//        $products=json_encode($collection,JSON_PRETTY_PRINT);
-//        print($products);
-        return response()->json(ProductResource::collection($collection));
+            // Find the products in the database
+            $product1 = Product::find($productId1);
+            $product2 = Product::find($productId2);
 
+            // Create a collection of the products
+            $collection = [$product1, $product2];
+
+            // Return the products as a JSON response
+            return response()->json(ProductResource::collection($collection));
+        }
+
+        // Return an empty response if no matching user is found
+        return response()->json(['message' => 'No recommended products found for the user.'], 404);
     }
 
     public function offers(Request $request)
@@ -146,7 +176,6 @@ class ProductController extends Controller
         $products = $this->productFetcher->findProductByName($productName);
         return ProductResource::collection($products);
     }
-
 
 
     public function fillStoreProductsTable(): void

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "37b14e505dddd48f8c808ab0526ea453",
+    "content-hash": "b441ae8cd30e5b61d26debe4ea3716c2",
     "packages": [
         {
             "name": "ahmedsaoud31/laravel-permission-to-vuejs",

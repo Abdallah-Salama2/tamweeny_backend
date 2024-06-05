@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 
 
@@ -51,7 +52,8 @@ class AuthController extends Controller
         $user = Auth::user();
         $this->updateLastLogin($user);
 
-        $token = $user->createToken($request->device_name)->plainTextToken;
+        $token = $user->createToken('token-name')->plainTextToken;
+        Session::put('api_token', $user->name);
 
         return response()->json(['token' => $token, 'userId' => $user->id, 'userType' => $user->user_type], 200);
     }

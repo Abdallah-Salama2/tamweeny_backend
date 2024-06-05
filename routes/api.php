@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\FavoriteController;
+use App\Http\Controllers\Api\FlaskController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\Orders_madeController;
 use App\Http\Controllers\Api\ProductController;
@@ -37,10 +38,14 @@ Route::post('/cardRegistration', [AdminCardController::class, 'store']);
 Route::get('/test2', [AdminCardController::class, 'create']);
 Route::post('/login', [AuthController::class, 'login']);
 //Route::post('/login', [DeliveryAuthController::class, 'login']);
+Route::get('/send-data', [ProductController::class, 'sendData']);
 
 //Route::get('/model', [Orders_madeController::class, 'model']);
 Route::get('/modelProducts', [ProductController::class,'model']);            //Products
 Route::get('/modelUsers', [UserController::class,'index']);            //Products
+Route::get('/tokenAndName', [UserController::class,'tokenAndName']);            //Products
+Route::get  ('/recommendations', [ProductController::class, 'getRecommendations']);
+Route::post('/send-token', [FlaskController::class, 'sendDataToFlaskAPI']);
 
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
@@ -57,7 +62,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::controller(UserController::class)->name('customer.')->group(function () {
 
         Route::patch('updateAccInfo', 'updateUserInfo');
-        Route::get('isNew', 'isNewUser')->name("newUser")   ;       //Users
+        Route::get('isNew', 'isNewUser')->name("newUser");       //Users
         Route::get('search/{name}', 'search');
         Route::get('users/{id?}', 'findUser');
         Route::get('userData', 'getLoggedInUserData');
@@ -127,7 +132,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     });
 
-    Route::get  ('/recommendations', [ProductController::class, 'getRecommendations']);
 
 
 //    Route::get('/model', [Orders_madeController::class, 'ordersForModel']);
