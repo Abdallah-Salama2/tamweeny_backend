@@ -70,22 +70,46 @@ class ProductController extends Controller
     }
 
 
-    public function getRecommendations(Request $request)
+    public function getRecommendations()
     {
-        $user = auth()->user()->name;
-        $response = Http::post('http://127.0.0.1:8000/recommend', [
-            'user' => $user,
-        ]);
+        try {
+            // Make an HTTP GET request to your Flask API endpoint
+            $response = Http::get('http://127.0.0.1:5000/');
+            // Check if the request was successful (status code 200)
+            if ($response->ok()) {
+                $data = $response->json();
+                $rec = [];
+                foreach ($data as $id) {
+                    // Fetch all products based on recommendations
+                    $products = Product::where("id", $id)->get();
+                    // Add products to the recommendations array
+                    $rec = array_merge($rec, $products->toArray());
+                }
+                // Return the collection of products as a JSON response
+                return response()->json(ProductResource::collection($rec));
 
-        if ($response->successful()) {
-            return $response->json();
+            } else {
+                // Handle the case where the request was not successful
+                return response()->json([
+                    'error' => 'Failed to fetch recommendations from Flask API'
+                ], $response->status());
+            }
+        } catch (\Exception $e) {
+            // Handle any exceptions that occur during the request
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        return response()->json(['error' => 'Failed to fetch recommendations'], 500);
     }
 
-    public function recommendedProducts2(Request $request, $productId1, $productId2)
+
+    public function recommendedProducts2(Request $request)
     {
+        $response = Http::get('http://127.0.0.1:5000/');
+        $data = $response->json();
+        $productId1=$data[0];
+        $productId2=$data[1];
+
         $product1 = Product::find($productId1);
         $product2 = Product::find($productId2);
 
