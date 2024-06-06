@@ -45,7 +45,7 @@ Route::get('/modelProducts', [ProductController::class,'model']);            //P
 Route::get('/modelUsers', [UserController::class,'index']);            //Products
 Route::get('/tokenAndName', [UserController::class,'tokenAndName']);            //Products
 Route::get  ('/recommendations', [ProductController::class, 'getRecommendations']);
-Route::post('/send-token', [FlaskController::class, 'sendDataToFlaskAPI']);
+//Route::post('/send-token', [FlaskController::class, 'sendDataToFlaskAPI']);
 
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 

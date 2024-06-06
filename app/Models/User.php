@@ -13,10 +13,10 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens;
-    use HasFactory, Notifiable;
     use LaravelPermissionToVueJS;
+    use HasApiTokens;
     use HasRoles;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.

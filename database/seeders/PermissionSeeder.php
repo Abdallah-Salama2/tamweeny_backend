@@ -53,7 +53,7 @@ class PermissionSeeder extends Seeder
             } elseif (in_array($permissionName, ['can-list-offers', 'can-list-products', 'can-view-favorites', 'can-addOrRemove-favorites',
                 'can-list-orders',
             ])) {
-                $supplier->givePermissionTo($permission);
+                $customerRole->givePermissionTo($permission);
             }
         }
     }

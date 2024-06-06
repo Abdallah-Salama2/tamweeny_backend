@@ -35,7 +35,7 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        $allProducts = $this->productFetcher->getAllProducts()->latest()->paginate(8);
+        $allProducts = Product::with('category','productpricing')->paginate(8);
         $products = ProductResource::collection($allProducts);
         $numberOfPages = $allProducts->lastPage();
 
@@ -92,10 +92,15 @@ class ProductController extends Controller
 
     public function getRecommendations()
     {
-        $token = Session::get('api_token');
-        $gg = (string)$token;
-        $user = User::where('name', $gg)->first();
-        return $user->name;
+        // Execute the Python script and capture the output
+        $command = escapeshellcmd('python3 /path/to/recommendations.py');
+        $output = shell_exec($command);
+
+        // Decode the JSON output from the Python script
+        $recommendations = json_decode($output, true);
+
+        // Return the recommendations as a JSON response
+        return response()->json($recommendations);
     }
 
 
