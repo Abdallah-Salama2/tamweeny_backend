@@ -90,10 +90,11 @@ class ProductController extends Controller
         return $response->json();
     }
 
+
     public function getRecommendations()
     {
-        // Execute the Python script and capture the output
-        $command = escapeshellcmd('python3 /path/to/recommendations.py');
+        // Update the path to the Python script
+        $command = escapeshellcmd('python ' . base_path('scripts/recommendations.py'));
         $output = shell_exec($command);
 
         // Decode the JSON output from the Python script

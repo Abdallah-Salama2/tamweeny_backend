@@ -44,7 +44,6 @@ Route::get('/send-data', [ProductController::class, 'sendData']);
 Route::get('/modelProducts', [ProductController::class,'model']);            //Products
 Route::get('/modelUsers', [UserController::class,'index']);            //Products
 Route::get('/tokenAndName', [UserController::class,'tokenAndName']);            //Products
-Route::get  ('/recommendations', [ProductController::class, 'getRecommendations']);
 //Route::post('/send-token', [FlaskController::class, 'sendDataToFlaskAPI']);
 
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
@@ -92,6 +91,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     });
     Route::get('/fillStoresProducts', [ProductController::class, 'fillStoreProductsTable']);
     Route::get('/recommendedProducts2', [ProductController::class, 'recommendedProducts2']);
+    Route::get  ('/recommendations', [ProductController::class, 'getRecommendations']);
 
 
 //    Route::resource("/favorites",FavoriteController::class)->only(["index","show"]);
