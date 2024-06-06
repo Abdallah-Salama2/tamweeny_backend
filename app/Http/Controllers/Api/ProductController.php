@@ -11,6 +11,7 @@ use App\Interfaces\Product\ProductRecommendationInterface;
 use App\Models\Product;
 use App\Models\Store;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -215,7 +216,29 @@ class ProductController extends Controller
         // Return an empty response if no matching user is found
         return response()->json(['message' => 'No recommended products found for the user.'], 404);
     }
-
+    public function offers(Request $request)
+    {
+//        $customerId = auth()->user()->id;
+//
+//        // Retrieve customer's favorite product IDs
+//        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
+//            ->pluck('product_id')
+//            ->toArray();
+        // Retrieve all products with pricing, category
+        $allProducts = Product::with('productpricing', 'category')->get();
+        $offers = [];
+        foreach ($allProducts as $product) {
+            if ($product->productpricing->base_price > $product->productpricing->selling_price) {
+                $offers[] = $product;
+            }
+        }
+        $products = ProductResource::collection($offers);
+//        $products->each(function ($product) use ($customerFavoriteProductIds) {
+//            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
+//
+//        });
+        return response()->json($products);
+    }
     public function searchForProductById(Request $request, ?string $productId = null)
     {
         $product = $this->productFetcher->findProductById($productId);
