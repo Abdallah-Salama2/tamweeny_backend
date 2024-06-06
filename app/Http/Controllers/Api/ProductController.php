@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use function Pest\Laravel\json;
+use function PHPUnit\Framework\isEmpty;
 
 class ProductController extends Controller
 {
@@ -37,7 +38,7 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        $allProducts = Product::with('category','productpricing')->paginate(8);
+        $allProducts = Product::with('category', 'productpricing')->paginate(8);
         $products = ProductResource::collection($allProducts);
         $numberOfPages = $allProducts->lastPage();
 
@@ -68,53 +69,106 @@ class ProductController extends Controller
 
     public function recommendedProducts(Request $request)
     {
-        $recommendedProducts = $this->productRecommendation->getRecommendedProducts();
+//        $userId = $request->user()->id;
+//        $customerId = auth()->user()->id;
+//
+//
+//        // Retrieve customer's favorite product IDs
+//        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
+//            ->pluck('product_id')
+//            ->toArray();
+        // Retrieve all products with pricing, category
+        $allProducts = Product::with('productpricing', 'category')->get();
+//        dd($allProducts);
+        // Sort products based on order_count and favorite_count in descending order
+        $sortedProducts = $allProducts->sortByDesc('order_count')->sortByDesc('favorite_count');
+        //first item the highest order 2nd item the 2nd order
+        // Take only the top two recommended products
+        $recommendedProducts = $sortedProducts->take(2);
+        // Transform products using ProductResource and set favoriteStats based on if they are favorites
+        $products = ProductResource::collection($recommendedProducts);
+//        $products->each(function ($product) use ($customerFavoriteProductIds) {
+//            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
+//        });
         return response()->json([
-            'Most Ordered' => new ProductResource($recommendedProducts[0]),
-            'Most Favorited' => new ProductResource($recommendedProducts[1]),
+           $products->first(),
+           $products->last(),
+
         ]);
+//        return $products;
     }
 
-    public function sendData()
+    public function recommendedProducts2(Request $request)
     {
-        $url = 'http://127.0.0.1:5000/post-data'; // Flask app URL
+        // Get the current authenticated user's name
+        $user = auth()->user();
+        $user->load('favorite','order_made');
+//        print(response()->json($user->favorite));
+//        dd($user);
+        // Check if the user has no favorites and has made orders
+        if (count($user->favorite) === 0 && count($user->order_made) === 0) {
+            // Call the recommendedProducts method if the conditions are met
+            return $this->recommendedProducts($request);
+        } else {
+            $name = $user->name;
+            $python = new PythonController();
+            // Call the runPythonScript function to get the recommendations
+            $recommendationsResponse = $python->runPythonScript();
 
-        // Data to be sent
-        $data = [
-            'name' => 'John',
-            'age' => 30
-        ];
+            // Check if the script executed successfully
+            if ($recommendationsResponse->getStatusCode() == 200) {
+                $recommendationsData = $recommendationsResponse->getData();
 
-        // Sending POST request
-        $response = Http::post($url, $data);
+                // Extract the output from the response
+                $output = $recommendationsData->output;
 
-        // Returning response from Flask
-        return $response->json();
-    }
+                // The last line of the output contains the JSON string with recommendations
+                $recommendationsJson = end($output);
 
+                // Decode the JSON string
+                $recommendations = json_decode($recommendationsJson, true);
 
-    public function getRecommendations()
-    {
-        // Use 'python' instead of 'python3'
-//        $command = escapeshellcmd('python ' . base_path('scripts/recommendations.py'));
-            $output = shell_exec('python C:\wamp64\www\tamweeny\scripts\recommendations.py');
+                // Check if the user's name is in the recommendations array keys
+                if (array_key_exists($name, $recommendations)) {
 
-        // Debugging: Check if $output is empty or contains errors
-        if (empty($output)) {
-            return response()->json(['error' => 'No output from Python script'], 500);
+                    // Retrieve the product IDs
+                    $productIds = $recommendations[$name];
+                    $productId1 = $productIds[0];
+                    $productId2 = $productIds[1];
+
+                    // Find the products in the database
+                    $product1 = Product::find($productId1);
+                    $product2 = Product::find($productId2);
+
+                    // Create a collection of the products
+                    $collection = [$product1, $product2];
+
+                    // Return the products as a JSON response
+                    return response()->json(ProductResource::collection($collection));
+                }
+            }
         }
-
-        // Decode the JSON output from the Python script
-        $recommendations = json_decode($output, true);
-
-        // Check if json_decode failed
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return response()->json(['error' => 'JSON decoding failed: ' . json_last_error_msg()], 500);
-        }
-
-        // Return the recommendations as a JSON response
-        return response()->json($recommendations);
+        // Return an empty response if no matching user is found
+        return response()->json(['message' => 'No recommended products found for the user.'], 404);
     }
+//
+//    public function sendData()
+//    {
+//        $url = 'http://127.0.0.1:5000/post-data'; // Flask app URL
+//
+//        // Data to be sent
+//        $data = [
+//            'name' => 'John',
+//            'age' => 30
+//        ];
+//
+//        // Sending POST request
+//        $response = Http::post($url, $data);
+//
+//        // Returning response from Flask
+//        return $response->json();
+//    }
+
 
 //    public function recommendedProducts2(Request $request)
 //    {
@@ -173,49 +227,7 @@ class ProductController extends Controller
 //        return response()->json(ProductResource::collection($offers));
 //    }
 
-    public function recommendedProducts2(Request $request)
-    {
-        // Get the current authenticated user's name
-        $name = auth()->user()->name;
-        $python=new PythonController();
-        // Call the runPythonScript function to get the recommendations
-        $recommendationsResponse = $python->runPythonScript();
 
-        // Check if the script executed successfully
-        if ($recommendationsResponse->getStatusCode() == 200) {
-            $recommendationsData = $recommendationsResponse->getData();
-
-            // Extract the output from the response
-            $output = $recommendationsData->output;
-
-            // The last line of the output contains the JSON string with recommendations
-            $recommendationsJson = end($output);
-
-            // Decode the JSON string
-            $recommendations = json_decode($recommendationsJson, true);
-
-            // Check if the user's name is in the recommendations array keys
-            if (array_key_exists($name, $recommendations)) {
-                // Retrieve the product IDs
-                $productIds = $recommendations[$name];
-                $productId1 = $productIds[0];
-                $productId2 = $productIds[1];
-
-                // Find the products in the database
-                $product1 = Product::find($productId1);
-                $product2 = Product::find($productId2);
-
-                // Create a collection of the products
-                $collection = [$product1, $product2];
-
-                // Return the products as a JSON response
-                return response()->json(ProductResource::collection($collection));
-            }
-        }
-
-        // Return an empty response if no matching user is found
-        return response()->json(['message' => 'No recommended products found for the user.'], 404);
-    }
     public function offers(Request $request)
     {
 //        $customerId = auth()->user()->id;
@@ -239,6 +251,7 @@ class ProductController extends Controller
 //        });
         return response()->json($products);
     }
+
     public function searchForProductById(Request $request, ?string $productId = null)
     {
         $product = $this->productFetcher->findProductById($productId);
