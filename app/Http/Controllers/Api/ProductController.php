@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\PythonController;
 use App\Http\Resources\ProductResource;
 use App\Interfaces\Product\ProductFetcherInterface;
 use App\Interfaces\Product\ProductOfferInterface;
@@ -93,17 +94,26 @@ class ProductController extends Controller
 
     public function getRecommendations()
     {
-        // Update the path to the Python script
-        $command = escapeshellcmd('python ' . base_path('scripts/recommendations.py'));
-        $output = shell_exec($command);
+        // Use 'python' instead of 'python3'
+//        $command = escapeshellcmd('python ' . base_path('scripts/recommendations.py'));
+            $output = shell_exec('python C:\wamp64\www\tamweeny\scripts\recommendations.py');
+
+        // Debugging: Check if $output is empty or contains errors
+        if (empty($output)) {
+            return response()->json(['error' => 'No output from Python script'], 500);
+        }
 
         // Decode the JSON output from the Python script
         $recommendations = json_decode($output, true);
 
+        // Check if json_decode failed
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return response()->json(['error' => 'JSON decoding failed: ' . json_last_error_msg()], 500);
+        }
+
         // Return the recommendations as a JSON response
         return response()->json($recommendations);
     }
-
 
 //    public function recommendedProducts2(Request $request)
 //    {
@@ -125,41 +135,85 @@ class ProductController extends Controller
 //        return response()->json(ProductResource::collection($collection));
 //    }
 
+//    public function recommendedProducts2(Request $request)
+//    {
+//        // Get the current authenticated user's name
+//        $name = auth()->user()->name;
+//
+//        // Make a GET request to the Flask API
+//        $response = Http::get('http://127.0.0.1:5000/');
+//        $data = $response->json();
+//
+//        // Check if the user's name is in the data array keys
+//        if (array_key_exists($name, $data)) {
+//            // Retrieve the product IDs
+//            $productIds = $data[$name];
+//            $productId1 = $productIds[0];
+//            $productId2 = $productIds[1];
+//
+//            // Find the products in the database
+//            $product1 = Product::find($productId1);
+//            $product2 = Product::find($productId2);
+//
+//            // Create a collection of the products
+//            $collection = [$product1, $product2];
+//
+//            // Return the products as a JSON response
+//            return response()->json(ProductResource::collection($collection));
+//        }
+//
+//        // Return an empty response if no matching user is found
+//        return response()->json(['message' => 'No recommended products found for the user.'], 404);
+//    }
+//
+//    public function offers(Request $request)
+//    {
+//        $offers = $this->productOffer->getProductsOnOffer();
+//        return response()->json(ProductResource::collection($offers));
+//    }
+
     public function recommendedProducts2(Request $request)
     {
         // Get the current authenticated user's name
         $name = auth()->user()->name;
+        $python=new PythonController();
+        // Call the runPythonScript function to get the recommendations
+        $recommendationsResponse = $python->runPythonScript();
 
-        // Make a GET request to the Flask API
-        $response = Http::get('http://127.0.0.1:5000/');
-        $data = $response->json();
+        // Check if the script executed successfully
+        if ($recommendationsResponse->getStatusCode() == 200) {
+            $recommendationsData = $recommendationsResponse->getData();
 
-        // Check if the user's name is in the data array keys
-        if (array_key_exists($name, $data)) {
-            // Retrieve the product IDs
-            $productIds = $data[$name];
-            $productId1 = $productIds[0];
-            $productId2 = $productIds[1];
+            // Extract the output from the response
+            $output = $recommendationsData->output;
 
-            // Find the products in the database
-            $product1 = Product::find($productId1);
-            $product2 = Product::find($productId2);
+            // The last line of the output contains the JSON string with recommendations
+            $recommendationsJson = end($output);
 
-            // Create a collection of the products
-            $collection = [$product1, $product2];
+            // Decode the JSON string
+            $recommendations = json_decode($recommendationsJson, true);
 
-            // Return the products as a JSON response
-            return response()->json(ProductResource::collection($collection));
+            // Check if the user's name is in the recommendations array keys
+            if (array_key_exists($name, $recommendations)) {
+                // Retrieve the product IDs
+                $productIds = $recommendations[$name];
+                $productId1 = $productIds[0];
+                $productId2 = $productIds[1];
+
+                // Find the products in the database
+                $product1 = Product::find($productId1);
+                $product2 = Product::find($productId2);
+
+                // Create a collection of the products
+                $collection = [$product1, $product2];
+
+                // Return the products as a JSON response
+                return response()->json(ProductResource::collection($collection));
+            }
         }
 
         // Return an empty response if no matching user is found
         return response()->json(['message' => 'No recommended products found for the user.'], 404);
-    }
-
-    public function offers(Request $request)
-    {
-        $offers = $this->productOffer->getProductsOnOffer();
-        return response()->json(ProductResource::collection($offers));
     }
 
     public function searchForProductById(Request $request, ?string $productId = null)

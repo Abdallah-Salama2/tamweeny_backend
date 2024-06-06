@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\StoreController;
 use App\Http\Controllers\Api\StoreOwnerController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\FIleController;
+use App\Http\Controllers\PythonController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,6 +46,7 @@ Route::get('/modelProducts', [ProductController::class,'model']);            //P
 Route::get('/modelUsers', [UserController::class,'index']);            //Products
 Route::get('/tokenAndName', [UserController::class,'tokenAndName']);            //Products
 //Route::post('/send-token', [FlaskController::class, 'sendDataToFlaskAPI']);
+Route::get('/run-python', [PythonController::class, 'runPythonScript']);
 
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 

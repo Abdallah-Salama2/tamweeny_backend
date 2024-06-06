@@ -12,12 +12,12 @@ class modelResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray($request)
     {
         return [
-            'user'=>$this->name,
-            'past_orders'=>$this->order_made->pluck('product_id'),
-            'favorites'=>$this->favorite->pluck('product_id')
+            'user' => $this->name, // Adjust according to your user fields
+            'past_orders' => $this->order_made->pluck('product_id'), // Assuming `order_made` relation returns products
+            'favorites' => $this->favorite->pluck('product_id'), // Assuming `favorite` relation returns products
         ];
     }
 }

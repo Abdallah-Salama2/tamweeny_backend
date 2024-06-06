@@ -1,0 +1,25 @@
+[
+    {
+        "user": "Alas",
+        "past_orders": [
+            4,
+            10
+        ],
+        "favorites": [
+            5,
+            9,
+            10
+        ]
+    },
+    {
+        "user": "test",
+        "past_orders": [
+            4,
+            4
+        ],
+        "favorites": [
+            4,
+            5
+        ]
+    }
+]
