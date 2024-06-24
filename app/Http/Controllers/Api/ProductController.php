@@ -237,14 +237,14 @@ class ProductController extends Controller
 //            ->pluck('product_id')
 //            ->toArray();
         // Retrieve all products with pricing, category
-        $allProducts = Product::with('productpricing', 'category')->get();
-        $offers = [];
-        foreach ($allProducts as $product) {
-            if ($product->productpricing->base_price > $product->productpricing->selling_price) {
-                $offers[] = $product;
-            }
-        }
-        $products = ProductResource::collection($offers);
+        $allProducts = Product::with('productpricing', 'category')->where('product_type',1)->latest()->get();
+//        $offers = [];
+//        foreach ($allProducts as $product) {
+//            if ($product->productpricing->base_price > $product->productpricing->selling_price) {
+//                $offers[] = $product;
+//            }
+//        }
+        $products = ProductResource::collection($allProducts);
 //        $products->each(function ($product) use ($customerFavoriteProductIds) {
 //            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
 //
@@ -272,7 +272,6 @@ class ProductController extends Controller
         $products = $this->productFetcher->findProductByName($productName);
         return ProductResource::collection($products);
     }
-
 
     public function fillStoreProductsTable(): void
     {
