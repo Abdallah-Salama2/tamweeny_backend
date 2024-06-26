@@ -3,19 +3,27 @@
 
   <AuthenticatedLayout>
     <form @submit.prevent="create">
-      <h1>ADD STORE LOCATION ON MAP BY LATITUDE AND LONGITUDE</h1>
-      <div class="   overflow-y-visible   mt-3   relative ">
-        <div class="mr-2  absolute  top-10 right-32 text-xl">
-          <label for="supplier">موزع</label>
-          <input
-            id="supplier" type="radio" name="userType" class="mt-1" style="margin-right: 12px"
-            checked @click="userType = 'Supplier'"
-          /><br /><br />
+      <!--      <h1>ADD STORE LOCATION ON MAP BY LATITUDE AND LONGITUDE</h1>-->
+      <!--        v-if="permissions.includes('list-orders')"-->
+
+      <div
+        class="overflow-y-visible mt-3 relative"
+      >
+        <div class="mr-2 absolute top-10 right-32 text-xl">
+          <div v-if="permissions.includes('add-supplier')">
+            <label for="supplier">موزع</label>
+            <input
+              id="supplier" type="radio" name="userType" class="mt-1" style="margin-right: 12px"
+              :checked="userType === 'Supplier'" @click="userType = 'Supplier'"
+            /><br /><br />
+          </div>
+
           <label for="delivery">طيار</label>
-          <input id="delivery" type="radio" name="userType" class="mr-4 mb-1" @click="userType = 'Delivery' " />
+
+          <input v-if="permissions.includes('add-supplier')" id="delivery" type="radio" name="userType" class="mr-4 mb-1" checked @click="userType = 'Delivery'" />
         </div>
 
-        <div class=" " style="margin-right: 780px">
+        <div class="" style="margin-right: 780px">
           <Link><img src="../../../img/Ellipse%202.png" class="" alt="logo.png" /></Link>
         </div>
 
@@ -23,16 +31,8 @@
           <h1 class="text-3xl font-bold">البيانات الشخصيه</h1>
           <label for="name" class="text-white">الاسم</label><br />
           <input id="name" v-model="data.name" type="text" class="" required /><br />
-          <!--                    <div v-if="data.errors.name" class="input-error">-->
-          <!--                        {{ data.errors.name }}-->
-          <!--                        &lt;!&ndash; form.erros used to show validation error hyro7 3la beds fe validation w yshof eih rules bta3etha &ndash;&gt;-->
-          <!--                    </div>-->
           <label for="nationalId" class="text-white">الرقم القومى</label><br />
           <input id="nationalId" v-model="data.nationalId" type="number" name="nationalId" required /><br />
-          <!--                    <div v-if="data.errors.nationalId" class="input-error">-->
-          <!--                        {{ data.errors.nationalId }}-->
-          <!--                        &lt;!&ndash; form.erros used to show validation error hyro7 3la beds fe validation w yshof eih rules bta3etha &ndash;&gt;-->
-          <!--                    </div>-->
           <label for="phoneNumber" class="text-white">رقم المحمول</label><br />
           <input id="number" v-model="data.phoneNumber" type="tel" name="phoneNumber" required /><br />
           <label for="birthDate" class="text-white">تاريخ الميلاد</label><br />
@@ -44,14 +44,8 @@
             <input id="storeName" v-model="data.storeName" type="text" name="name" required /><br />
             <label for="storeAddress" class="text-white">عنوان محل التوزيع</label><br />
             <input id="storeAddress" v-model="data.storeAddress" type="text" name="name" required /><br />
-            <!--                    <label for="cardNumber" class="text-white">رقم بطاقة التموين</label><br>-->
-            <!--                    <input v-model="data.cardNumber" id="cardNumber" type="number" name="cardNumber" class="mb-5"><br>-->
           </section>
         </div>
-        <!--                                @role('storeOwner')-->
-
-        <!--                                @endrole-->
-
 
         <div class="ml-64 mt-10 pass" style="float: left">
           <section v-if="userType === 'Supplier'">
@@ -62,18 +56,15 @@
           </section>
 
           <h1 class="text-3xl font-bold">كلمة السر والامان </h1>
-
           <label for="email" class="text-white">البريد الألكترونى</label><br />
           <input id="email" v-model="data.email" type="email" name="name" required /><br />
-
           <label for="password" class="text-white">كلمة السر </label><br />
           <input id="password" v-model="data.password" type="password" name="card_name" class="mb-5" required /><br />
         </div>
-        <!--            <span class="block spanColor">{{ user.card.card_number }}</span>-->
       </div>
-      <div class="  " style="margin-right: 760px ; margin-top: 500px;">
+      <div class="" style="margin-right: 760px; margin-top: 500px;">
         <button
-          type="submit" class="mb-20  "
+          type="submit" class="mb-20"
           style="background:#345E37;color:#C6FFE6;width: 200px;justify-content: center;padding: 10px;border-radius: 20px"
         >
           تأكيد
@@ -86,22 +77,16 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
-import { Head, Link, useForm } from '@inertiajs/vue3'
-import ProductCard from '@/Components/My Components/ProductCard.vue'
-import { onMounted, onBeforeMount, ref, reactive } from 'vue'
-import UserCard from '@/Components/My Components/UserCard.vue'
-import PrimaryButton from '@/Components/PrimaryButton.vue'
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3'
+import { ref, computed } from 'vue'
 import { route } from 'ziggy-js'
+import ResponsiveNavLink from '@/Components/Breeze Componenets/ResponsiveNavLink.vue'
 
-const userType = ref('Supplier')
-// const errors = ref({});
+const userType = ref('Delivery')
 
-// const ay7aga="asdad";
-defineProps({
-  users: Array,
-  // cardNumber:Array
+const page = usePage()
 
-})
+const permissions = computed(() => page.props.auth.permissions)
 
 const data = useForm({
   name: null,
@@ -110,63 +95,25 @@ const data = useForm({
   birthDate: null,
   address: null,
   cardNumber: null,
-  // cardName:"",
   email: null,
   password: null,
   taxNumber: null,
   storeAddress: null,
   storeName: null,
-
-
 })
 
-
-const create = () => data.post(route('admin.user.store', { 'userType': userType.value }))
-//     try {
-//         const response = await
-//         console.log(response);
-//         // Handle successful response
-//     } catch (error) {
-//         if (error.response.status === 422) {
-//             // Update errors ref with validation errors
-//             errors.value = error.response.data.errors;
-//             // Handle validation errors
-//         } else {
-//             // Handle other errors
-//         }
-//     }
-// };
-//
-
-// const reset = () => {
-//     data.name = "";
-//     data.nationalId = "";
-//     data.phoneNumber = "";
-//     data.birthDate = "";
-//     data.address = "";
-//     data.cardNumber = "";
-//     // data.cardName="";
-//     data.taxNumber = "";
-//     data.email = "";
-//     data.password = "";
-//     data.storeName = "";
-//     data.storeAddress = "";
-// }
-
+const create = () => {
+  data.post(route('admin.user.store', { userType: userType.value }))
+}
 </script>
 
 <style scoped>
-
-
 p, h1, label {
     color: #c6ffe6;
 }
-
 .spanColor {
     color: #61bc84;
 }
-
-
 .personalInfo input,
 .pass input {
     color: white;
@@ -174,14 +121,10 @@ p, h1, label {
     width: 300px;
     border-radius: 10px;
     margin-bottom: 10px;
-//border: none;
-    /* Add more custom styles here */
 }
-
 .cursor-pointer {
     cursor: pointer;
 }
-
 .btn-wrapper {
     text-align: center;
 }

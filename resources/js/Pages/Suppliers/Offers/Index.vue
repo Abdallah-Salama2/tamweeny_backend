@@ -18,7 +18,7 @@ defineProps({
 
   <AuthenticatedLayout>
     <div class=" flex flex-row flex-wrap gap-10   justify-center  mt-2  ">
-      <!--            <Link :href="route('admin.product.create')"><img src="https://i.imghippo.com/files/gNcoH1712448873.png" alt=""></Link>-->
+      <Link :href="route('admin.product.create')"><img src="../../../img/gNcoH1712448873.webp" alt="" /></Link>
 
 
       <!--            <productCard :selectedImage="'https://i.imghippo.com/files/OIG8U1712448601.png'" :show-first-image="false" />-->
@@ -27,8 +27,8 @@ defineProps({
         v-for="product in products"
         :key="product.id"
         :product="product"
-        :selected-image="'https://i.imghippo.com/files/OIG8U1712448601.png'"
-        :show-first-image="true"
+        :selected-image="'../../public/images/8erMode3m.png'"
+        :show-first-image="false"
       />
       <!--        selected image show 8er mod3m-->
 

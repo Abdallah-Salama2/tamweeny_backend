@@ -3,7 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Head, Link, useForm } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { route } from 'ziggy-js'
-import Modal from '@/Components/Modal.vue'
+import Modal from '@/Components/Breeze Componenets/Modal.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
@@ -55,9 +55,9 @@ const checkFiles = (cardId) => {
   <Head title="Dashboard" />
 
   <AuthenticatedLayout>
-    <div class="overflow-hidden">
-      <h1 class="font-bold" style="color: #c6ffe6; font-size: 60px; margin-right: 25px;"> جميع الطلبات </h1>
-      <div class="relative shadow-md sm:rounded-lg mt-28">
+    <div class="">
+      <h1 class="font-bold" style="color: #c6ffe6; font-size: 60px; margin-right: 25px;"> التنبيهات </h1>
+      <div class="relative shadow-md sm:rounded-lg mt-20">
         <table class="w-11/12 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mr-12">
           <thead class="text-xs text-gray-100 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-100">
             <tr>

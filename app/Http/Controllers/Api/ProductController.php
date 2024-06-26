@@ -38,7 +38,7 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        $allProducts = Product::with('category', 'productpricing')->paginate(8);
+        $allProducts = Product::with('category', 'productpricing')->where("product_type",0)->paginate(8);
         $products = ProductResource::collection($allProducts);
         $numberOfPages = $allProducts->lastPage();
 

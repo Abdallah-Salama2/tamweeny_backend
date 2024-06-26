@@ -24,7 +24,6 @@ class Orders_madeController extends Controller
     {
 
         $customerId = auth()->user()->id;
-
         $ordersMade = Orders_made::where("customer_id", $customerId)->get();
         return response()->json(Orders_madeResource::collection($ordersMade));
     }
@@ -73,6 +72,23 @@ class Orders_madeController extends Controller
 
 //        $customerId = auth()->user()->id;
         $orders = OrderResource2::collection(Order::where('delivery_status', 'Pending')->get());
+//        if ($orders->isEmpty()) {
+//            return response()->json(['error' => 'No orders yet'], 500);
+//        }
+        foreach ($orders as $order) {
+            $orderData = new OrderResource2($order);
+            $orderData['ordersMade'] = Orders_madeResource::collection(
+                Orders_made::where("order_id", $order->id)->get()
+            );
+        }
+
+        return response()->json($orders);
+    }
+    public function fullOnHoldOrders(Request $request)
+    {
+
+//        $customerId = auth()->user()->id;
+        $orders = OrderResource2::collection(Order::where('delivery_status', 'onHold')->get());
 //        if ($orders->isEmpty()) {
 //            return response()->json(['error' => 'No orders yet'], 500);
 //        }

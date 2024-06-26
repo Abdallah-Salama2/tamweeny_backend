@@ -1,10 +1,10 @@
 <script setup>
-import Checkbox from '@/Components/Checkbox.vue'
+import Checkbox from '@/Components/Breeze Componenets/Checkbox.vue'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
-import InputError from '@/Components/InputError.vue'
-import InputLabel from '@/Components/InputLabel.vue'
-import PrimaryButton from '@/Components/PrimaryButton.vue'
-import TextInput from '@/Components/TextInput.vue'
+import InputError from '@/Components/Breeze Componenets/InputError.vue'
+import InputLabel from '@/Components/Breeze Componenets/InputLabel.vue'
+import PrimaryButton from '@/Components/Breeze Componenets/PrimaryButton.vue'
+import TextInput from '@/Components/Breeze Componenets/TextInput.vue'
 import { Head, Link, useForm } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content')

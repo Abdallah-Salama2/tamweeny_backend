@@ -30,8 +30,8 @@ class UserController extends Controller
     {
         //
 //        $customerId = auth()->user()->id;
-
         $users = User::with('card')->where('user_type', 'Delivery')->get();
+
 
 
         return Inertia::render('Admin/Users/DeliveryIndex', ['users' => $users]);
@@ -41,11 +41,11 @@ class UserController extends Controller
     {
         //
 //        $customerId = auth()->user()->id;
+        $deliveries = User::with('card')->where('user_type', 'Delivery')->get();
+        $suppliers = User::with('card')->where('user_type', 'Supplier')->get();
 
-        $users = User::with('card')->where('user_type', 'Supplier')->get();
 
-
-        return Inertia::render('Admin/Users/SupplierIndex', ['users' => $users]);
+        return Inertia::render('Admin/Users/EmployeesIndex', ['suppliers' => $suppliers,'deliveries' => $deliveries]);
     }
 
     public function create()
@@ -90,10 +90,12 @@ class UserController extends Controller
                 'store_name' => $request->storeName,
                 'address' => $request->storeAddress
             ]);
+            $user->assignRole('supplier');
+
         } else if ($userType === "Delivery") {
             $deliveryInfo = ['car_type' => 'Motorcycle', 'license_plate' => "gg123"];
             $deliveryInfoJson = json_encode($deliveryInfo);
-            User::create([
+            $user=User::create([
                 'name' => $request->name,
                 'national_id' => $request->nationalId,
                 'email' => $request->email,
@@ -103,8 +105,9 @@ class UserController extends Controller
                 'birth_date' => $request->birthDate,
                 'user_type' => $userType,
                 'delivery_info' => $deliveryInfoJson,
-
             ]);
+            $user->assignRole('delivery');
+
         }
         return redirect()->route('admin.product.index');
     }

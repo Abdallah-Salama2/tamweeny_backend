@@ -69,9 +69,14 @@ class OrderController extends Controller
         ]);
 
 
-        Session::put("orderId", $order->id);
 
         foreach ($customerCart as $cartItem) {
+            $product=Product::find($cartItem->product_id);
+            if($product->product_type=1){
+                $stores=$product->stores();
+
+
+            }
             Orders_made::create([
                 'order_id' => $order->id,
                 'product_id' => $cartItem->product_id,

@@ -40,7 +40,7 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/admin/index', [AdminProductsController::class, 'index'])->middleware(['auth',])->name('admin.product.index');
     Route::get('/admin/product/create', [AdminProductsController::class, 'create'])->middleware(['auth'])->name('admin.product.create');
-    Route::post('/admin/product', [AdminProductsController::class, 'store'])->middleware(['auth'])->name('admin.product.store');
+    Route::post('/admin/product', [AdminProductsController::class, 'store'])->name('admin.product.store');
     Route::get('/admin/product/{product}/edit', [AdminProductsController::class, 'edit'])->middleware(['auth'])->name('admin.product.edit');
     Route::post('/admin/product/{product}', [AdminProductsController::class, 'update'])->middleware(['auth'])->name('admin.product.update');
     Route::delete('/admin/product/{product}/deleteImage', [AdminProductsController::class, 'deleteProductImg'])->middleware(['auth'])->name('admin.product.productImage.delete');
@@ -52,8 +52,9 @@ Route::middleware('auth')->group(function () {
     Route::get('admin/addAccount', [UserController::class, 'create'])->name('admin.user.create');
     Route::post('admin/addUser/{userType}', [UserController::class, 'store'])->name('admin.user.store');
 
-    Route::get('/admin/offers', [OffersController::class, 'index'])->middleware(['auth',])->name('admin.offer.index');
-    Route::get('/admin/stores/index', [StoreController::class, 'index'])->middleware(['auth',])->name('admin.store.index');
+    Route::get('/admin/offers', [OffersController::class, 'index'])->middleware(['auth'])->name('admin.offer.index');
+    Route::get('/admin/stores/index', [StoreController::class, 'index'])->middleware(['auth'])->name('admin.store.index');
+    Route::post('/admin/stores', [StoreController::class, 'edit'])->middleware(['auth'])->name('admin.store.update');
 
     Route::get('supplier/orders', [OrdersController::class, 'index'])->name('supplier.order.index');
     Route::post('supplier/orders/{orderId}', [OrdersController::class, 'update'])->name('supplier.order.update');

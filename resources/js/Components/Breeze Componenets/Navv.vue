@@ -95,7 +95,7 @@
 </template>
 
 <script setup>
-import ApplicationLogo from '@/Components/ApplicationLogo.vue'
+import ApplicationLogo from '@/Components/Breeze Componenets/ApplicationLogo.vue'
 
 defineProps({
   isdrawerOpen : Boolean,

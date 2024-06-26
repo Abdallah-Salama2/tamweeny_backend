@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class Product extends Model
+class   Product extends Model
 {
     use HasFactory, Notifiable;
     use FavoriteScope;
@@ -46,7 +46,7 @@ class Product extends Model
 
     public function stores()
     {
-        return $this->belongsToMany(Store::class, 'stores_products');
+        return $this->belongsToMany(Store::class, 'stores_products')->withPivot('quantity');
     }
 
     public function cart()

@@ -6,11 +6,13 @@
           v-model.number="filterForm.priceFrom"
           type="text" placeholder="السعر من"
           class="input-filter-r w-28"
+          style="background-color: #242422;border-left: 1px dashed rgba(220,220,220,0.1)"
         />
         <input
           v-model.number="filterForm.priceTo"
           type="text" placeholder="السعر الى"
           class="input-filter-l w-28"
+          style="background-color: #242422"
         />
       </div>
       <div class="flex flex-nowrap items-center">
@@ -18,17 +20,19 @@
           v-model.number="filterForm.quantityFrom"
           type="text" placeholder="الكمية من "
           class="input-filter-r w-28"
+          style="background-color: #242422;border-left: 1px dashed rgba(220,220,220,0.1)"
         />
         <input
           v-model.number="filterForm.quantityTo"
 
           type="text" placeholder="الكمية الى"
           class="input-filter-l w-28"
+          style="background-color: #242422"
         />
       </div>
 
       <div class="flex flex-nowrap items-center">
-        <select v-model="filterForm.category" class="input-filter w-28">
+        <select v-model="filterForm.category" class="input-filter w-28 " style="background-color: #242422">
           <option :value="null">الفئات</option>
           <option v-for="category in categories" :key="category.id" :value="category.id">
             {{ category.category_name }}
@@ -38,8 +42,8 @@
       </div>
 
 
-      <button type="submit" class="btn-normal mr-2 rounded-3xl">Filter</button>
-      <button type="reset" class="btn-normal mr-2 rounded-3xl" @click="clear">Clear</button>
+      <button type="submit" class="btn-normal mr-2 rounded-3xl text-gray-800" style="background-color: rgba(97, 160 ,132)">Filter</button>
+      <button type="reset" class="btn-normal mr-2 rounded-3xl text-gray-800" style="background-color: rgba(97, 160 ,132)" @click="clear">Clear</button>
 
       <!--      <button type="reset" class="mr-2" @click="clear">Clear</button>-->
     </div>

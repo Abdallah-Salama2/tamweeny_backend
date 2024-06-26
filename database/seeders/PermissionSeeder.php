@@ -20,40 +20,67 @@ class PermissionSeeder extends Seeder
         $supplier = Role::where('name', 'supplier')->first();
 
         $permissions = [
-            'can-add-products',
-            'can-list-products',
-            'can-edit-products',
-            'can-delete-products1',
-            'can-delete-products2',
-            'can-list-offers',
-            'can-add-offer-to-products',
-            'can-delete-offer-from-products',
-            'can-add-user',
-            'can-list-users',
-            'can-list-deliveries',
-            'can-list-suppliers',
-            'can-view-user-order',
-            'can-view-stores',
-            'can-view-favorites',
-            'can-addOrRemove-favorites',
-            'can-list-orders',
-            'can-deliver-orders',
-            'can-assign-orders',
-            'can-export-activity'
+            'add-products',
+            'list-products',
+            'edit-products',
+            'filter-products',
+            'delete-products',
+            'list-supplier-products',
+            'add-supplier-product',
+            'list-categories',
+            'add-categories',
+            'list-cards',
+            'add-supplier',
+            'add-deliveryGuy',
+            'list-users',
+            'list-deliveries',
+            'list-suppliers',
+            'view-user-orders',
+            'list-stores',
+            'view-favorites',
+            'addOrRemove-favorites',
+            'list-orders',
+            'deliver-orders',
+            'assign-orders',
+            'export-activity'
         ];
 
         foreach ($permissions as $permissionName) {
             $permission = \Spatie\Permission\Models\Permission::create(['name' => $permissionName]);
-            $adminRole->givePermissionTo($permission);
+            if (in_array($permissionName, [
+                'add-products',
+                'list-products',
+                'edit-products',
+                'filter-products',
+                'delete-products',
+                'list-categories',
+                'add-categories',
+                'list-cards',
+                'add-supplier',
+                'add-deliveryGuy',
+                'list-users',
+                'list-deliveries',
+                'list-suppliers',
+                'view-user-orders',
+                'list-stores',
+                'list-orders',
+            ])) {
+                $adminRole->givePermissionTo($permission);
+            }
 
-            if (in_array($permissionName, ['can-list-offers', 'can-list-products', 'can-delete-products2', 'can-add-offer-to-products', 'can-delete-offer-from-products', 'can-list-deliveries',
-                'can-view-user-order', 'can-list-orders', 'can-assign-orders',
-            ])) {
+            if (in_array($permissionName, [
+                'list-products',
+                'filter-products',
+                'list-supplier-products',
+                'add-supplier-product',
+                'add-deliveryGuy',
+                'list-users',
+                'list-deliveries',
+                'view-user-orders',
+                'assign-orders',
+            ]
+            )) {
                 $supplier->givePermissionTo($permission);
-            } elseif (in_array($permissionName, ['can-list-offers', 'can-list-products', 'can-view-favorites', 'can-addOrRemove-favorites',
-                'can-list-orders',
-            ])) {
-                $customerRole->givePermissionTo($permission);
             }
         }
     }

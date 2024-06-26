@@ -39,6 +39,7 @@ class UserSeeder extends Seeder
             'longitude'=>11.20000000,
         ]);
 
+
         $admin->assignRole('admin');
 
 

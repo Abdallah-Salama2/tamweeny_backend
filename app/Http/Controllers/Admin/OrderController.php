@@ -11,12 +11,18 @@ use Inertia\Inertia;
 class OrderController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with('customer','delivery')
-            ->orderBy('order_date', 'desc')
-            ->get();
+        $name = $request->input('name', '');
 
+        $orders = Order::with('customer', 'delivery')
+            ->orderBy('order_date', 'desc');
+        if ($name) {
+            $orders = $orders->whereHas('customer', function($query) use ($name) {
+                $query->where('name', 'like', '%' . $name . '%');
+            });        }
+//        dd($name);
+        $orders=$orders->get();
         return Inertia::render('Admin/Orders/Index', [
             'orders' => $orders,
         ]);

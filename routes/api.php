@@ -119,10 +119,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::controller(Orders_madeController::class)->group(function () {
         Route::get('/ordersMade', 'index');
-        Route::get('/fullOrder', 'fullOrder');
+//        Route::get('/fullOrder', 'fullOrder');
         Route::get('/modelOrders', 'modelOrders');
         Route::get('/fullPendingOrders', 'fullPendingOrders');
         Route::get('/fullDeliveredOrders', 'fullDeliveredOrders');
+        Route::get('/fullOnHoldOrders', 'fullOnHoldOrders');
         Route::get('/orderDetails/{orderId}', 'OrdersDetails');
 
     });

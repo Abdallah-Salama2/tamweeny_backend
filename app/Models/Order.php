@@ -18,6 +18,7 @@ class Order extends Model
         'discount_code',
         'delivery_status',
         'payment_number',
+        'store_id',
         'customer_id',
         'delivery_id'
     ];
@@ -25,6 +26,10 @@ class Order extends Model
     public function order_made()
     {
         return $this->hasOne(Orders_made::class, 'order_id', 'id');
+    }
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'store_id', 'id');
     }
 
     public function customer()

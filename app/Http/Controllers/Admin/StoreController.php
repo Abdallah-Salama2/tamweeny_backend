@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\Store;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class StoreController extends Controller
@@ -15,8 +17,14 @@ class StoreController extends Controller
     public function index()
     {
         //
-        $stores = Store::all();
-        $stores->load('user');
+        $stores = Store::all(); // or any other way you retrieve your stores
+
+        $stores->load([
+            'user',
+            'products' => function ($query) {
+                $query->where('product_type', 0);
+            }
+        ]);
         return Inertia::render('Admin/Stores/Index', [
             'stores' => $stores,
         ]);
@@ -36,6 +44,7 @@ class StoreController extends Controller
     public function store(Request $request)
     {
         //
+
     }
 
     /**
@@ -49,9 +58,18 @@ class StoreController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request)
     {
         //
+        $product = DB::table('stores_products')
+//            ->join('products','stores_products.product_id','=','products.id')
+            ->where('product_id', $request->product_id)
+            ->where('store_id', $request->store_id)
+            ->update(['quantity' => DB::raw('quantity + ' . $request->quantity)]);
+        $productId = $request->product_id;
+//        $product = Product::join('stores_products', 'products.id', '=', 'stores_products.product_id')
+//            ->where('stores_products.product_id',$productId)->And('stores_products.product_id',$request->store_id)->get();
+//        $products = $store->products;
     }
 
     /**

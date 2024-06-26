@@ -4,19 +4,15 @@ import { Head, Link, usePage } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
 
 import CategoryCard from '@/Components/My Components/CategoryCard.vue'
+import { computed } from 'vue'
 
 defineProps({
   categories: Array,
-
 })
 
-
-
 const page = usePage()
-
-
+const permissions = computed(() => page.props.auth.permissions)
 console.log(page.props.flash) // Debugging line
-
 // const flashSuccess = computed(() => page.props.flash.success)
 </script>
 
@@ -27,10 +23,13 @@ console.log(page.props.flash) // Debugging line
     <!--    <p>Cards Approval, Flash Messages, Stores, Categories</p>-->
     <!--    <p>{{ categories }}</p>-->
     <div class="flex flex-row flex-wrap gap-10 justify-center mt-5">
-      <Link :href="route('admin.product.create')">
+      <Link
+        v-if="permissions.includes('add-categories')"
+        :href="route('admin.product.create')"
+      >
         <img
           class="cardWidth"
-          src="https://i.imghippo.com/files/gNcoH1712448873.png" alt=""
+          src="../../../img/gNcoH1712448873.webp" alt=""
         />
       </Link>
 

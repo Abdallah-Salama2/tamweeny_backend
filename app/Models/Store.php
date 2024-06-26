@@ -36,11 +36,15 @@ class Store extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Store::class,'stores_products');
+        return $this->belongsToMany(Product::class,'stores_products')->withPivot('quantity');
     }
     public function user()
     {
         return $this->belongsTo(User::class,'owner_id','id');
+    }
+    public function order()
+    {
+        return $this->hasMany(Order::class, 'store_id', 'id');
     }
 
 

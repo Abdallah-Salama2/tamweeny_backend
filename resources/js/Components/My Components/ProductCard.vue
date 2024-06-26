@@ -28,28 +28,33 @@
           v-if="isHovered"
           class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
         >
-          <div class="flex">
-            <svg
-              class="w-6 mt-1 h-6 iconn text-gray-800 dark:text-white"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M18.045 3.007 12.31 3a1.965 1.965 0 0 0-1.4.585l-7.33 7.394a2 2 0 0 0 0 2.805l6.573 6.631a1.957 1.957 0 0 0 1.4.585 1.965 1.965 0 0 0 1.4-.585l7.409-7.477A2 2 0 0 0 21 11.479v-5.5a2.972 2.972 0 0 0-2.955-2.972Zm-2.452 6.438a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"
-              />
-            </svg>
-            <button
-              class="text-2xl font-bold cursor-pointer mb-4 text-emerald-400"
-              @click="showModal = true"
-            >
-              اضافة عرض
-            </button>
-          </div>
-          <div class="flex">
+          <!--          <div-->
+          <!--            class="flex"-->
+          <!--          >-->
+          <!--            <svg-->
+          <!--              class="w-6 mt-1 h-6 iconn text-gray-800 dark:text-white"-->
+          <!--              aria-hidden="true"-->
+          <!--              xmlns="http://www.w3.org/2000/svg"-->
+          <!--              width="24"-->
+          <!--              height="24"-->
+          <!--              fill="currentColor"-->
+          <!--              viewBox="0 0 24 24"-->
+          <!--            >-->
+          <!--              <path-->
+          <!--                d="M18.045 3.007 12.31 3a1.965 1.965 0 0 0-1.4.585l-7.33 7.394a2 2 0 0 0 0 2.805l6.573 6.631a1.957 1.957 0 0 0 1.4.585 1.965 1.965 0 0 0 1.4-.585l7.409-7.477A2 2 0 0 0 21 11.479v-5.5a2.972 2.972 0 0 0-2.955-2.972Zm-2.452 6.438a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"-->
+          <!--              />-->
+          <!--            </svg>-->
+          <!--            <button-->
+          <!--              class="text-2xl font-bold cursor-pointer mb-4 text-emerald-400"-->
+          <!--              @click="showModal = true"-->
+          <!--            >-->
+          <!--              اضافة عرض-->
+          <!--            </button>-->
+          <!--          </div>-->
+          <div
+            v-if="permissions.includes('edit-products')"
+            class="flex"
+          >
             <svg
               class="w-6 h-6 mt-1 ml-1 text-gray-800 iconn dark:text-white"
               aria-hidden="true"
@@ -74,7 +79,39 @@
               تعديل منتج
             </Link>
           </div>
-          <div class="flex">
+          <div
+            v-if="permissions.includes('delete-products')"
+            class="flex"
+          >
+            <svg
+              class="w-6 h-6 mt-1 ml-1 text-gray-800 iconn dark:text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            <Link
+              :href="route('admin.product.destroy', product)"
+              method="delete"
+              as="button"
+              class="text-2xl font-bold mb-4 text-emerald-400"
+              @click="destroy"
+            >
+              حذف منتج
+            </Link>
+          </div>
+          <div
+            v-if="page.url === '/admin/offers'"
+            class="flex"
+          >
             <svg
               class="w-6 h-6 mt-1 ml-1 text-gray-800 iconn dark:text-white"
               aria-hidden="true"
@@ -101,6 +138,7 @@
             </Link>
           </div>
         </div>
+        <!--        <h1>{{ page.url }}</h1>-->
       </div>
     </div>
 
@@ -146,11 +184,11 @@
       </div>
     </Modal>
 
-    <!-- Second image and discount -->
+    <!-- Second banner and discount -->
     <img :src="selectedImage" alt="status" class="absolute top-0" style="left: 2px;" />
     <div v-if="showFirstImage">
       <img
-        :src="'https://i.imghippo.com/files/pgMMB1712509469.png'"
+        src="../../img/redOffer.webp"
         alt="status"
         class="absolute top-0"
         style="right: 0;"
@@ -163,6 +201,7 @@
       <h6 class="mb-7 pColor">{{ product.description }}</h6>
       <p class="mb-7 pColor">
         سعر الوحدة
+        <!--        <span v-if="user.user_type==='Supplier'" class="block spanColor">{{ product.productpricing.selling_price }}</span>-->
         <span class="block spanColor">{{ product.productpricing.selling_price }}</span>
       </p>
       <p>
@@ -174,17 +213,17 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from 'vue'
+import { computed, defineProps, ref } from 'vue'
 import { route } from 'ziggy-js'
-import { Link } from '@inertiajs/vue3'
-import Modal from '@/Components/Modal.vue'
+import { Link, usePage } from '@inertiajs/vue3'
+import Modal from '@/Components/Breeze Componenets/Modal.vue'
 import { createToaster } from '@meforma/vue-toaster'
 
 const props = defineProps({
   product: Object,
   selectedImage: {
     type: String,
-    default: 'https://i.imghippo.com/files/zs3Zz1712448566.png',
+    default: '../../public/images/mod3m.png',
   },
   showFirstImage: {
     type: Boolean,
@@ -208,6 +247,14 @@ const destroy = () => {
   const toaster = createToaster({ position: 'top-right', duration: 5000, width: '100%' })
   toaster.error('تم حذف المنتج')
 }
+
+const page = usePage()
+const user = computed(() => page.props.auth.user)
+console.log(user.value.user_type)
+const permissions = computed(() => page.props.auth.permissions)
+
+
+
 </script>
 
 <style scoped>

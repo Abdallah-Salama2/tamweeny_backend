@@ -328,17 +328,6 @@ class ProductsPricingsTableSeeder extends Seeder
             [
                 'id' => 32,
                 'product_id' => 32,
-                'base_price' => '6.00',
-                'selling_price' => '6.00',
-                'discount' => 0,
-                'discount_unit' => '%',
-                'date_created' => null,
-                'expired_date' => null,
-            ],
-
-            [
-                'id' => 33,
-                'product_id' => 33,
                 'base_price' => '88.80',
                 'selling_price' => '76.56',
                 'discount' => 13,

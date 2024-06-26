@@ -15,16 +15,15 @@ class OffersController extends Controller
     public function index()
     {
         //
-        $allProducts = Product::with('productpricing', 'category')->latest()->get();
+        $allProducts = Product::with('productpricing', 'category')->where('product_type',1)->latest()->get();
         $offers = [];
 
-        foreach ($allProducts as $product) {
-            if ($product->productpricing->base_price > $product->productpricing->selling_price) {
-                $offers[] = $product;
-            }
-
-        }
-        return Inertia::render('Suppliers/Offers/Index',  ['products' => $offers]);
+//        foreach ($allProducts as $product) {
+//            if ($product->productpricing->base_price > $product->productpricing->selling_price) {
+//                $offers[] = $product;
+//            }
+//        }
+        return Inertia::render('Suppliers/Offers/Index',  ['products' => $allProducts]);
     }
 
     /**
