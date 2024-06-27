@@ -120,7 +120,7 @@ const showOrderDetails = (order) => {
     <div class="">
       <search-bar :name="name" class="py-4" @update:name="updateName" />
 
-      <form @submit.prevent="assignDelivery(data.order_id)">
+      <form @submit.prevent="">
         <div class="relative shadow-md sm:rounded-lg mt-20">
           <table class="w-11/12 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mr-12">
             <thead class="text-xs text-gray-100 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-100">
@@ -230,7 +230,26 @@ const showOrderDetails = (order) => {
   </AuthenticatedLayout>
 </template>
 
-<style>
+<style scoped>
+
+input {
+    font-weight: 500;
+    color: #fff;
+    background-color: rgb(28, 28, 30);
+    border-radius: 0.4vw;
+    border: 1px solid black;
+    outline: none;
+    padding: 0.4vw;
+    width: 240px;
+    transition: 0.4s;
+}
+input:hover {
+    box-shadow: 0 0 0 0.15vw rgba(135, 207, 235, 0.186);
+}
+
+input:focus {
+    box-shadow: 0 0 0 0.15vw skyblue;
+}
 .cardWidth {
     width: 400px;
 }

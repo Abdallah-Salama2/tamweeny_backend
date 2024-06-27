@@ -23,11 +23,9 @@ class OrdersController extends Controller
         $store = Store::where("owner_id", $ownerId)->first();
         $name = $request->input('name', '');
 
+
         // Fetch all store's products at once
-        $storeProductIds = DB::table('stores_products')
-            ->where('store_id', $store->id)
-            ->pluck('product_id')
-            ->toArray();
+        $storeProductIds = $store->products()->pluck('products.id')->toArray();
 
         $ordersQuery = Order::with('customer', 'delivery', 'order_made')
             ->orderBy('order_date', 'desc');
@@ -39,6 +37,7 @@ class OrdersController extends Controller
         }
 
         $orders = $ordersQuery->get();
+//        dd($orders);
         $filteredOrders = collect();
 
         foreach ($orders as $order) {
@@ -47,7 +46,8 @@ class OrdersController extends Controller
 
             foreach ($ordersMade as $item) {
                 $product = Product::find($item->product_id);
-                if ($product->product_type == 1 && !in_array($product->id, $storeProductIds)) {
+                if (!in_array($product->id, $storeProductIds)) {
+//                    dd($product->id);
                     $allProductsExist = false;
                     break;
                 }

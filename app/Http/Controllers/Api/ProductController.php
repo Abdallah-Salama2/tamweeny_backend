@@ -277,7 +277,7 @@ class ProductController extends Controller
     {
         // Retrieve all stores and products
         $stores = Store::all();
-        $products = Product::where('product_type', 0)->get();
+        $products = Product::all();
 
         foreach ($products as $product) {
             $product->stock_quantity -= 10;

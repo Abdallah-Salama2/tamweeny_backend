@@ -300,8 +300,6 @@ const permissions = computed(() => page.props.auth.permissions)
         <!--Add New User-->
         <li>
           <ResponsiveNavLink
-            v-if="permissions.includes('list-orders')"
-
             :href="route('admin.user.create')"
             :active="route().current('admin.user.create')"
             class="navLink"

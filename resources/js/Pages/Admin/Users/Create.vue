@@ -18,7 +18,7 @@
             /><br /><br />
           </div>
 
-          <label for="delivery">طيار</label>
+          <label for="delivery">موصل المنتجات</label>
 
           <input v-if="permissions.includes('add-supplier')" id="delivery" type="radio" name="userType" class="mr-4 mb-1" checked @click="userType = 'Delivery'" />
         </div>
@@ -122,6 +122,7 @@ p, h1, label {
     border-radius: 10px;
     margin-bottom: 10px;
 }
+
 .cursor-pointer {
     cursor: pointer;
 }
