@@ -28,7 +28,7 @@ class DelieveryEmailSeeder extends Seeder
 //    ]),
         $delivery1 = User::create([
             'email' => 'Delivery1@gmail.com',
-            'name'=>'Delivery',
+            'name'=>'Delivery1',
             'password' => static::$password ?? Hash::make('password'),
             'user_type' => 'Delivery',
             'delivery_info' => json_encode([
@@ -38,7 +38,7 @@ class DelieveryEmailSeeder extends Seeder
         $delivery1->assignRole('delivery');
         $delivery2 = User::create([
             'email' => 'Delivery2@gmail.com',
-            'name'=>'7amo',
+            'name'=>'Delivery2',
             'password' => static::$password ?? Hash::make('password'),
             'user_type' => 'Delivery',
             'delivery_info' => json_encode([
