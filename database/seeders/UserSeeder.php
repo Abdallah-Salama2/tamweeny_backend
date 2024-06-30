@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
         $user=User::Create([
 
             'national_id' => '29006141400948',
-            'name' => 'Alas',
+            'name' => 'Abdallah Fawzi',
             'email' => 'alas@gmail.com',
             'password' => static::$password ??= Hash::make('password'),
             'phone_number' => '01020304050',
@@ -61,9 +61,9 @@ class UserSeeder extends Seeder
         ]);
         Card::create([
             'user_id'=>$user->id,
-            'card_name'=>'Alas',
-            'card_number'=>1,
-            'card_national_id'=>1,
+            'card_name'=>'Abdallah Fawzi',
+            'card_number'=>1234567891011,
+            'card_national_id'=>29006141400948,
             'card_password'=>static::$password ??= Hash::make('password'),
         ]);
 
