@@ -14,8 +14,7 @@ class Card extends Model
         'card_national_id',
         'card_password',
         'individuals_number',
-        'bread_points',
-        'tamween_points',
+        'tamween_balance',
 
     ];
     protected $hidden = [

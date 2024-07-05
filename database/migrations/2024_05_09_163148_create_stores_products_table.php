@@ -15,6 +15,7 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->foreignId('store_id')->constrained('stores')->cascadeOnDelete();
             $table->integer('quantity');
+            $table->boolean('quantity_increase_request')->default(0);
             $table->timestamps();
         });
     }

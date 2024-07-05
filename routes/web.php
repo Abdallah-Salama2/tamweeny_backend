@@ -63,7 +63,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
     Route::delete('/product/{product}', [AdminProductsController::class, 'destroy'])->name('admin.product.destroy');
+    Route::post('/product/{product}', [AdminProductsController::class, 'increase_quantity'])->name('admin.product.increase');
+
 
     Route::resource('/admin/categories', CategoryController::class)
         ->only(['index', 'show'])->names([

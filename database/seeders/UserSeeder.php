@@ -65,6 +65,8 @@ class UserSeeder extends Seeder
             'card_number'=>1234567891011,
             'card_national_id'=>29006141400948,
             'card_password'=>static::$password ??= Hash::make('password'),
+            'individuals_number'=>4,
+            'tamween_balance'=>400
         ]);
 
         $user->assignRole('customer');

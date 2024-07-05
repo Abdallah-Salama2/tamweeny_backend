@@ -36,8 +36,7 @@ class UserResource extends JsonResource
             'cardNationalId' => $this->card->card_national_id ?? null,
             'cardPassword' => $this->card->card_password ?? null,
             'individualsNumber' => $this->card->individuals_number ?? null,
-            'breadPoints' => $this->card->bread_points ?? null,
-            'tamweenPoints' => $this->card->tamween_points ?? null
+            'tamweenPoints' => $this->card->tamween_balance ?? null
         ];
     }
 }

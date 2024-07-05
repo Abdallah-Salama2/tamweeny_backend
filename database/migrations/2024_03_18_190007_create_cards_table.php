@@ -19,8 +19,7 @@ return new class extends Migration
             $table->bigInteger('card_national_id');
             $table->string('card_password', 191);
             $table->integer('individuals_number')->default(1);
-            $table->integer('bread_points')->default(1);
-            $table->integer('tamween_points')->default(1);
+            $table->integer('tamween_balance')->default(1);
             $table->timestamps();
         });
     }

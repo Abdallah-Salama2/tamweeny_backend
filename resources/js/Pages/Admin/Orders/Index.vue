@@ -2,7 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Head, useForm } from '@inertiajs/vue3'
 import { computed, reactive, ref } from 'vue'
-import SearchBar from '@/Components/Breeze Componenets/SearchBar.vue'
+import SearchBar from '@/Components/My Components/SearchBar.vue'
 import Modal from '@/Components/Breeze Componenets/Modal.vue'
 import { route } from 'ziggy-js'
 

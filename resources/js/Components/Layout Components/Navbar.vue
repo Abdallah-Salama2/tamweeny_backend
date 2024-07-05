@@ -8,7 +8,7 @@ import { route } from 'ziggy-js'
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-start rtl:justify-end">
           <a :href="route('admin.product.index')" class="flex ms-2 ">
-            <img src="https://i.ibb.co/t8pzc58/Logo-2.png" alt="Logo-2" class=" w-12" />
+            <img src="../../img/Logo-2.png" alt="Logo-2" class=" w-12" />
             <span
               class="self-center text-xl font-semibold mr-2 sm:text-2xl whitespace-nowrap dark:text-white"
             >Tamweeny</span>

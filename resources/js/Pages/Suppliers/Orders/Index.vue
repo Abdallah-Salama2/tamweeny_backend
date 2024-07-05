@@ -4,7 +4,7 @@ import { Head, useForm, usePage } from '@inertiajs/vue3'
 import { ref, reactive, computed } from 'vue'
 import { route } from 'ziggy-js'
 import Swal from 'sweetalert2'
-import SearchBar from '@/Components/Breeze Componenets/SearchBar.vue'
+import SearchBar from '@/Components/My Components/SearchBar.vue'
 import Modal from '@/Components/Breeze Componenets/Modal.vue'
 
 const id = ref('')

@@ -289,6 +289,19 @@ class AdminProductsController extends Controller
 
     }
 
+    public function increase_quantity(Product $product)
+    {
+        //
+        $ownerid = auth()->user()->id;
+        $store = Store::where("owner_id", $ownerid)->first();
+        $store->request=1;
+        $store->save();
+//        dd($store->products()->);
+        $store->products()->updateExistingPivot($product, ['quantity_increase_request' => 1]);
+
+//        dd($product);
+    }
+
     public function deleteProductImg(Product $product)
     {
         //

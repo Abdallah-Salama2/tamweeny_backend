@@ -26,6 +26,7 @@ class Store extends Model
         'phone_number',
         'type',
         'valid',
+        'request',
         'latitude',
         'longitude',
     ];
@@ -36,7 +37,7 @@ class Store extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class,'stores_products')->withPivot('quantity');
+        return $this->belongsToMany(Product::class,'stores_products')->withPivot(['quantity','quantity_increase_request']);
     }
     public function user()
     {

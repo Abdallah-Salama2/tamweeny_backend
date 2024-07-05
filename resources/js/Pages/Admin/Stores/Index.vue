@@ -5,6 +5,8 @@ import Modal from '@/Components/Breeze Componenets/Modal.vue'
 import { ref, reactive, computed } from 'vue'
 import { route } from 'ziggy-js'
 import { createToaster } from '@meforma/vue-toaster'
+import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 defineProps({
   stores: Array,
@@ -89,10 +91,23 @@ const user = computed(() => page.props.auth.user)
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                 {{ store.id ? store.id : 'N/A' }}
               </th>
-              <td class="px-6 py-4 ">
+              <td class="px-6 py-4 flex">
                 <button class="underline " @click="currentStore = store; showModal = true">
                   {{ store.store_name ? store.store_name : 'N/A' }}
                 </button>
+                <FontAwesomeIcon
+                  v-if="store.request === 1"
+                  :icon="store.request === 1 ? faTimesCircle : '' "
+                  class="w-5 h-5 mr-2 mt-2"
+                  :class="store.request === 1 ? 'text-red-500' : '' "
+                />
+                <!--                {{ store.pivot.quantity_increase_request }} -->
+                <!--                <FontAwesomeIcon-->
+                <!--                  v-if="checkStatus[card.id] !== undefined"-->
+                <!--                  :icon="checkStatus[card.id] ? faCheckCircle : faTimesCircle"-->
+                <!--                  class="w-6 h-6 mr-2"-->
+                <!--                  :class="checkStatus[card.id] ? 'text-green-500' : 'text-red-500'"-->
+                <!--                />-->
               </td>
               <td class="px-6 py-4">
                 {{ store.user ? store.user.name : 'N/A' }}
@@ -123,6 +138,7 @@ const user = computed(() => page.props.auth.user)
           <tr>
             <th scope="col" class="px-3 py-3">اسم المنتج</th>
             <th scope="col" class="px-3 py-3">الكمية</th>
+            <th scope="col" class="px-3 py-3">طلب زيادة</th>
             <th scope="col" class="px-3 py-3">الكمية المضافه</th>
             <th scope="col" class="px-3 py-3">تعديل</th>
           </tr>
@@ -136,6 +152,13 @@ const user = computed(() => page.props.auth.user)
               {{ product.description ? product.description : "N/A" }}
             </th>
             <td class="px-3 py-4">{{ product.pivot.quantity ? product.pivot.quantity : "N/A" }}</td>
+            <td
+              :class="{
+                'text-red-600 text-center  ': product.pivot.quantity_increase_request === 1
+              }"
+            >
+              {{ product.pivot.quantity_increase_request === 1 ? ' طلب زيادة' : '' }}
+            </td>
             <td class="px-3 py-4">
               <input v-model="getQuantity(product.pivot.product_id).value" type="number" class="w-24 h-10" />
             </td>

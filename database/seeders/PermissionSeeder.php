@@ -27,6 +27,7 @@ class PermissionSeeder extends Seeder
             'delete-products',
             'list-supplier-products',
             'add-supplier-product',
+            'delete-supplier-product',
             'list-categories',
             'add-categories',
             'list-cards',
@@ -42,7 +43,7 @@ class PermissionSeeder extends Seeder
             'list-orders',
             'deliver-orders',
             'assign-orders',
-            'export-activity'
+            'ask_for_quantity_increase',
         ];
 
         foreach ($permissions as $permissionName) {
@@ -73,11 +74,13 @@ class PermissionSeeder extends Seeder
                 'filter-products',
                 'list-supplier-products',
                 'add-supplier-product',
+                'delete-supplier-product',
                 'add-deliveryGuy',
                 'list-users',
                 'list-deliveries',
                 'view-user-orders',
                 'assign-orders',
+                'ask_for_quantity_increase',
             ]
             )) {
                 $supplier->givePermissionTo($permission);

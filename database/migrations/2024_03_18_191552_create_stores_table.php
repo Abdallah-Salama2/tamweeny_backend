@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('phone_number', 100)->nullable();
             $table->string('type', 50)->nullable();
             $table->integer('valid')->nullable();
+            $table->boolean('request')->default(0);
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
             $table->timestamp('created_at')->useCurrent(); // Set timestamps to use current time

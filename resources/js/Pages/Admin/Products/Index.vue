@@ -2,7 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import { Head, Link, useForm, usePage } from '@inertiajs/vue3'
 import { route } from 'ziggy-js'
-import SearchBar from '@/Components/Breeze Componenets/SearchBar.vue'
+import SearchBar from '@/Components/My Components/SearchBar.vue'
 import { computed } from 'vue'
 import Filters from '@/Components/My Components/Filters.vue'
 import ProductCard from '@/Components/My Components/ProductCard.vue'
