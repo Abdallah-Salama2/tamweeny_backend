@@ -74,8 +74,11 @@ Route::middleware('auth')->group(function () {
             'index' => 'admin.categories.index',
             'show' => 'admin.categories.show',
         ]);
-    Route::get('/admin/cards', [CardsController::class, 'index'])->middleware(['auth',])->name('admin.card.index');
+
+    Route::get('/admin/cards/{flag?}/{str?}', [CardsController::class, 'index'])->middleware(['auth',])->name('admin.card.index');
     Route::post('/admin/cards', [CardsController::class, 'update'])->middleware(['auth',])->name('admin.card.update');
+    Route::post('/admin/cards/self', [CardsController::class, 'checkSelfFiles'])->middleware(['auth',])->name('admin.card.self');
+    Route::post('/admin/cards/followers', [CardsController::class, 'checkFollowersFiles'])->middleware(['auth',])->name('admin.card.followers');
     Route::get('/test-flash', function () {
         return redirect()->route('admin.product.index');
     })->middleware('test.flash');

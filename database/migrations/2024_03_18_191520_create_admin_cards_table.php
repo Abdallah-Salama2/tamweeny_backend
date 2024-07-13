@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('admin_cards', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('admin_id')->nullable()->constrained('users')->cascadeOnDelete();
+            $table->bigInteger('national_id')->nullable()->unique();
             $table->integer('card_number')->nullable();
             $table->string('card_status_text', 50)->default('Pending');
             $table->integer('individuals_number');
@@ -23,9 +24,9 @@ return new class extends Migration
             $table->string('gender', 191);
             $table->string('email', 191)->nullable()->unique();
             $table->string('social_status', 50)->nullable();
-            $table->mediumInteger('phone_number')->nullable();
+            $table->text('phone_number')->nullable();
             $table->string('salary', 191);
-            $table->string('national_id_card_and_birth_certificate', 191)->nullable();
+            $table->json('national_id_card_and_birth_certificate')->nullable();
             $table->json('followers_national_id_cards_and_birth_certificates')->nullable();
             $table->timestamps();
 

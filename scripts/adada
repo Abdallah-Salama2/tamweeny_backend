@@ -1,0 +1,111 @@
+import os
+import pytesseract
+from PIL import Image
+import json
+import numpy as np
+import matplotlib.pyplot as plt
+import arabic_reshaper
+from bidi.algorithm import get_display
+
+pytesseract.pytesseract.tesseract_cmd = r'C:/Program Files/Tesseract-OCR/tesseract.exe'
+
+
+tessdata_dir = os.path.join(os.path.dirname(pytesseract.pytesseract.tesseract_cmd), 'tessdata')
+
+import numpy as np
+from PIL import Image
+
+def crop_image_pil(image, x1, y1, x2, y2):
+    cropped_image = image.crop((x1, y1, x2, y2))
+    return cropped_image
+
+
+def names_arabic_ocr(image_path):
+    names2=[]
+    with Image.open(image_path) as img:
+        cropped_images = [
+            #for id
+            (740,150, 809,180),
+            (459, 180, 810, 250),
+            (440, 410, 830, 470),
+            (280,280,700,315)
+        ]
+
+        ocr_results = []
+        for coordinates in cropped_images:
+            img_cropped = crop_image_pil(img, *coordinates)
+            text_ara = pytesseract.image_to_string(img_cropped, lang='ara', config='--psm 6 ')
+            text_eng = pytesseract.image_to_string(img_cropped, lang='eng', config='--psm 6 ')
+            if len(text_ara) >= len(text_eng):
+                ocr_results.append(text_ara.strip())
+            else:
+                ocr_results.append(text_eng.strip())
+        #print(ocr_results)
+
+        names2.append(ocr_results[0])
+
+        names2.append(ocr_results[1])
+
+        names2.append(ocr_results[2])
+
+        return names2
+
+def dates_arabic_ocr(image_path):
+    names2=[]
+    with Image.open(image_path) as img:
+        cropped_images = [
+            #for id
+            (740,150, 809,180),
+            (459, 180, 810, 250),
+            (440, 410, 830, 470),
+            (280,280,700,315)
+        ]
+
+        ocr_results = []
+        for coordinates in cropped_images:
+            img_cropped = crop_image_pil(img, *coordinates)
+            text_ara = pytesseract.image_to_string(img_cropped, lang='ara', config='--psm 6 ')
+            text_eng = pytesseract.image_to_string(img_cropped, lang='eng', config='--psm 6 ')
+            if len(text_ara) >= len(text_eng):
+                ocr_results.append(text_ara.strip())
+            else:
+                ocr_results.append(text_eng.strip())
+        fourth=ocr_results[3]
+        return fourth
+        #return ocr_results
+
+Validity_Date=dates_arabic_ocr(r'C:\Users\Administrator\Desktop\tamweeny flutter and images and  reccomend system\OCR Project\New folder\cropped ids\1(1).png')
+names=names_arabic_ocr(r'C:\Users\Administrator\Desktop\tamweeny flutter and images and  reccomend system\OCR Project\New folder\cropped ids\2.png')
+
+
+if __name__ == "__main__":
+    directory = r'C:\Users\Administrator\Desktop\tamweeny flutter and images and  reccomend system\OCR Project\New folder\cropped ids'
+
+with Image.open(r'C:\Users\Administrator\Desktop\tamweeny flutter and images and  reccomend system\OCR Project\New folder\cropped ids\22.png') as img:
+        img1=crop_image_pil(img,400, 410, 830, 470)
+
+cropped_np = np.array(img1)
+# # Display using matplotlib
+# plt.imshow(cropped_np)
+# plt.axis('off')  # Turn off axis
+# plt.show()
+
+img2= crop_image_pil(img,383,370,460,410)
+img1=crop_image_pil(img,410,451,580,480)
+img3=crop_image_pil(img,480,480,580,504)
+img4=crop_image_pil(img,340,590,520,620)
+img5=crop_image_pil(img,345,750,540,784)
+img6=crop_image_pil(img,295,293,510,316)
+
+
+print(json.dumps(names))
+# First_Name = names[0]
+#
+# Last_Name = names[1]
+# # ID_Number = names[2].encode('utf-8').decode('utf-8')
+# print(json.dumps(First_Name))
+# print(json.dumps(Last_Name))
+
+# print(ID_Number)
+#
+# print(Validity_Date)

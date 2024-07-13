@@ -8,6 +8,7 @@ use App\Models\AdminCard;
 use App\Models\User;
 use App\Services\AdminCardService;
 use App\Services\FileStorage\Interfaces\FileStorageInterface;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,6 +24,7 @@ class AdminCardController extends Controller
 
     public function store(AdminCardRequest $request)
     {
+
         $request->validated();
 
         try {
@@ -31,9 +33,10 @@ class AdminCardController extends Controller
             return response()->json(["message" => "Card created and waiting for approval"], 200);
         } catch (\Exception $e) {
             Log::error("Error storing admin card: " . $e->getMessage());
-            return response()->json(["message" => "An error occurred while creating the card"], 500);
+            return response()->json(["message" => "An error occurred while creating the card",$e], 500);
         }
     }
+
 
     // Other methods (show, edit, update, destroy) can be implemented similarly
 }

@@ -1,0 +1,174 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Api\AdminCardController;
+use App\Http\Controllers\Controller;
+use App\Models\AdminCard;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
+
+class CardsController extends Controller
+{
+    //
+
+    public function index()
+    {
+        $cards = AdminCard::all();
+        return Inertia::render('Admin/Notifications/Index', ['cards' => $cards]);
+
+    }
+
+    public function update(Request $request)
+    {
+
+//        dd($request);
+        $card = AdminCard::find($request->cardId);
+
+        if ($request->status == "Decline"):
+            $card->card_status_text = "Declined";
+            $card->save();
+        else:
+            if ($card->individuals_number == 1):
+                $points = 100;
+            elseif ($card->individuals_number == 2):
+                $points = 200;
+            elseif ($card->individuals_number == 3):
+                $points = 300;
+            else :
+                $points = 400;
+            endif;
+
+            $card->update([
+                'card_number' => $request->card_number,
+                'tamween_points' => $points,
+            ]);
+            $card->card_status_text = "Accepted";
+            $card->save();
+        endif;
+    }
+
+    public function checkSelfFiles(Request $request)
+    {
+        // Get the card name from the request
+        $cardName = $request->input('cardName');
+        // Get all directories in the specified path
+        $directories = Storage::directories('public/uploads/CardFiles');
+
+        // Find the directory that matches the card name
+        $matchingDirectory = null;
+        foreach ($directories as $directory) {
+            if (basename($directory) === $cardName) {
+                $matchingDirectory = $directory;
+                break;
+            }
+        }
+
+        if ($matchingDirectory) {
+            // Directory found, check for 'nationalIdCardAndBirthCertificate' folder
+            $targetFolder = $matchingDirectory . '/nationalIdCardAndBirthCertificate';
+
+            if (Storage::exists($targetFolder)) {
+                // Get all files in the 'nationalIdCardAndBirthCertificate' folder
+                $files = Storage::files($targetFolder);
+
+                // Read file contents (assuming you need to read and return them)
+                $fileContents = [];
+                foreach ($files as $file) {
+                    $fileContents[] = [
+                        'path' => $file,
+                    ];
+                }
+                return $this->runPythonScript($filePaths);
+
+//                return response()->json([
+//                    'message' => 'Folder and files found',
+//                    'files' => $fileContents
+//                ]);
+            } else {
+                return response()->json(['message' => 'Target folder not found'], 404);
+            }
+        } else {
+            // Directory not found
+            return response()->json(['message' => 'Directory not found'], 404);
+        }
+    }
+
+    public function checkFollowersFiles(Request $request)
+    {
+        // Get the card name from the request
+        $cardName = $request->input('cardName');
+        // Get all directories in the specified path
+        $directories = Storage::directories('public/uploads/CardFiles');
+
+        // Find the directory that matches the card name
+        $matchingDirectory = null;
+        foreach ($directories as $directory) {
+            if (basename($directory) === $cardName) {
+                $matchingDirectory = $directory;
+                break;
+            }
+        }
+
+        if ($matchingDirectory) {
+            // Directory found, check for 'nationalIdCardAndBirthCertificate' folder
+            $targetFolder = $matchingDirectory . '/followersNationalIdCardsAndBirthCertificates';
+
+            if (Storage::exists($targetFolder)) {
+                // Get all files in the 'nationalIdCardAndBirthCertificate' folder
+                $files = Storage::files($targetFolder);
+
+                // Read file contents (assuming you need to read and return them)
+                $fileContents = [];
+                foreach ($files as $file) {
+                    $fileContents[] = [
+                        'path' => $file,
+                    ];
+                }
+                return response()->json([
+                    'message' => 'Folder and files found',
+                    'files' => $fileContents
+                ]);
+            } else {
+                return response()->json(['message' => 'Target folder not found'], 404);
+            }
+        } else {
+            // Directory not found
+            return response()->json(['message' => 'Directory not found'], 404);
+        }
+    }
+    public function runPythonScript(array $filePaths)
+    {
+        // Path to your Python script
+        $pythonScriptPath = base_path('scripts/Ocr.py');
+        $filePathsJson = json_encode($filePaths);
+
+        // Command to execute the Python script
+        $command = escapeshellcmd("python $pythonScriptPath '$filePathsJson'");
+
+        // Execute the command and capture the output
+        $output = [];
+        $retval = null;
+        exec($command, $output, $retval);
+//        dd($output);
+        // Join the output lines into a single JSON string
+        $json_output = implode("\n", $output);
+//        dd($json_output);
+
+        // Decode the JSON output
+        $decoded_array = json_decode($json_output, true);
+        dd($decoded_array);
+        // Check for JSON decoding errors
+
+
+        // Return the output and status
+        return response()->json([
+            'decoded_output' => $decoded_array,
+            'retval' => $retval,
+        ]);
+    }
+
+
+
+}

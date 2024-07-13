@@ -20,14 +20,14 @@ class AdminCardService
 
     public function createNewCard($request)
     {
-
         // Generate unique directory path
-        $uniqueDir = '/public/uploads/CardFiles/' . $this->fileStorageService->getNextFolderCounter();
+        $username = $request->input('name'); // Assuming 'username' is the input field name
+        $uniqueDir = '/public/uploads/CardFiles/' . $username;
         Storage::makeDirectory($uniqueDir);
 
         // Store files
-        $nationalIdCardPath = $this->fileStorageService->storeFile($request->file('nationalIdCardAndBirthCertificate'), $uniqueDir);
-        $followersNationalIdCardsPaths = $this->fileStorageService->storeMultipleFiles($request->file('followersNationalIdCardsAndBirthCertificates'), $uniqueDir);
+        $nationalIdCardPath = $this->fileStorageService->storeMultipleFiles($request->file('nationalIdCardAndBirthCertificate'), $uniqueDir.'/nationalIdCardAndBirthCertificate');
+        $followersNationalIdCardsPaths = $this->fileStorageService->storeMultipleFiles($request->file('followersNationalIdCardsAndBirthCertificates'), $uniqueDir.'/followersNationalIdCardsAndBirthCertificates');
 
         // Retrieve the admin user
         $user = User::where('user_type', 'Admin')->firstOrFail();
@@ -36,13 +36,14 @@ class AdminCardService
          AdminCard::create([
             'name' => $request->input('name'),
             'admin_id' => $user->id,
+            'national_id'=>$request->input('nationalId'),
             'email' => $request->input('email'),
             'gender' => $request->input('gender'),
             'phone_number' => $request->input('phoneNumber'),
             'social_status' => $request->input('socialStatus'),
             'salary' => $request->input('salary'),
-            'individuals_number' => 1,
-            'national_id_card_and_birth_certificate' => asset($nationalIdCardPath),
+            'individuals_number' => 4,
+            'national_id_card_and_birth_certificate' =>  json_encode(array_map('asset', $nationalIdCardPath)),
             'followers_national_id_cards_and_birth_certificates' => json_encode(array_map('asset', $followersNationalIdCardsPaths)),
         ]);
 

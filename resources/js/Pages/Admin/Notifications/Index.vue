@@ -8,11 +8,14 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
 const props = defineProps({
-  cards: Array,
+  cards: Object,
+  flag: Number,
+  message: String,
 })
 
 const form = useForm({
   cardId: '',
+  cardName: '',
   card_number: '',
   tamween_points: '',
   status: '',
@@ -42,12 +45,15 @@ const assignCardData = (card, status) => {
   })
 }
 
-const checkFiles = (cardId) => {
+const checkSelfFiles = (cardName) => {
+  form.cardName = cardName
+  form.post(route('admin.card.self'))
   // Simulate a file check
-  let success = Math.random() > 0.5 // Randomly simulate success or failure
-
-  // Update the checkStatus object
-  checkStatus.value[cardId] = success
+}
+const checkFollowersFiles = (cardName) => {
+  form.cardName = cardName
+  form.post(route('admin.card.followers'))
+  // Simulate a file check
 }
 </script>
 
@@ -57,12 +63,14 @@ const checkFiles = (cardId) => {
   <AuthenticatedLayout>
     <div class="">
       <h1 class="font-bold" style="color: #c6ffe6; font-size: 60px; margin-right: 25px;"> التنبيهات </h1>
+      <!--      {{ flag + " " + message }}-->
       <div class="relative shadow-md sm:rounded-lg mt-20">
         <table class="w-11/12 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mr-12">
           <thead class="text-xs text-gray-100 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-100">
             <tr>
               <th scope="col" class="px-6 py-3">رقم الطلب</th>
               <th scope="col" class="px-6 py-3">اسم العميل</th>
+              <th scope="col" class="px-6 py-3">الرقم القومي</th>
               <th scope="col" class="px-6 py-3">حالة البطاقه</th>
               <th scope="col" class="px-6 py-3">بيانات الطلب</th>
               <th scope="col" class="px-6 py-3">اضافة رقم البطاقه</th>
@@ -85,6 +93,9 @@ const checkFiles = (cardId) => {
                 {{ card.name }}
               </td>
               <td class="px-6 py-4">
+                {{ card.national_id }}
+              </td>
+              <td class="px-6 py-4">
                 <div
                   :class="{
                     'bg-orange-600 p-2 rounded-3xl': card.card_status_text === 'Declined',
@@ -103,6 +114,7 @@ const checkFiles = (cardId) => {
                 >
                   البيانات
                 </button>
+
 
                 <FontAwesomeIcon
                   v-if="checkStatus[card.id] !== undefined"
@@ -162,8 +174,11 @@ const checkFiles = (cardId) => {
 
   <!-- Modal -->
   <Modal class="" :show="showModal" @close="showModal = false">
-    <div class="w-full flex flex-col relative shadow-2xl rounded-3xl color" style="height: 800px; width: 400px; margin: auto;">
-      <div class="mt-4 p-2 flex-1 flex-col items-center text-center text-xl justify-between">
+    <div
+      class="w-full flex flex-col relative shadow-2xl rounded-3xl color pt-4 "
+      style="height: 800px; width: 400px; margin: auto;"
+    >
+      <div class=" p-2 flex-1 flex-col items-center text-center text-xl justify-between">
         <p class="mb-4 pColor">
           الاسم
           <span class="block spanColor">{{ currentCard.name }}</span>
@@ -184,29 +199,65 @@ const checkFiles = (cardId) => {
           رقم الهاتف
           <span class="block spanColor">{{ currentCard.phone_number }}</span>
         </p>
-        <p class="mb-4 pColor">
+        <p class=" mb-">
           بطاقة الرقم القومي وشهادة الميلاد
-          <a :href="currentCard.national_id_card_and_birth_certificate" target="_blank" class="block underline text-blue-500">
-            عرض الملف
-          </a>
+          <span
+            v-for="(path, index) in JSON.parse(currentCard.national_id_card_and_birth_certificate)"
+            :key="index"
+          >
+            <a :href="path" target="_blank" class="inline-block  text-blue-500 ml-4 line-clamp-6">
+              عرض الملف {{ index + 1 }}
+            </a>
+          </span>
+          <br />
+          <Link
+            class="inline-block mt-3 text-md spanColor underline"
+            style="justify-content: center;padding: 5px;border-radius: 20px"
+            @click="checkSelfFiles(currentCard.name)"
+          >
+            فحص الملفات
+          </Link>
+          <FontAwesomeIcon
+            v-if="flag === 0"
+            :icon="faTimesCircle"
+            class="w-6 h-6 ml-2 text-red-500"
+          />
+          <FontAwesomeIcon
+            v-else
+            :icon="faCheckCircle"
+            class="w-6 h-6 ml-2 text-green-500"
+          />
         </p>
-        <p class="mb-4 pColor">
+
+        <p class="mb-4 pColor ">
           بطاقات الرقم القومي وشهادات ميلاد التابعين
-          <span v-for="(path, index) in JSON.parse(currentCard.followers_national_id_cards_and_birth_certificates)" :key="index">
-            <a :href="path" target="_blank" class="block underline text-blue-500">
+          <span
+            v-for="(path, index) in JSON.parse(currentCard.followers_national_id_cards_and_birth_certificates)"
+            :key="index"
+          >
+            <a :href="path" target="_blank" class="inline-block  text-blue-500 ml-4 line-clamp-1">
               عرض الملف {{ index + 1 }}
             </a>
           </span>
         </p>
+        <Link
+          class="inline-block text-md spanColor underline "
+          style="justify-content: center;padding: 5px;border-radius: 20px"
+          @click="checkFollowersFiles(currentCard.name)"
+        >
+          فحص الملفات
+        </Link>
+        <br />
+
         <button
           class="mt-4"
           style="background:#345E37;color:#C6FFE6;width: 200px;justify-content: center;padding: 10px;border-radius: 20px"
-          @click="checkFiles(currentCard.id)"
+          @click="showModal = false"
         >
-          فحص الملفات
+          تحميل الملفات
         </button>
         <button
-          class="mt-4"
+          class="mt-4 "
           style="background:#345E37;color:#C6FFE6;width: 200px;justify-content: center;padding: 10px;border-radius: 20px"
           @click="showModal = false"
         >
@@ -218,45 +269,15 @@ const checkFiles = (cardId) => {
 </template>
 
 <style scoped>
-.cardWidth {
-    width: 90vw;
-    max-width: 340px;
-}
-
 .color {
     background-color: #1e1e1e;
 }
 
-p, h6, .iconColor, label {
-    color: #c6ffe6;
-}
-
-.iconn {
+p, h6, label {
     color: #c6ffe6;
 }
 
 .spanColor {
     color: #61bc84;
-}
-
-.btn-wrapper:not(:hover) {
-//pointer-events: none;
-}
-
-.cursor-pointer {
-//cursor: pointer;
-}
-
-.btn-wrapper {
-    text-align: center;
-}
-
-.f {
-    color: white;
-    background-color: transparent;
-    width: 100%;
-    border-radius: 10px;
-    margin-bottom: 10px;
-//border: none;
 }
 </style>

@@ -30,35 +30,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/images', [ProductController::class, 'store']);
-//Route::get('/admin-cards/create', [AdminCardController::class, 'create'])->name('admin-cards.create');
-//Route::get('/admin-card', [AdminCardController::class, 'showAdminCards']);
 
-Route::get('/testttttt',[UserController::class,'testtt']);
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/cardRegistration', [AdminCardController::class, 'store']);
-Route::get('/test2', [AdminCardController::class, 'create']);
 Route::post('/login', [AuthController::class, 'login']);
-//Route::post('/login', [DeliveryAuthController::class, 'login']);
-Route::get('/send-data', [ProductController::class, 'sendData']);
 
-//Route::get('/model', [Orders_madeController::class, 'model']);
+
 Route::get('/modelProducts', [ProductController::class,'model']);            //Products
 Route::get('/modelUsers', [UserController::class,'index']);            //Products
-Route::get('/tokenAndName', [UserController::class,'tokenAndName']);            //Products
-//Route::post('/send-token', [FlaskController::class, 'sendDataToFlaskAPI']);
-Route::get('/run-python', [PythonController::class, 'runPythonScript']);
+Route::get('/run-python', [\App\Http\Controllers\Admin\CardsController::class, 'runPythonScript']);
 
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
-//Route::get('/userss', [UserController::class, 'index']);                //Users
-//Route::get('/ay7aga', [AuthController::class, 'ay7aga']);                //Users
 
+//Only authenticated users may access this group of routes.
 Route::group(['middleware' => 'auth:sanctum'], function () {
-    Route::get('/ay7aga', [UserController::class, 'ay7aga']);                //Users
 
 
-//    Route::resource('user',UserController::class)->only(['index','update','destroy']);
-//    Route::get('userBalance', 'userBalance');
 
     Route::controller(UserController::class)->name('customer.')->group(function () {
 
@@ -82,11 +71,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 //    });
 
     Route::get('/recommended', [ProductController::class,'recommendedProducts']);            //Products
-//    Route::resource('products',ProductController::class)->only(['index']);
 
     Route::get("/products/{product}",[ProductController::class,'show']);
+
+
+
     Route::controller(ProductController::class)->group(function () {
-        Route::get('/products', 'index');// ['@role customer , delviery']//Products
+        Route::get('/products', 'index');
         Route::get('/productId/{product?}', 'searchForProductById');
         Route::get('/productName/{product?}', 'searchForProductByName');
         Route::get('/offers', 'offers');       //ProductPricing
@@ -96,7 +87,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get  ('/recommendations', [ProductController::class, 'getRecommendations']);
 
 
-//    Route::resource("/favorites",FavoriteController::class)->only(["index","show"]);
     Route::controller(FavoriteController::class)->group(function () {
         Route::get('/favorites', 'index');          //Favorites
         Route::post('favorite/{productId}', 'add');
@@ -119,7 +109,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::controller(Orders_madeController::class)->group(function () {
         Route::get('/ordersMade', 'index');
-//        Route::get('/fullOrder', 'fullOrder');
         Route::get('/modelOrders', 'modelOrders');
         Route::get('/fullPendingOrders', 'fullPendingOrders');
         Route::get('/fullDeliveredOrders', 'fullDeliveredOrders');
@@ -137,7 +126,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 
 
-//    Route::get('/model', [Orders_madeController::class, 'ordersForModel']);
     Route::get('/customers', [CustomerController::class, 'index']);         //Customers
     Route::get('/owners', [StoreOwnerController::class, 'index']);
     Route::get('/cards', [CardController::class, 'index']);
@@ -148,12 +136,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 });
 
 
-Route::post("/upload", [FIleController::class, 'upload']);
-////Route::get(' / test2',[CategoryController::class, 'test']);
-////Route::get(' / test3',[CategoryController::class, 'test2']);
-//Route::post(' / fake', [AuthController::class, 'fake2']);
-//Route::get(' / test',[ProductController::class, 'test']);
-//
-//Route::get(' / users',[AuthController::class, 'test']);
+
 
 
