@@ -28,6 +28,8 @@ return new class extends Migration
             $table->string('salary', 191);
             $table->json('national_id_card_and_birth_certificate')->nullable();
             $table->json('followers_national_id_cards_and_birth_certificates')->nullable();
+            $table->boolean('flag')->nullable();
+            $table->string('message')->nullable();
             $table->timestamps();
 
 //            $table->foreign('admin_id')->references('id')->on('governor_admins')->onDelete('cascade');

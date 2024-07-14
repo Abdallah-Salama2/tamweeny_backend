@@ -9,8 +9,6 @@ import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
 const props = defineProps({
   cards: Object,
-  flag: Number,
-  message: String,
 })
 
 const form = useForm({
@@ -27,7 +25,6 @@ const form = useForm({
 
 const currentCard = ref(null)
 const showModal = ref(false)
-const checkStatus = ref({}) // To store the check status of each card
 
 const assignCardData = (card, status) => {
   form.cardId = card.id
@@ -64,6 +61,7 @@ const checkFollowersFiles = (cardName) => {
     <div class="">
       <h1 class="font-bold" style="color: #c6ffe6; font-size: 60px; margin-right: 25px;"> التنبيهات </h1>
       <!--      {{ flag + " " + message }}-->
+
       <div class="relative shadow-md sm:rounded-lg mt-20">
         <table class="w-11/12 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 mr-12">
           <thead class="text-xs text-gray-100 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-100">
@@ -114,14 +112,7 @@ const checkFollowersFiles = (cardName) => {
                 >
                   البيانات
                 </button>
-
-
-                <FontAwesomeIcon
-                  v-if="checkStatus[card.id] !== undefined"
-                  :icon="checkStatus[card.id] ? faCheckCircle : faTimesCircle"
-                  class="w-6 h-6 mr-2"
-                  :class="checkStatus[card.id] ? 'text-green-500' : 'text-red-500'"
-                />
+                <p style="color: red"> ({{ card.message }})</p>
               </td>
               <td class="px-6 py-4">
                 <input
@@ -218,12 +209,12 @@ const checkFollowersFiles = (cardName) => {
             فحص الملفات
           </Link>
           <FontAwesomeIcon
-            v-if="flag === 0"
+            v-if="currentCard.flag === 0"
             :icon="faTimesCircle"
             class="w-6 h-6 ml-2 text-red-500"
           />
           <FontAwesomeIcon
-            v-else
+            v-else-if="currentCard.flag === 1"
             :icon="faCheckCircle"
             class="w-6 h-6 ml-2 text-green-500"
           />

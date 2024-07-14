@@ -13,13 +13,13 @@ class CardsController extends Controller
 {
     //
 
-    public function index($flag = null, $str = null)
+    public function index($card = null)
     {
         $cards = AdminCard::all();
         return Inertia::render('Admin/Notifications/Index', [
             'cards' => $cards,
-            'flag' => (int)$flag,
-            'message' => $str,
+            'card' => $card,
+
         ]);
     }
 
@@ -85,6 +85,7 @@ class CardsController extends Controller
                 $nationalId = $data[2];
                 $dateString = $data[3];
 
+
                 // Extract the date from the date string
                 preg_match('/(\d{4}\/\d{1,2}\/\d{1,2})/', $dateString, $matches);
                 $expiryDate = $matches[0];
@@ -93,43 +94,38 @@ class CardsController extends Controller
                 $expiryDate = \DateTime::createFromFormat('Y/m/d', $expiryDate);
                 $now = new \DateTime();
                 // dd($expiryDate < $now);
-                $flag = 0;
-                $str = "";
+                $card->message = "";
                 // dd($nationalId, $date);
                 // Check the conditions
                 if ($combinedName == $cardName) {
                     if ($nationalId == $national_Id) {
                         if ($expiryDate >= $now) {
-                            $flag = 1;
+                            $card->flag = 1;
                         } else {
-                            $flag = 0;
-                            $str = "تاريخ البطاقه منتهي";
+                            $card->flag = 0;
+                            $card->message = "تاريخ البطاقه منتهي";
                         }
                     } else {
-                        $flag = 0;
-                        $str = "رقم قومي خطا ";
+                        $card->flag = 0;
+                        $card->message = "رقم قومي خطا ";
                     }
                 } else {
-                    $flag = 0;
-                    $str = "عدم تطابق في الاسم";
+                    $card->flag = 0;
+                    $card->message = "عدم تطابق في الاسم";
                 }
+                $card->save();
+//                dd($card->toArray());  // Check if 'flag' attribute is present in the array representation
 
                 // Return back to index notification with the flag as a prop
-                return redirect()->route('admin.card.index', ['flag' => $flag, 'str' => $str]);
+                return redirect()->route('admin.card.index', ['card' => $card]);
             } else {
-                return Inertia::render('Admin/Notifications/Index', [
-                    'cards' => AdminCard::all(),
-                    'flag' => 0,
-                    'message' => 'Target folder not found'
-                ]);
+                return response("Folder not found");
+
             }
         } else {
             // Directory not found
-            return Inertia::render('Admin/Notifications/Index', [
-                'cards' => AdminCard::all(),
-                'flag' => 0,
-                'message' => 'Directory not found'
-            ]);
+            return response("Directory not found");
+
         }
     }
 

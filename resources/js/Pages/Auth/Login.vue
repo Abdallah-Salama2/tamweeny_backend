@@ -91,7 +91,7 @@ const submit = () => {
         </span>
         <input
           id="website-admin" v-model="form.password"
-          type="text"
+          type="password"
           class="rounded-none rounded-e-lg bg-transparent  border text-gray-900 focus:ring-blue-500 focus:border-blue-500  placeholder-green-500 font-medium
                            block flex-1 min-w-0 w-full text-sm border-gray-100 p-2.5  dark:border-gray-600  dark:text-white dark:focus:ring-blue-500
                             dark:focus:border-blue-500"
