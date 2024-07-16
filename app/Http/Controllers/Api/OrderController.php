@@ -22,20 +22,10 @@ class OrderController extends Controller
     {
 
         $customerId = auth()->user()->id;
-
-        //print("CustomerId " . $customerId . "\n");
-
         $customerOrders = Order::where("customer_id", $customerId)->get();
-        //print($customerOrders);
 
         return response()->json(OrderResource::collection($customerOrders));
     }
-
-
-    /**
-     * Store a newly created resource in storage.
-     */
-
 
     public function create(Request $request)
     {
@@ -51,15 +41,7 @@ class OrderController extends Controller
         }
 
         $total = $customerCart->sum('total_price');
-//        $users = User::all();
 
-// Sort the users collection by the order_count attribute
-//        $sortedUsers = $users->sortBy('order_count');
-
-// Now you can get the first user after sorting
-//        $delivery = $sortedUsers->first();
-        // Find the delivery with the minimum number of orders
-//        $delivery = User::orderBy('order_count')->first();
         $order = Order::create([
             "order_date" => now(),
             "order_price" => $total,
@@ -102,6 +84,11 @@ class OrderController extends Controller
     {
 
         $order = Order::find($orderId);
+        if(!$order){
+            return response()->json([
+                'message' => 'Order not found',
+            ]);
+        }
         $order->delivery_status = "Delivered";
         $order->save();
 
@@ -110,27 +97,5 @@ class OrderController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Order $order)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Order $order)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Order $order)
-    {
-        //
-    }
 }

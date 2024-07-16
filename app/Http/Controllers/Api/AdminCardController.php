@@ -30,10 +30,10 @@ class AdminCardController extends Controller
         try {
             $this->adminCardService->createNewCard($request);
 
-            return response()->json(["message" => "Card created and waiting for approval"], 200);
+            return response()->json(["message" => "Card created and waiting for approval",'success'=>'true'], 200);
         } catch (\Exception $e) {
             Log::error("Error storing admin card: " . $e->getMessage());
-            return response()->json(["message" => "An error occurred while creating the card",$e], 500);
+            return response()->json(["message" => "An error occurred while creating the card",'success'=>'false',$e], 500);
         }
     }
 

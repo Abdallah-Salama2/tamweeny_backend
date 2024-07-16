@@ -26,7 +26,7 @@ class AdminCardRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:admin_cards,email',
-            'gender' => ['required', Rule::in(['male', 'female','ذكر','انثى'])],
+            'gender' => ['required', Rule::in(['Male', 'Female','ذكر','انثى'])],
             'phoneNumber' => 'required|string|max:20',
             'nationalId' => 'required|string|max:255|',
             'socialStatus' => 'required|string|max:255',

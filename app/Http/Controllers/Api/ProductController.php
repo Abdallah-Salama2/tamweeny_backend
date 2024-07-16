@@ -69,14 +69,7 @@ class ProductController extends Controller
 
     public function recommendedProducts(Request $request)
     {
-//        $userId = $request->user()->id;
-//        $customerId = auth()->user()->id;
-//
-//
-//        // Retrieve customer's favorite product IDs
-//        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
-//            ->pluck('product_id')
-//            ->toArray();
+
         // Retrieve all products with pricing, category
         $allProducts = Product::with('productpricing', 'category')->get();
 //        dd($allProducts);
@@ -87,9 +80,7 @@ class ProductController extends Controller
         $recommendedProducts = $sortedProducts->take(2);
         // Transform products using ProductResource and set favoriteStats based on if they are favorites
         $products = ProductResource::collection($recommendedProducts);
-//        $products->each(function ($product) use ($customerFavoriteProductIds) {
-//            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
-//        });
+
         return response()->json([
            $products->first(),
            $products->last(),
@@ -151,104 +142,14 @@ class ProductController extends Controller
         // Return an empty response if no matching user is found
         return response()->json(['message' => 'No recommended products found for the user.'], 404);
     }
-//
-//    public function sendData()
-//    {
-//        $url = 'http://127.0.0.1:5000/post-data'; // Flask app URL
-//
-//        // Data to be sent
-//        $data = [
-//            'name' => 'John',
-//            'age' => 30
-//        ];
-//
-//        // Sending POST request
-//        $response = Http::post($url, $data);
-//
-//        // Returning response from Flask
-//        return $response->json();
-//    }
-
-
-//    public function recommendedProducts2(Request $request)
-//    {
-//
-////        return $token;
-////        $flask_url = "http://127.0.0.1:5000/?token={$api_token}";
-////        dd($flask_url);
-////        $response = Http::get($flask_url);
-////        $data = $response->json();
-//
-//        $productId1 = $data[0];
-//        $productId2 = $data[1];
-//
-//        $product1 = Product::find($productId1);
-//        $product2 = Product::find($productId2);
-//
-//        $collection = [$product1, $product2];
-//
-//        return response()->json(ProductResource::collection($collection));
-//    }
-
-//    public function recommendedProducts2(Request $request)
-//    {
-//        // Get the current authenticated user's name
-//        $name = auth()->user()->name;
-//
-//        // Make a GET request to the Flask API
-//        $response = Http::get('http://127.0.0.1:5000/');
-//        $data = $response->json();
-//
-//        // Check if the user's name is in the data array keys
-//        if (array_key_exists($name, $data)) {
-//            // Retrieve the product IDs
-//            $productIds = $data[$name];
-//            $productId1 = $productIds[0];
-//            $productId2 = $productIds[1];
-//
-//            // Find the products in the database
-//            $product1 = Product::find($productId1);
-//            $product2 = Product::find($productId2);
-//
-//            // Create a collection of the products
-//            $collection = [$product1, $product2];
-//
-//            // Return the products as a JSON response
-//            return response()->json(ProductResource::collection($collection));
-//        }
-//
-//        // Return an empty response if no matching user is found
-//        return response()->json(['message' => 'No recommended products found for the user.'], 404);
-//    }
-//
-//    public function offers(Request $request)
-//    {
-//        $offers = $this->productOffer->getProductsOnOffer();
-//        return response()->json(ProductResource::collection($offers));
-//    }
 
 
     public function offers(Request $request)
     {
-//        $customerId = auth()->user()->id;
-//
-//        // Retrieve customer's favorite product IDs
-//        $customerFavoriteProductIds = Favorite::where('customer_id', $customerId)
-//            ->pluck('product_id')
-//            ->toArray();
         // Retrieve all products with pricing, category
         $allProducts = Product::with('productpricing', 'category')->where('product_type',1)->latest()->get();
-//        $offers = [];
-//        foreach ($allProducts as $product) {
-//            if ($product->productpricing->base_price > $product->productpricing->selling_price) {
-//                $offers[] = $product;
-//            }
-//        }
+
         $products = ProductResource::collection($allProducts);
-//        $products->each(function ($product) use ($customerFavoriteProductIds) {
-//            $product->favoriteStats = in_array($product->id, $customerFavoriteProductIds) ? 1 : 0;
-//
-//        });
         return response()->json($products);
     }
 

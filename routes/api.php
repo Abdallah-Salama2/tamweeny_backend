@@ -29,30 +29,27 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::get('/images', [ProductController::class, 'store']);
 
-
+//Auth Endpoints
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/cardRegistration', [AdminCardController::class, 'store']);
 Route::post('/login', [AuthController::class, 'login']);
-
-
-Route::get('/modelProducts', [ProductController::class,'model']);            //Products
-Route::get('/modelUsers', [UserController::class,'index']);            //Products
-Route::get('/run-python', [\App\Http\Controllers\Admin\CardsController::class, 'runPythonScript']);
-
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+
+
+Route::post('/cardRegistration', [AdminCardController::class, 'store']);
+
+// End Points For Recommendations Python Model
+Route::get('/modelProducts', [ProductController::class, 'model']);            //Products
+Route::get('/modelUsers', [UserController::class, 'index']);            //Products
+Route::get('/run-python', [\App\Http\Controllers\Admin\CardsController::class, 'runPythonScript']);
 
 
 //Only authenticated users may access this group of routes.
 Route::group(['middleware' => 'auth:sanctum'], function () {
 
-
-
     Route::controller(UserController::class)->name('customer.')->group(function () {
 
         Route::patch('updateAccInfo', 'updateUserInfo');
-        Route::get('isNew', 'isNewUser')->name("newUser");       //Users
         Route::get('search/{name}', 'search');
         Route::get('users/{id?}', 'findUser');
         Route::get('userData', 'getLoggedInUserData');
@@ -63,16 +60,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     });
 
 
-    Route::resource('/categories',CategoryController::class)->only(['index','show'])->scoped(['category'=>'category_name']);
+    Route::resource('/categories', CategoryController::class)->only(['index', 'show'])->scoped(['category' => 'category_name']);
 
 //    Route::controller(CategoryController::class)->group(function () {
 //        Route::get('/categories', 'index');        //Categories
 //        Route::get('/categories/{catName}', 'productsByCategory');
 //    });
-
-    Route::get('/recommended', [ProductController::class,'recommendedProducts']);            //Products
-
-    Route::get("/products/{product}",[ProductController::class,'show']);
 
 
 
@@ -80,12 +73,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('/products', 'index');
         Route::get('/productId/{product?}', 'searchForProductById');
         Route::get('/productName/{product?}', 'searchForProductByName');
-        Route::get('/offers', 'offers');       //ProductPricing
+        Route::get('/offers', 'offers');
+        Route::get('/recommended','recommendedProducts');            //Products
+        Route::get('/fillStoresProducts','fillStoreProductsTable');
+        Route::get('/recommendedProducts2','recommendedProducts2');
     });
-    Route::get('/fillStoresProducts', [ProductController::class, 'fillStoreProductsTable']);
-    Route::get('/recommendedProducts2', [ProductController::class, 'recommendedProducts2']);
-    Route::get  ('/recommendations', [ProductController::class, 'getRecommendations']);
-
 
     Route::controller(FavoriteController::class)->group(function () {
         Route::get('/favorites', 'index');          //Favorites
@@ -98,7 +90,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::delete('/cart/{productId}', 'delete');
 
     });
-
 
 
     Route::controller(OrderController::class)->group(function () {
@@ -125,15 +116,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     });
 
 
-
-    Route::get('/customers', [CustomerController::class, 'index']);         //Customers
-    Route::get('/owners', [StoreOwnerController::class, 'index']);
     Route::get('/cards', [CardController::class, 'index']);
-    Route::get('/test', [TestController::class, 'index']);
-    Route::post('/test22', [TestController::class, 'store']);
 
 
-});
+
+}); 
 
 
 

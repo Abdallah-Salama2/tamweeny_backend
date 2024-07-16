@@ -38,35 +38,37 @@ Route::get('/', function () {
 
 
 Route::middleware('auth')->group(function () {
-    Route::get('/admin/index', [AdminProductsController::class, 'index'])->middleware(['auth',])->name('admin.product.index');
+    Route::get('/products', [AdminProductsController::class, 'index'])->middleware(['auth',])->name('admin.product.index');
     Route::get('/admin/product/create', [AdminProductsController::class, 'create'])->middleware(['auth'])->name('admin.product.create');
     Route::post('/admin/product', [AdminProductsController::class, 'store'])->name('admin.product.store');
     Route::get('/admin/product/{product}/edit', [AdminProductsController::class, 'edit'])->middleware(['auth'])->name('admin.product.edit');
     Route::post('/admin/product/{product}', [AdminProductsController::class, 'update'])->middleware(['auth'])->name('admin.product.update');
-    Route::delete('/admin/product/{product}/deleteImage', [AdminProductsController::class, 'deleteProductImg'])->middleware(['auth'])->name('admin.product.productImage.delete');
+    Route::delete('/admin/product/{product}/deleteImage', [AdminProductsController::class, 'deleteProductImg'])->middleware(['auth'])
+        ->name('admin.product.productImage.delete');
+    Route::delete('/product/{product}', [AdminProductsController::class, 'destroy'])->name('admin.product.destroy');
+    Route::post('/product/{product}', [AdminProductsController::class, 'increase_quantity'])->name('admin.product.increase');
 
-    Route::get('admin/users', [UserController::class, 'customerIndex'])->name('admin.customer.index');
-    Route::get('admin/orders', [OrderController::class, 'index'])->name('admin.order.index');
-    Route::get('admin/deliverys', [UserController::class, 'deliveryIndex'])->name('admin.delivery.index');
-    Route::get('admin/suppliers', [UserController::class, 'supplierIndex'])->name('admin.supplier.index');
+
+    Route::get('/users', [UserController::class, 'supplierIndex'])->name('admin.supplier.index');
     Route::get('admin/addAccount', [UserController::class, 'create'])->name('admin.user.create');
     Route::post('admin/addUser/{userType}', [UserController::class, 'store'])->name('admin.user.store');
 
-    Route::get('/admin/offers', [OffersController::class, 'index'])->middleware(['auth'])->name('admin.offer.index');
+    Route::get('admin/orders', [OrderController::class, 'index'])->name('admin.order.index');
+    Route::get('supplier/orders', [OrdersController::class, 'index'])->name('supplier.order.index');
+    Route::post('supplier/orders/{orderId}', [OrdersController::class, 'update'])->name('supplier.order.update');
+
+
+    Route::get('/supplier/offers', [OffersController::class, 'index'])->middleware(['auth'])->name('supplier.offer.index');
+
     Route::get('/admin/stores/index', [StoreController::class, 'index'])->middleware(['auth'])->name('admin.store.index');
     Route::post('/admin/stores', [StoreController::class, 'edit'])->middleware(['auth'])->name('admin.store.update');
 
-    Route::get('supplier/orders', [OrdersController::class, 'index'])->name('supplier.order.index');
-    Route::post('supplier/orders/{orderId}', [OrdersController::class, 'update'])->name('supplier.order.update');
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-
-    Route::delete('/product/{product}', [AdminProductsController::class, 'destroy'])->name('admin.product.destroy');
-    Route::post('/product/{product}', [AdminProductsController::class, 'increase_quantity'])->name('admin.product.increase');
 
 
     Route::resource('/admin/categories', CategoryController::class)
@@ -75,13 +77,10 @@ Route::middleware('auth')->group(function () {
             'show' => 'admin.categories.show',
         ]);
 
-    Route::get('/admin/cards/{flag?}/{str?}', [CardsController::class, 'index'])->middleware(['auth',])->name('admin.card.index');
+    Route::get('/admin/cards/', [CardsController::class, 'index'])->middleware(['auth',])->name('admin.card.index');
     Route::post('/admin/cards', [CardsController::class, 'update'])->middleware(['auth',])->name('admin.card.update');
     Route::post('/admin/cards/self', [CardsController::class, 'checkSelfFiles'])->middleware(['auth',])->name('admin.card.self');
     Route::post('/admin/cards/followers', [CardsController::class, 'checkFollowersFiles'])->middleware(['auth',])->name('admin.card.followers');
-    Route::get('/test-flash', function () {
-        return redirect()->route('admin.product.index');
-    })->middleware('test.flash');
 
 //    Route::resource('order',\App\Http\Controllers\Api\OrderController::class);
 });

@@ -29,31 +29,10 @@ class Orders_madeController extends Controller
     }
 
     /**
-     * Display orders for a model.
-     */
-    public function ordersForModel(Request $request)
-    {
-//        $userId = $request->user()->id;
-//        $user = User::with('customer', 'customer.card')->find($userId);
-//        $customerId = $user->customer->id;
-        $customerId = auth()->user()->id;
-
-
-        $ordersMade = Orders_made::where("customer_id", $customerId)->get();
-        return response()->json(modelResource::collection($ordersMade));
-    }
-
-    /**
      * Display full order details.
      */
     public function fullOrder(Request $request)
     {
-//        $userId = $request->user()->id;
-//        $user = User::with('customer', 'customer.card')->find($userId);
-//        if (!$user) {
-//            return response()->json(['error' => 'User not found'], 404);
-//        }
-
         $orderId = Session::get("orderId");
         $orders = Order::find($orderId);
         $ordersMade = Orders_made::where("order_id", $orderId)->get();

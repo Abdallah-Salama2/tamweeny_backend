@@ -72,8 +72,8 @@ const permissions = computed(() => page.props.auth.permissions)
         <li>
           <ResponsiveNavLink
             v-if="permissions.includes('list-supplier-products')"
-            :href="route('admin.offer.index')"
-            :active="route().current('admin.offer.index')"
+            :href="route('supplier.offer.index')"
+            :active="route().current('supplier.offer.index')"
             class="navLink"
           >
             <!--icon-->

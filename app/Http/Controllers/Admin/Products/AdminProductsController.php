@@ -190,7 +190,7 @@ class AdminProductsController extends Controller
                 'discount' => 0,
             ]);
             $store->products()->attach($product,['quantity'=>$request->stock_quantity,'created_at'=>now(),'updated_at'=>now()]);
-            return redirect(route('admin.offer.index'))
+            return redirect(route('supplier.offer.index'))
                 ->with('success', 'تم اضافة المنتج بنجاح');
         }
 //        dd(session()->all());

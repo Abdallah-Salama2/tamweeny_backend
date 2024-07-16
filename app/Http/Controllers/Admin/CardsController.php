@@ -13,12 +13,11 @@ class CardsController extends Controller
 {
     //
 
-    public function index($card = null)
+    public function index()
     {
         $cards = AdminCard::all();
         return Inertia::render('Admin/Notifications/Index', [
             'cards' => $cards,
-            'card' => $card,
 
         ]);
     }

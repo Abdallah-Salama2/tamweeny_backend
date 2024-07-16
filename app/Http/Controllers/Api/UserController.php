@@ -16,22 +16,12 @@ use Illuminate\Support\Facades\Http;
 
 class UserController extends Controller
 {
-    public function testtt(){
 
-    }
     //List all users
     public function index(): JsonResponse
     {
-        $users = User::with('card','favorite','order_made')->where('user_type','customer')->get();
-//        return  response()->json($users);
-        return  response()->json(modelResource::collection($users));
-
-    }
-    public function tokenAndName(): JsonResponse
-    {
-//        $token=session('api_token');
-
-        return  response()->json(['Name'=>auth()->user()->name]);
+        $users = User::with('card', 'favorite', 'order_made')->where('user_type', 'customer')->get();
+        return response()->json(modelResource::collection($users));
 
     }
 

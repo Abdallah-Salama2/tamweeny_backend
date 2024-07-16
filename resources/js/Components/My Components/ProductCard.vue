@@ -80,7 +80,7 @@
             </Link>
           </div>
           <div
-            v-if=" page.url === '/admin/offers' "
+            v-if=" page.url === '/supplier/offers' "
             class="flex"
           >
             <svg
@@ -109,7 +109,7 @@
           </div>
 
           <div
-            v-if="permissions.includes('ask_for_quantity_increase') && page.url === '/admin/index' "
+            v-if="permissions.includes('ask_for_quantity_increase') && page.url === '/products' "
             class="flex"
           >
             <svg class="w-6 h-6 mt-1 ml-1 text-gray-800 iconn dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -157,7 +157,7 @@
             </Link>
           </div>
           <div
-            v-if=" page.url === '/admin/offers' "
+            v-if=" page.url === '/supplier/offers' "
             class="flex"
           >
             <svg

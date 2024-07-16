@@ -25,7 +25,7 @@ console.log(page.props.flash) // Debugging line
     <div class="flex flex-row flex-wrap gap-10 justify-center mt-5">
       <Link
         v-if="permissions.includes('add-categories')"
-        :href="route('admin.product.create')"
+        href=""
       >
         <img
           class="cardWidth"

@@ -11,7 +11,7 @@
         "description": "عدس مجروش 500 جم",
         "category": "البقوليات والحبوب",
         "order_count": 3,
-        "favorite_count": 1
+        "favorite_count": 2
     },
     {
         "product_id": 3,
@@ -32,7 +32,7 @@
         "description": "شاي ناعم 40 جم",
         "category": "اخرى",
         "order_count": 1,
-        "favorite_count": 0
+        "favorite_count": 1
     },
     {
         "product_id": 6,
@@ -220,13 +220,6 @@
         "product_id": 32,
         "description": "شيكولاتة ماندولين - 50جم - عبوة من 12",
         "category": "شوكولاته",
-        "order_count": 0,
-        "favorite_count": 0
-    },
-    {
-        "product_id": 41,
-        "description": "1",
-        "category": "اخرى",
         "order_count": 0,
         "favorite_count": 0
     }

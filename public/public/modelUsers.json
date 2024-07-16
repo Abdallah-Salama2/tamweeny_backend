@@ -1,18 +1,23 @@
 [
     {
-        "user": "Alas",
+        "user": "Abdallah Fawzi",
         "past_orders": [
+            30,
+            14,
+            1,
+            4,
             1,
             24,
-            2
+            5,
+            3,
+            7,
+            8,
+            9
         ],
         "favorites": [
+            5,
+            2,
             14
         ]
-    },
-    {
-        "user": "test",
-        "past_orders": [],
-        "favorites": []
     }
 ]
